@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<link rel="stylesheet" type="text/css" href="/dasna_main.css" media="screen,projection" />
+<title>Links - Helpful Links and Related Websites</title>
+<meta name="description" content="Our links page provides helpful links and related Websites to our visitors" />
+<meta name="keywords" content="Dansna Helpful Links, Websites related to Dasna, Ethiopia, Development Association of Shire, Shire Enaslasie, Shire alumni, Shire Tigrai, Shire Tigray" />
+<meta name="document-type" content="Public" />
+<meta name="document-distribution" content="Global" />
+<meta name="author" content="Dasna.net/www.dasna.net" />
+<link rel="SHORTCUT ICON" href="http://www.dasna.net/favicon.ico" />
+	<script type="text/javascript" src="/1.3.2.jquery.min.js"></script>
+	<script type="text/javascript" src="/jquery.panelgallery.js"></script>
+	<script type="text/javascript">
+		$(function(){
+		$('#slidecontainer').panelGallery();
+		});
+	</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-39035051-1']);
+  _gaq.push(['_setDomainName', 'dasna.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+          <h1 id="logo"><a href="www.dasna.net">Development Association of Shire</a></h1>
+        </div>
+<div class="headerphoto" id="slidecontainer" style="width:1000px;position:relative;">
+		<img src="/flag3.jpg" alt="Image 1: Shire Urban Landscape" />
+		<img src="/slide1.png" alt="Image 1: Shire Urban Landscape" />
+		<img src="/slide2.png" alt="Image 2: Shire Urban Landscape" />
+		<img src="/slide3.png" alt="Image 3: Shire Urban Landscape" />
+		<img src="/slide4.png" alt="Image 4: Shire Urban Landscape" />
+		<img src="/slide5.png" alt="Image 5: Shire Urban Landscape" />
+		<img src="/slide6.png" alt="Image 6: Shire Urban Landscape" />
+		<img src="/slide7.png" alt="Image 7: Shire Urban Landscape" />
+		<img src="/slide8.png" alt="Image 8: Shire Urban Landscape" />
+		<img src="/slide9.png" alt="Image 9: Shire Urban Landscape" />
+		<img src="/slide10.png" alt="Image 10: Shire Urban Landscape" />
+		<img src="/slide11.png" alt="Image 11: Shire Urban Landscape" />
+                <img src="/slide12.png" alt="Image 12: Shire Urban Landscape" />
+		<img src="/slide13.jpg" alt="Image 13: Shire Urban Landscape" />
+
+	</div> 
+        <div id="nav-bar">
+        <ul>
+		<li class="first"><a href="http://www.dasna.net">HOME</a></li>
+                <li><a href="/articles/about_dasna.html">ABOUT</a></li>
+<li><a href="/articles/board.html">BOARD MEMBERS</a></a></li>
+                <li><a href="/articles/dasna_bylaw.html">BYLAW</a></li>
+                <li><a href="/articles/membership.html">MEMBERSHIP</a></li>
+                <li><a href="/articles/photos.html">PHOTOS</a></li>
+<li><a href="/articles/videos.html">VIDEOS</a></li>
+        	<li><a href="/articles/dasna_projects.html">PROJECTS</a></li>
+                <li  class="active"><a href="/articles/links">LINKS</a></li>
+		<li><a href="/articles/contact_dasna.html">CONTACT</a></li>
+	</ul>
+        </div>
+        <div id="leftcolumn">
+<h2></h2>
+            <p></p>
+        </div>
+        <div id="widecolumn" style="height: 1235px">
+<h2>Helpful Links and Related Websites</h2>
+<h2>Alumnis and Development Associations</h2>
+<ul>
+<li><a href="http://www.agazi.net/" target="_blank">Agazi, ASAA</a></li>
+<li><a href="http://www.awlaelo.org/" target="_blank">Kilte Awlaelo, KASDA</a></li>
+<li><a href="http://www.atseyohannes.org/" target="_blank">Atse Yohannes, AYAA</a></li>
+<li><a href="http://www.axumalumniassociations.com/" target="_blank">Axum, AAA</a></li>
+<li><a href="http://dasna.net/" target="_blank">Shire, DAS-N.A.</a></li>
+<li><a href="http://www.queenshebainternational.org/" target="_blank">Queen Sheba, QSSA</a></li>
+<li><a href="http://www.enderta.org/" target="_blank">Enderta, ERDA</a></li>
+</ul>
+<h2>HIGHER EDUCATION</h2>
+<ul>
+<li><a href="http://www.mu.edu.et/" target="_blank">Mekelle University</a></li>
+<li><a href="http://www.mitethiopia.edu.et/" target="_blank">MIT Mekelle</a></li>
+</ul>
+<h2>NEWS WEBSITES</h2>
+<ul>
+<li><a href="http://www.aigaforum.com/" target="_blank">Aiga Forum</a></li>
+<li><a href="http://www.tigraionline.com/" target="_blank">Tigrai Online</a></li>
+<li><a href="http://www.waltainfo.com/" target="_blank">Walta</a></li>
+</ul>					
+</div>
+        
+        <div id="footer">
+            <p>&copy;2013-2014 Development Association of Shire N.A. (http://www.dasna.net)</p>
+        </div>
+    </div>
+</body>
+</html>

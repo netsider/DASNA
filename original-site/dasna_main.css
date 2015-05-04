@@ -1,0 +1,237 @@
+* 
+{ 
+	padding : 0; 
+	margin : 0 auto; 
+	outline : 0; 
+}
+body 
+{ 
+	font-family : Verdana, Arial, Helvetica, sans-serif; 
+	color : #333; 
+	background : #7094FF; 
+}
+#wrapper, #header, #logo, #nav-bar, #content, #leftcolum, #rightcolumn, #footer, #widecolum
+{
+	display: block;
+}
+#wrapper 
+{
+	font-family : Verdana, Arial, Helvetica, sans-serif; 
+	margin : 0 auto; 
+	padding : 0; 
+	width : 1000px;  
+} 
+#slidecontainer img
+{
+	height: 350px;
+	width: 1000px;
+}
+#header 
+{ 
+	background : url(shire_dasna_headerv3.jpg) top left no-repeat;
+	margin: 0 auto; 
+	width: 1000px;
+	height: 180px; 
+}
+
+#logo { 
+	float : left; 
+	display : inline; 
+	width : 170px; 
+	font-size : 0; 
+	line-height : 0; 
+	margin : 0; 
+	padding : 5px 0 0 5px; 
+} 
+#logo a 
+{ 
+	display : block; 
+	height : 170px; 
+	text-indent : -4000px; 
+	background : url(dasna_logo.gif); 
+}
+#nav-bar 
+{ 
+	clear : left; 
+	float : left; 
+	width : 100%; 
+	background : url(dasnavbg.jpg) 0 25% repeat #071907; 
+	font-family : Trebuchet MS, Helvetica, sans-serif; 
+	border-bottom : 1px solid #49A9FF; 
+	overflow : hidden; 
+} 
+#nav-bar ul 
+{ 
+	clear : left; 
+	float : left; 
+	list-style : none; 
+	margin : 0; 
+	padding : 0; 
+	position : relative; 
+	left : 50%; 
+	text-align : center; 
+} 
+#nav-bar ul li 
+{ 
+	display : block; 
+	float : left; 
+	list-style : none; 
+	margin : 0; 
+	padding : 0; 
+	position : relative; 
+	right : 50%; 
+} 
+#nav-bar ul li.first 
+{ 
+	border-left : 1px solid #174717; 
+} 
+#nav-bar ul li.last 
+{ 
+	border-right : 1px solid #174717; 
+} 
+#nav-bar ul li a 
+{ 
+	display : block; 
+	margin : 0; 
+	padding : 0.4em 0.8em; 
+	color : #fff; 
+	text-decoration : none; 
+	border-left : 1px solid #174717; 
+	border-right : 1px solid #112711; 
+	line-height : 1.3em; 
+}
+#nav-bar ul li.active a 
+{ 
+	background : url(roundbar-blue.gif) 0 75% repeat; 
+	font-weight : bold; 
+} 
+#nav-bar ul li a:hover
+ { 
+	background : url(dasnav_active_bg.jpg) 0 75% repeat; 
+}
+#content 
+{ 
+	float : left; 
+	margin : 0; 
+	padding : 0; 
+	background : #FFFFFF; 
+	width : 480px; 
+	padding : 0; 
+	height: 1550px;
+	font-family: Verdana, Arial;
+	font-size: 13px;
+}
+a
+{
+	color: #0000FF;
+}
+a:hover
+{
+	color: #FF0000;
+}
+ul, ol { 
+	margin : 0; 
+	padding : 0 0 0 25px; 
+	font-size : 15px; 
+}
+li 
+{ 
+	list-style : disc;
+	padding : 0 10px 10px 0; 
+	margin : 0; 
+}
+p 
+{ 
+	padding : 0 10px 10px; 
+	font-size : 14px;
+}
+h1, h2 
+{ 
+	font-family : "Times New Roman", Verdana, Arial, Helvetica, sans-serif; 
+	padding : 5px 10px 10px; 
+	color : #004700; 
+	font-size : 22px; 
+}
+#leftcolumn 
+{ 
+	background : #FFFFFF; 
+	width : 250px; 
+	float : left; 
+	padding : 0 0 0 10px;
+	height: 1550px;
+	text-align: left;
+}
+#rightcolumn 
+{ 
+	background : #FFFFFF; 
+	width : 250px; 
+	float : left; 
+	padding : 0 10px 0 0;
+	height: 1550px;
+	font-size: 12px;
+	text-decoration: none;
+}
+#footer 
+{ 
+	height : 50px; 
+	width : 1000px; 
+	background : #081d08; 
+	text-align : center; 
+	padding-top: 0px;
+	clear : both; 
+	font-size : 5px; 
+	color : #fff;
+	padding-top: 5px;
+}
+#socmed
+{
+	margin-top: 0px; /* Moves Box up & down */
+	border-top: 1px solid #000;
+	position: absolute;
+	font-size: 12px;
+	text-align: center;
+}
+#newstext
+{
+	color: #000;
+	font-size: 12px;
+	text-align: left;
+}
+.headtxt 
+{
+	font: 1.3em Arial; color: #063179; padding: 0;
+}
+#centim
+{
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+}
+#widecolumn 
+{ 
+	float : left; 
+	background : #FFFFFF; 
+	width : 720px;
+	padding : 0 10px 0;
+	text-align: left;
+	height: 1550px;
+}
+td
+{
+	font-family: Arial;
+	padding: 3px;
+	border: 1px solid black;
+}
+.countdown
+{
+	font-size: 20px;
+	margin-left: 10px;
+}
+audio
+{
+	width: 215px;
+}
+hr
+{
+	width: 175
+}

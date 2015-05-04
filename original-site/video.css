@@ -1,0 +1,189 @@
+*
+{
+	padding: 0;
+	margin: 0;
+}
+
+body
+{
+ 	background: #93B4E6;
+	margin-left: auto;
+	margin-right: auto;
+	color: #000;
+	text-align: center;
+}
+
+#wrapper, #header, #footer, #nav-bar
+{
+	width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+	height: 100%;
+	display: block;
+}
+
+#content_wrapper
+{
+	width: 100%;	
+}
+
+#header
+{
+	height: 180px;
+	background: url(images/shire_dasna_headerv3.jpg) top left no-repeat;
+}  
+
+#header img
+{
+	float: left;
+}
+
+#nav
+{ 
+	height: 30px;
+	background: #FFFFFF;
+	text-align: center;
+}  
+
+.js-lazyYT
+{
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+}
+
+p.center
+{
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#nav li
+{
+	display: inline;
+}
+
+#content
+{
+	background: #FFF;
+	text-align: center;
+	width: 80%;
+	float: left;	
+	padding-top: 15px;
+	padding-bottom: 15px;
+	height: 1600px;
+	display: block;
+}  
+
+#content hr, #aside hr
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 150px;
+}
+
+#footer
+{
+	padding-top: 10px;
+	text-align: center; 
+	background: #004A00;
+	color: #FFF;
+	font-size: 12px;
+	clear: both;
+	display: block;
+	z-index: -10;
+	margin-top: -10px;
+	height: 4em;
+	border-radius: 0px 0px 15px 15px;
+} 
+
+#aside
+{
+	color: #000;
+	text-align: center;
+	width: 20%;
+	background: #FFFFFF;
+	float: right;
+	height: 1630px;
+}
+
+
+#nav-bar { 
+margin-left: auto;
+margin-right: auto;
+background : url(dasnavbg.jpg) 0 25% repeat #071907; 
+font-family : Trebuchet MS, Helvetica, sans-serif; 
+border-bottom : 1px solid #071907; 
+overflow : hidden;
+position: relative;
+} 
+
+#nav-bar ul { 
+text-align: center;
+clear : left; 
+float : left;
+list-style : none; 
+margin : 0; 
+padding : 0; 
+position : relative; 
+left : 50%; 
+text-align : center; 
+} 
+#nav-bar ul li {  
+float : left;
+margin : 0; 
+padding : 0; 
+position : relative; 
+right : 50%; 
+} 
+#nav-bar ul li.first { 
+border-left : 1px solid #174717; 
+} 
+#nav-bar ul li.last { 
+border-right : 1px solid #174717; 
+} 
+#nav-bar ul li a { 
+	display : block; 
+	margin : 0; 
+	padding : 0.4em 0.8em; 
+	color : #fff; 
+	text-decoration : none; 
+	border-left : 1px solid #174717; 
+	border-right : 1px solid #112711; 
+	line-height : 1.3em; 
+} 
+
+#nav-bar ul li.active a { 
+	background : url(roundbar-blue.gif) 0 75% repeat; 
+}
+ 
+#nav-bar ul li a:hover { 
+	background : url(dasnav_active_bg.jpg) 0 75% repeat; 
+} 
+
+#nav-bar ul li a span { 
+	display : block; 
+} 
+
+#aside a
+{
+	color: blue;
+}
+
+#footer a
+{
+	color: #FFF;
+}
+
+#footer a:hover, #aside a:hover
+{
+	color: red;
+} 
+
+.videotitle
+{
+	font-size: 20px;
+	color: #000000;
+}
+  

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="dasna_main.css" />
+	<title>Development Association of Shire: North America</title>
+	<meta name="revisit-after" content="7 days" />
+	<meta name="revised" content="December 30, 2013, 2:30 am" />
+	<meta name="coverage" content="worldwide" />
+	<meta name="distribution" content="global" />
+	<meta name="description" content="Development Association Shire North America," />
+	<meta name="keywords" content="DASNA, non-profit, ethiopia, development association, shire, endasilassie, alumni, tigrai, tigray, africa, library" />
+	<meta name="alexaVerifyID" content="L92Wl15x0IcBCdsKwyvPlFGIrkQ" />
+	<link rel="shortcut icon" href="http://www.dasna.net/favicon.ico" />
+	<script src="jquery-1.4.2.min.js"></script>
+	<script src="jquery.panelgallery2.js"></script>
+	<script>
+			$(function()
+			{
+				$('#slidecontainer').panelGallery({
+					viewDuration: 6000,
+					panelTransitionDuration: 40,
+					transitionDuration: 50,
+					boxSize: 35,
+					panelWidth: 40,
+					boxFadeDuration: 0,
+					boxTransitionDuration: 5,
+				});
+			});
+	</script>
+	<script>
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-39035051-1']);
+			_gaq.push(['_setDomainName', 'dasna.net']);
+			_gaq.push(['_trackPageview']);
+
+			(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+	</script>
+	<script>
+		/* Christmas Date Script Written by Russell - rdoubleoc@aol.com  */
+		var todaysDate = new Date();
+		var currentmonth = todaysDate.getMonth();
+		if ((currentmonth == 0) || (currentmonth == 11)) /* Sets Snowflakes to only activate in December and January */
+			{
+				var snowmax=35;
+				var snowcolor=new Array("#aaaacc","#ddddff","#ccccdd","#f3f3f3","#f0ffff");
+				var snowtype=new Array("Times","Arial","Times","Verdana");
+				var snowletter="*";
+				var sinkspeed=0.6;
+				var snowmaxsize=30;
+				var snowminsize=8;
+				var snowingzone=1;
+				var snow=new Array();
+				var marginbottom;
+				var marginright;
+				var timer;
+				var i_snow=0;
+				var x_mv=new Array();
+				var crds=new Array();
+				var lftrght=new Array();
+				var browserinfos=navigator.userAgent;
+				var ie5=document.all&&document.getElementById&&!browserinfos.match(/Opera/);
+				var ns6=document.getElementById&&!document.all;
+				var opera=browserinfos.match(/Opera/);
+				var browserok=ie5||ns6||opera;
+				function randommaker(range) {
+						rand=Math.floor(range*Math.random())
+					return rand;
+				}
+				function initsnow() {
+						if (ie5 || opera) {
+								marginbottom = document.body.scrollHeight
+								marginright = document.body.clientWidth-15
+						}
+						else if (ns6) {
+								marginbottom = document.body.scrollHeight
+								marginright = window.innerWidth-15
+						}
+						var snowsizerange=snowmaxsize-snowminsize;
+						for (i=0;i<=snowmax;i++) {
+								crds[i] = 0;
+							lftrght[i] = Math.random()*15;
+							x_mv[i] = 0.03 + Math.random()/10;
+								snow[i]=document.getElementById("s"+i)
+								snow[i].style.fontFamily=snowtype[randommaker(snowtype.length)]
+								snow[i].size=randommaker(snowsizerange)+snowminsize
+								snow[i].style.fontSize=snow[i].size+'px';
+								snow[i].style.color=snowcolor[randommaker(snowcolor.length)]
+								snow[i].style.zIndex=1000
+								snow[i].sink=sinkspeed*snow[i].size/5
+								if (snowingzone==1) {snow[i].posx=randommaker(marginright-snow[i].size)}
+								if (snowingzone==2) {snow[i].posx=randommaker(marginright/2-snow[i].size)}
+								if (snowingzone==3) {snow[i].posx=randommaker(marginright/2-snow[i].size)+marginright/4}
+								if (snowingzone==4) {snow[i].posx=randommaker(marginright/2-snow[i].size)+marginright/2}
+								snow[i].posy=randommaker(2*marginbottom-marginbottom-2*snow[i].size)
+								snow[i].style.left=snow[i].posx+'px';
+								snow[i].style.top=snow[i].posy+'px';
+						}
+						movesnow()
+				}
+				function movesnow() {
+						for (i=0;i<=snowmax;i++) {
+								crds[i] += x_mv[i];
+								snow[i].posy+=snow[i].sink
+								snow[i].style.left=snow[i].posx+lftrght[i]*Math.sin(crds[i])+'px';
+								snow[i].style.top=snow[i].posy+'px';
+
+								if (snow[i].posy>=marginbottom-2*snow[i].size || parseInt(snow[i].style.left)>(marginright-3*lftrght[i])){
+										if (snowingzone==1) {snow[i].posx=randommaker(marginright-snow[i].size)}
+										if (snowingzone==2) {snow[i].posx=randommaker(marginright/2-snow[i].size)}
+										if (snowingzone==3) {snow[i].posx=randommaker(marginright/2-snow[i].size)+marginright/4}
+										if (snowingzone==4) {snow[i].posx=randommaker(marginright/2-snow[i].size)+marginright/2}
+										snow[i].posy=0
+								}
+						}
+						var timer=setTimeout("movesnow()",50);
+				}
+				for (i=0;i<=snowmax;i++) {
+						document.write("<span id='s"+i+"' style='position:absolute;top:-"+snowmaxsize+"'>"+snowletter+"</span>");
+				}
+				if (browserok) {
+						window.onload=initsnow;
+				}
+			}
+</script>
+</head>
+<body>
+    <div id="wrapper">
+    <div id="header">
+		<h1 id="logo"><a href="http://www.dasna.net/">Development Association of Shire</a></h1>
+    </div>
+	<div class="headerphoto" id="slidecontainer" style="width:1000px;position:relative;">
+		<img src="flag3.jpg" alt="Image 1: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide1.png" alt="Image 1: Shire Urban Landscape" name="panelTeethLeftReveal" />
+		<img src="slide2.png" alt="Image 2: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide3.png" alt="Image 3: Shire Urban Landscape" name="panelTeethLeftReveal" />
+		<img src="slide4.png" alt="Image 4: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide5.png" alt="Image 5: Shire Urban Landscape"name="panelTeethLeftReveal" />
+		<img src="slide6.png" alt="Image 6: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide7.png" alt="Image 7: Shire Urban Landscape" name="panelTeethLeftReveal" />
+		<img src="slide8.png" alt="Image 8: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide9.png" alt="Image 9: Shire Urban Landscape" name="panelTeethLeftReveal" />
+		<img src="slide10.png" alt="Image 10: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide11.png" alt="Image 11: Shire Urban Landscape" name="panelTeethLeftReveal" />
+		<img src="slide12.png" alt="Image 12: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide13.jpg" alt="Image 13: Shire Urban Landscape" name="panelTeethLeftReveal" />
+	</div>    
+	<div id="nav-bar">
+        <ul>
+			<li class="active"><a href="http://www.dasna.net">HOME</a></li>
+            <li><a href="/articles/about_dasna.html">ABOUT</a></li>
+			<li><a href="/articles/board.html">BOARD MEMBERS</a></a></li>
+            <li><a href="/articles/dasna_bylaw.html">BYLAW</a></li>
+            <li><a href="/articles/membership.html">MEMBERSHIP</a></li>
+            <li><a href="/articles/photos.html">PHOTOS</a></li>
+			<li><a href="/articles/videos.html">VIDEOS</a></li>
+        	<li><a href="/articles/dasna_projects.html">PROJECTS</a></li>
+            <li><a href="/articles/links">LINKS</a></li>
+			<li><a href="/articles/contact_dasna.html">CONTACT</a></li>
+		</ul>
+    </div>
+    <div id="leftcolumn">
+		<h2>News and Updates</h2>
+		<hr width="150px">
+		<br/>
+		<p id="newstext">
+		<span style="color: #FF0000"><strong>(Attention!)</span> December 18, 2013</strong> - Added Information about <abbr title="Development Association of Shire: North America">DASNA</abbr>'s 11th Anniversary Fundraising Event in Seattle Washington.<br/></p>
+		<div id="centim"><a href="flyer.jpg"><img src="flyer_med.jpg" alt="Dasna 11th Anniversary Seattle Washington Flyer" border="0" height="100%" width="100%" /></a></div>
+		<div style="font-size: 10px; margin-top: -5px; color: red; text-align: center"><a href="flyer.jpg">(Click to Enlarge)</a></div><br/>
+		<p id="newstext">
+		<strong>Address:</strong> (<a href="https://maps.google.com/maps?q=Genesee+Hall+4200+32+Ave+So.+Seattle,+Washington+98118&ie=UTF-8&hq=&hnear=0x54904050e98d6b89:0x6b850e50c6cf99b0,4200+32nd+Ave+SW,+Seattle,+WA+98126&gl=us&ei=VVyyUs_FAubisATMpYDQAw&ved=0CCkQ8gEwAA">MAP</a>)<br/>
+		Genese Hall 4200 32 Ave So.<br/>
+		Seattle, Washington 98118<br/><br/>
+		<strong>Date and Time:</strong><br/>
+		May 24, 2014<br/>
+		6:00PM until 3:00AM<br/><br/>
+		<strong>Admission:</strong> $30.00<br/><br/>
+		<strong>Contact Information:</strong><br/>
+		Fissaha Tassew<br/>(206-841-2641)<br/>
+		Hadish Berehe<br/>(206-366-5727)<br/>
+		Azeb Seyoum<br/>(206-571-0237)<br/>
+		</p>
+		<p id="socmed"> 
+		Visit our Social Media:<br/>
+		<a href="http://www.facebook.com/pages/Development-Association-of-Shire/359461914166961?ref=hl#!/pages/Development-Association-of-Shire/359461914166961">
+		<img src="images/face_book.png" width="50" height="50" alt="dasna.net facebook page" title="our facebook page" /></a> 
+		<a href="https://plus.google.com/b/103242050547455901710/103242050547455901710/op/iph#103242050547455901710/posts">
+		<img src="images/google_plus.png" width="50" height="50" alt="dasna.net google plus page" title="our google page" /></a>
+		<a href="http://www.youtube.com/channel/UC5vwrxziZyyEzSAtFTuB9_Q?feature=watch">
+		<img src="images/youtube.png" width="50" height="50" alt="dasna.net youtube page" title="our youtube page" /></a>
+		<a href="https://twitter.com/DASNAnet"><img src="images/twitter-_ogo.png" width="50" height="50" alt="DASNA Twitter page" title="our Twitter page" /></a></p>
+    </div>
+    <div id="content">
+		<br/>
+		<p id="centim"><iframe width="460" height="300" src="http://www.youtube.com/embed/L7DYBi6D-eg" frameborder="0" allowfullscreen></iframe><br/>
+		Enter our <a href="videos.html">Video Archive</a> to view more videos!<br/><br/>
+		<strong>Have a <span style="color: green">Merry</span> <span style="color: red"> Christmas</span>, and Happy Holidays!<br/></p></strong>
+		<h2>Welcome to Development Association of Shire</h2>       
+		<p>The Development Association of Shire <abbr title="Development Association of Shire">(DAS)</abbr> was first established in 2004 by the dedicated people of United States of America. DAS was formed as an associational structure and operational working manuals, which made it transparent and accountable to the supporters and the general public. It has been licensed as non-profit organization by the State Of Massachusetts in the city of Boston. The main objective was to expand and strengthen some of the needs that were not addressed by the government and/or <abbr title="Non-Governmental Organization">NGO</abbr>&rsquo;s such as: &nbsp;</p>
+		<ul>
+			<li>to preserve the historical sites &amp; cultural landscapes, and to ensure the highest level of protections</li>
+			<li>to improve the quality of education &amp; health care in the region</li>
+			<li>to enhance/upsurge city structures</li>
+			<li>to support the youth and sports affairs</li>
+			<li>to participate actively in the community</li>
+		</ul>
+		<p>After the establishment of DAS the organization expanded its branches globally. The Development Association of Shire in North America was established in 2004. The objectives remained the same to outreach to under privileged people. DASNA has carried out six fundraising events that accumulated over 78,000 USD to fund the current library project. The cost of the new library facility cost approximately 3.7 million Eth. Birr (approximately 370,000USD). The library has a two story building and also includes a recreational area for the youth, a research center, and is handicap accessible.</p>
+	</div>
+	<div id="rightcolumn">
+		<p id="centim"><h2>Videos</h2>
+		<iframe width="250" height="200" src="http://www.youtube.com/embed/7hCcUwnFkOo" frameborder="0" allowfullscreen></iframe><br/><br/>
+		<iframe width="250" height="200" src="http://www.youtube.com/embed/zxlsQdFm1o8" frameborder="0" allowfullscreen></iframe><br/><br/>
+		<iframe width="250" height="200" src="http://www.youtube.com/embed/GfofvQW8trU" frameborder="0" allowfullscreen></iframe><br/><br/>
+		<iframe width="250" height="200" src="http://www.youtube.com/embed/-ruqtlzCcQ8" frameborder="0" allowfullscreen></iframe><br/><br/>
+		<iframe width="250" height="200" src="http://www.youtube.com/embed/D9JflW-cK0c" frameborder="0" allowfullscreen></iframe><br/><br/>
+	</div>
+	<div id="footer">
+		<p>&copy;2014 Development Association of Shire N.A. (http://www.dasna.net/)<br/>
+		(This website will stop snowing on February 1, 2014)</p>
+    </div>
+    </div>
+</body>
+</html>

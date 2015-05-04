@@ -1,0 +1,3 @@
+<p>&copy;2014 Development Association of Shire, North America (<abbr title="Development Association of Shire North America">DASNA</abbr>)<br/>
+<span style="font-size:9px; color:#FFF">Webmaster: <a href="https://www.updayte.com/">Russell Rounds (rdoubleoc@aol.com)</a><br/>
+[<a href="changelog.txt">changelog</a>]</span></p><script type="text/javascript">(function (d, w) {var x = d.getElementsByTagName('SCRIPT')[0];var f = function () {var s = d.createElement('SCRIPT');s.type = 'text/javascript';s.async = true;s.src = "//np.lexity.com/embed/YW/16b6cf0e3515dcfcba3159ff523013c0?id=af04f2081be2";x.parentNode.insertBefore(s, x);};w.attachEvent ? w.attachEvent('onload',f) :w.addEventListener('load',f,false);}(document, window));</script>

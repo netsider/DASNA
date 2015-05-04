@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="dasna_main.css" />
+	<title>Development Association of Shire: North America</title>
+	<meta name="revised" content="January 27, 2014, 9:30 pm" />
+	<meta name="description" content="Development Association Shire North America," />
+	<meta name="keywords" content="DASNA, non-profit, ethiopia, development association, shire, endasilassie, alumni, tigrai, tigray, africa, library" />
+	<meta name="alexaVerifyID" content="L92Wl15x0IcBCdsKwyvPlFGIrkQ" />
+	<link rel="shortcut icon" href="http://www.dasna.net/favicon.ico" />
+	<script src="jquery-1.4.2.min.js"></script>
+	<script src="jquery.panelgallery2.js"></script>
+	<script src="countdown.js"></script>
+	<script>
+			$(function()
+			{
+				$('#slidecontainer').panelGallery({
+					viewDuration: 6000,
+					panelTransitionDuration: 40,
+					transitionDuration: 50,
+					boxSize: 35,
+					panelWidth: 40,
+					boxFadeDuration: 0,
+					boxTransitionDuration: 5,
+				});
+			});
+	</script>
+	<script>
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-39035051-1']);
+			_gaq.push(['_setDomainName', 'dasna.net']);
+			_gaq.push(['_trackPageview']);
+
+			(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+	</script>
+</head>
+<body>
+    <div id="wrapper">
+    <div id="header">
+		<h1 id="logo"><a href="http://www.dasna.net/">Development Association of Shire</a></h1>
+    </div>
+	<div class="headerphoto" id="slidecontainer" style="width:1000px;position:relative;">
+		<img src="flag3.jpg" alt="Image 1: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide1.png" alt="Image 1: Shire Urban Landscape" name="panelTeethLeftReveal" />
+		<img src="slide2.png" alt="Image 2: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide3.png" alt="Image 3: Shire Urban Landscape" name="panelTeethLeftReveal" />
+		<img src="slide4.png" alt="Image 4: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide5.png" alt="Image 5: Shire Urban Landscape"name="panelTeethLeftReveal" />
+		<img src="slide6.png" alt="Image 6: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide7.png" alt="Image 7: Shire Urban Landscape" name="panelTeethLeftReveal" />
+		<img src="slide8.png" alt="Image 8: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide9.png" alt="Image 9: Shire Urban Landscape" name="panelTeethLeftReveal" />
+		<img src="slide10.png" alt="Image 10: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide11.png" alt="Image 11: Shire Urban Landscape" name="panelTeethLeftReveal" />
+		<img src="slide12.png" alt="Image 12: Shire Urban Landscape" name="panelTeethRightReveal" />
+		<img src="slide13.jpg" alt="Image 13: Shire Urban Landscape" name="panelTeethLeftReveal" />
+	</div>    
+	<div id="nav-bar">
+        <ul>
+			<li class="active"><a href="http://www.dasna.net">HOME</a></li>
+            <li><a href="/articles/about_dasna.html">ABOUT</a></li>
+			<li><a href="/articles/board.html">BOARD MEMBERS</a></a></li>
+            <li><a href="/articles/dasna_bylaw.html">BYLAW</a></li>
+            <li><a href="/articles/membership.html">MEMBERSHIP</a></li>
+            <li><a href="/articles/photos.html">PHOTOS</a></li>
+			<li><a href="/articles/videos.html">VIDEOS</a></li>
+        	<li><a href="/articles/dasna_projects.html">PROJECTS</a></li>
+            <li><a href="/articles/links">LINKS</a></li>
+			<li><a href="/articles/contact_dasna.html">CONTACT</a></li>
+		</ul>
+    </div>
+    <div id="leftcolumn">
+		<h2>News and Updates</h2>
+		<hr width="150px">
+		<br/>
+		<p id="newstext">
+		<span style="color: #FF0000"><strong>(Fundraiser!)</span></strong> See below for <abbr title="Development Association of Shire: North America">DASNA</abbr>'s 11th Anniversary Fundraising Event in Seattle Washington.<br/></p>
+		<div id="centim"><a href="flyer2.jpg"><img src="flyer2.jpg" alt="Dasna 11th Anniversary Seattle Washington Flyer" border="0" height="100%" width="100%" /></a></div>
+		<div style="font-size: 13px; margin-top: -5px; color: red; text-align: center"><a href="flyer2.jpg">(Click to Enlarge)</a>
+		</div><br/>
+		<div class="countdown">
+		<script type="application/javascript">
+		var myCountdownTest = new Countdown({
+									month	: 05, 
+									day		: 24,
+									hour	: 18,
+									ampm	: "am",
+									width	: 230, 
+									height	: 40,
+									style	: "boring",
+									padding	: 0.8,
+									rangeHi	: "month",
+								    numbers	 : {
+	                             		font : "Times New Roman",
+	                             		color	: "#FFCC00",
+	                             		bkgd	: "#004500",
+	                             		rounded	: 0.15
+	                             }
+	                             });
+		</script></div><br/>
+		<p id="newstext">
+		<strong>Address:</strong> (<a href="https://maps.google.com/maps?q=Genesee+Hall+4200+32+Ave+So.+Seattle,+Washington+98118&ie=UTF-8&hq=&hnear=0x54904050e98d6b89:0x6b850e50c6cf99b0,4200+32nd+Ave+SW,+Seattle,+WA+98126&gl=us&ei=VVyyUs_FAubisATMpYDQAw&ved=0CCkQ8gEwAA">MAP</a>)<br/>
+		Genese Hall 4200 32 Ave So.<br/>
+		Seattle, Washington 98118<br/><br/>
+		<strong>Date and Time:</strong><br/>
+		May 24, 2014<br/>
+		6:00PM until 3:00AM<br/><br/>
+		<strong>Admission:</strong> $30.00<br/><br/>
+		<strong>Contact Information:</strong><br/>
+		<a href="mailto:fissaha21@hotmail.com">Fissaha Tassew</a><br/>(206-841-2641)<br/>
+		<a href="mailto:hadishberehe@dasna.net">Hadish Berehe</a><br/>(206-366-5727)<br/>
+		<a href="mailto:azebseyoum54@yahoo.com">Azeb Seyoum<br/></a>(206-571-0237)<br/>
+		</p>
+		<p id="socmed"> 
+		Visit our Social Media:<br/>
+		<a href="http://www.facebook.com/pages/Development-Association-of-Shire/359461914166961?ref=hl#!/pages/Development-Association-of-Shire/359461914166961">
+		<img src="images/face_book.png" width="50" height="50" alt="dasna.net facebook page" title="our facebook page" /></a> 
+		<a href="https://plus.google.com/b/103242050547455901710/103242050547455901710/op/iph#103242050547455901710/posts">
+		<img src="images/google_plus.png" width="50" height="50" alt="dasna.net google plus page" title="our google page" /></a>
+		<a href="http://www.youtube.com/channel/UC5vwrxziZyyEzSAtFTuB9_Q?feature=watch">
+		<img src="images/youtube.png" width="50" height="50" alt="dasna.net youtube page" title="our youtube page" /></a>
+		<a href="https://twitter.com/DASNAnet"><img src="images/twitter-_ogo.png" width="50" height="50" alt="DASNA Twitter page" title="our Twitter page" /></a></p>
+    </div>
+    <div id="content">
+		<br/>
+		<p id="centim"><iframe width="460" height="300" src="http://www.youtube.com/embed/L7DYBi6D-eg" frameborder="0" allowfullscreen></iframe><br/>
+		Enter our <a href="videos.html">Video Archive</a> to view more videos!<br/>
+		<h2>Welcome to Development Association of Shire</h2><br/>
+		<p>The 11the Annual Shire Fundraising event is going to be held in Seattle, Washington on <strong>May 24th, 2014</strong>!  Please view the information to the left, or click <a href="flyer2.jpg">here</a> to view the flyer.  The <a href="https://maps.google.com/maps?q=Genesee+Hall+4200+32+Ave+So.+Seattle,+Washington+98118&ie=UTF-8&hq=&hnear=0x54904050e98d6b89:0x6b850e50c6cf99b0,4200+32nd+Ave+SW,+Seattle,+WA+98126&gl=us&ei=VVyyUs_FAubisATMpYDQAw&ved=0CCkQ8gEwAA">Google Map</a> of the event can be used to get directions.<br/><br/>
+				The Development Association of Shire <abbr title="Development Association of Shire">(DAS)</abbr> was first established in 2004 by the dedicated people of United States of America. DAS was formed as an associational structure and operational working manuals, which made it transparent and accountable to the supporters and the general public. It has been licensed as non-profit organization by the State Of Massachusetts in the city of Boston. The main objective was to expand and strengthen some of the needs that were not addressed by the government and/or <abbr title="Non-Governmental Organization">NGO</abbr>&rsquo;s such as: &nbsp;</p>
+		<ul>
+			<li>to preserve the historical sites &amp; cultural landscapes, and to ensure the highest level of protections</li>
+			<li>to improve the quality of education &amp; health care in the region</li>
+			<li>to enhance/upsurge city structures</li>
+			<li>to support the youth and sports affairs</li>
+			<li>to participate actively in the community</li>
+		</ul>
+		<p>After the establishment of DAS the organization expanded its branches globally. The Development Association of Shire in North America was established in 2004. The objectives remained the same to outreach to under privileged people. DASNA has carried out six fundraising events that accumulated over 78,000 USD to fund the current library project. The cost of the new library facility cost approximately 3.7 million Eth. Birr (approximately 370,000USD). The library has a two story building and also includes a recreational area for the youth, a research center, and is handicap accessible.</p>
+	</div>
+	<div id="rightcolumn">
+		<p id="centim"><h2>Videos</h2>
+		<iframe width="250" height="200" src="http://www.youtube.com/embed/7hCcUwnFkOo" frameborder="0" allowfullscreen></iframe><br/><br/>
+		<iframe width="250" height="200" src="http://www.youtube.com/embed/zxlsQdFm1o8" frameborder="0" allowfullscreen></iframe><br/><br/>
+		<iframe width="250" height="200" src="http://www.youtube.com/embed/GfofvQW8trU" frameborder="0" allowfullscreen></iframe><br/><br/>
+		<iframe width="250" height="200" src="http://www.youtube.com/embed/-ruqtlzCcQ8" frameborder="0" allowfullscreen></iframe><br/><br/>
+		<iframe width="250" height="200" src="http://www.youtube.com/embed/D9JflW-cK0c" frameborder="0" allowfullscreen></iframe><br/><br/>
+	</div>
+	<div id="footer">
+		<p>&copy;2014 Development Association of Shire N.A. (http://www.dasna.net/)<br/></p>
+    </div>
+    </div>
+</body>
+</html>
