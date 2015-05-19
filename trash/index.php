@@ -16,7 +16,7 @@ session_regenerate_id(true);$sid = session_id(); // To prevent session fixation
 	<tr><td>Username:</td><td><input type='text' name='in-user' /></td></tr>
 	<tr><td>Password:</td><td><input type='password' name='in-pass' /></td></tr>
 	<tr><td colspan='2'><input type='submit' name='in-submit' value='Login' /></td></tr>
-	<input type="hidden" name="page_origin" value="12345">
+	<!-- <input type="hidden" name="session_id" value="<?php echo $sid; // Pass session ID to next page via POST ?>"> -->
 	</form>
 	</table>
 	</center>

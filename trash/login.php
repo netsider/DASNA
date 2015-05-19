@@ -3,29 +3,28 @@ session_start();include_once('options.php');
 session_regenerate_id(true);$sid = session_id(); // To prevent session fixation
 $TABLE = 'users';$database = 'dasna';
 if($_POST){ // If submit button has been pressed
-	echo '<pre>';
-	print_r($_POST);
-	echo '</pre><br/>';
-	function allgood(){ // returns false if not alphanumeric
+	// echo '<pre>';
+	// print_r($_POST);
+	// echo '</pre><br/>';
+	function allgood(){
 		$minlength = 1;
 		$maxlength = 100;
 		$fc = '<font color="red">';
-		$efc = '</font><br/>';
-		$a = $fc . 'Length of <b>' . $key . '</b> is <b>' . $length . '</b>' . $efc;
+		$efc = '</font>';
 		foreach($_POST as $key => $value){
-			$length = strlen($value);
-			if($length < $minlength){
+			if(strlen($value) < $minlength){
+				$a = $fc . 'Length of <b>' . $key . '</b> is <b>' . strlen($value) . '</b>' . $efc;
 				echo $a;
 				return false;
 			}
-			if($length > $maxlength){
+			if(strlen($value) > $maxlength){
 				echo $a;
 				return false;
 			}
 			if (ctype_alnum($value)) {
-				echo '<font color="green">The field(<b>' . $key . '</b>) is completely alphanumeric.' . $efc;
+				echo '<font color="green">The field(<b>' . $key . '</b>) is completely letters and/or digits.<br/>' . $efc;
 			} else {
-				echo $fc . 'The field(<b>' . $key . '</b>) is not completely alphanumeric.' . $efc;
+				echo $fc . 'The field(<b>' . $key . '</b>) is not completely letters and/or digits.<br/>' . $efc;
 				return false;
 			}
 	
@@ -37,20 +36,16 @@ if($_POST){ // If submit button has been pressed
 		$password = $_POST['in-pass'];
 		include_once('db.php');
 		mysqli_select_db($db, $database);
-		$result = mysqli_query($db, "SELECT name FROM users");
+		$result = mysqli_query($db, "SELECT * FROM users");
 		while($row = mysqli_fetch_array($result)){
-			if($row[0] === $username){
-				echo 'User <b>' . $username . '</b> found!';
-				$user_exist = true;
-			}
+		if($row[1] === $username){
+			echo 'User <b>' . $row[1] . '</b> found!';
+			$user_exist = true;
 		}
-		mysqli_close($db);
-		if($user_exist){
-			
-		}else{
-			echo 'User does not exist!';
 		}
-	
+		// echo '<pre>';
+		// print_r($result);
+		// echo '</pre><br/>';
 	}
 }
 ?>
