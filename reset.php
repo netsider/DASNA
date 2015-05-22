@@ -31,6 +31,7 @@ if($_POST){
 			if($array[0] === NULL){
 				// echo 'NULL!<br/>';
 				$pfp = true;
+				$output = '<font color="green"><b>Please type an alphanumeric password to continue</font></b>';
 			}else{
 				$output = '<font color="red"><b>Username already has password/value!</font></b>';
 				$pfp = false;
@@ -54,7 +55,7 @@ if($_POST){
 <body>
 	<center>
 	<table width='10%' border='1'>
-	<tr><td colspan="2"></td></tr>
+	<tr><td colspan="2"><center>Set Password</center></td></tr>
 	<form action='reset.php' method='POST'>
 	<tr><td>Username:</td><td><input type='text' name='in-user' /></td></tr>
 	<?php 
