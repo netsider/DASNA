@@ -36,11 +36,11 @@ if($_POST){
 				$output = '<font color="red"><b>Username already has password/value!</font></b>';
 				$pfp = false;
 			}
-		echo '<br/>';
-		echo '<pre>';
-		var_dump($result);
-		print_r($result);
-		echo '</pre>';
+		// echo '<br/>';
+		// echo '<pre>';
+		// var_dump($result);
+		// print_r($result);
+		// echo '</pre>';
 	}else{
 		$output = '<b>User does not exist<b>!';
 	}
@@ -54,10 +54,11 @@ if($_POST){
 </head>
 <body>
 	<center>
-	<table width='10%' border='1'>
+	<table width='25%' border='1'>
 	<tr><td colspan="2"><center>Set Password</center></td></tr>
 	<form action='reset.php' method='POST'>
-	<tr><td>Username:</td><td><input type='text' name='in-user' /></td></tr>
+	<tr><td>Username:</td><td><input type='text' name='in-user' <?php 
+	if($pfp){ echo "value='$username' disabled";};?> /></td></tr>
 	<?php 
 	if($pfp){
 	echo $text;};?>
