@@ -6,13 +6,13 @@ if($_POST){ // If submit button has been pressed
 	echo '<pre>';
 	print_r($_POST);
 	echo '</pre><br/>';
-	function allgood(){ // returns false if not alphanumeric
+	function allgood($array){ // returns false if not alphanumeric
 		$minlength = 1;
 		$maxlength = 100;
 		$fc = '<font color="red">';
 		$efc = '</font><br/>';
 		$a = $fc . 'Length of <b>' . $key . '</b> is <b>' . $length . '</b>' . $efc;
-		foreach($_POST as $key => $value){
+		foreach($array as $key => $value){
 			$length = strlen($value);
 			if($length < $minlength){
 				echo $a;
@@ -23,16 +23,16 @@ if($_POST){ // If submit button has been pressed
 				return false;
 			}
 			if (ctype_alnum($value)) {
-				echo '<font color="green">The field(<b>' . $key . '</b>) is completely alphanumeric.' . $efc;
+				echo '<font color="green">The field (<b>' . $key . '</b>) is completely alphanumeric.' . $efc;
 			} else {
-				echo $fc . 'The field(<b>' . $key . '</b>) is not completely alphanumeric.' . $efc;
+				echo $fc . 'The field (<b>' . $key . '</b>) is not completely alphanumeric.' . $efc;
 				return false;
 			}
 	
 		}
 	return true;
 	};
-	if (allgood()){
+	if (allgood($_POST)){
 		$username = $_POST['in-user'];
 		$password = $_POST['in-pass'];
 		include_once('db.php');
@@ -50,7 +50,6 @@ if($_POST){ // If submit button has been pressed
 		}else{
 			echo 'User does not exist!';
 		}
-	
 	}
 }
 ?>
