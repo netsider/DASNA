@@ -17,8 +17,8 @@ $text = "<tr><td>Password:</td><td><input type='password' name='in-pass' /></td>
 	};
 if($_POST['in-submit']){
 	$username = $_POST['in-user'];
-	$password = $_POST['in-pass'];
 	if(user_exist($username)){
+		$password = $_POST['in-pass'];
 		// echo 'User exists!';
 		include('db.php');
 		mysqli_select_db($db, database);
@@ -30,7 +30,6 @@ if($_POST['in-submit']){
 			echo '<font color="green">' . $phash . '</font><br/>';
 			echo '<font color="blue">' . $plength . '</font><br/>';
 			if($array[0] === NULL){
-				// echo 'NULL!<br/>';
 				$null = true;
 				$output = '<font color="green"><b>Type an alphanumeric password to be your password.</font></b>';
 			}else{
@@ -55,7 +54,7 @@ if($_POST['in-submit']){
 	}
 	if($_POST['in-submit'] === "Confirm Password"){
 	$set = true;
-		echo 'Password Confirmed!';
+		$output = 'Password Confirmed!';
 		echo '<pre>';
 	print_r($_POST);
 	echo '</pre><br/>';
