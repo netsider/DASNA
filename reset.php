@@ -61,7 +61,6 @@ if($_POST['in-submit']){
 	echo '</pre><br/>';
 	}
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,8 +74,10 @@ if($_POST['in-submit']){
 	<tr><td colspan="2"><center>Set Password</center></td></tr>
 	<form action='reset.php' method='POST'>
 	<tr><td>Username:</td><td><input type='text' name='in-user' <?php 
-	if(isset($username)){ echo "value='$username'";}; if(isset($username)){ echo 'disabled';};?> /></td></tr>
+	if(isset($username)){ echo "value='$username'";}; if(isset($username)){ echo 'disabled';};?>
+	
 	<?php 
+	echo "/></td></tr>";
 	if($null){
 	echo "<tr><td><b>New Password</b>:</td><td><input type='password' name='in-pass'";
 	if(isset($password)){
@@ -98,8 +99,8 @@ if($_POST['in-submit']){
 			echo "value='$newpass'";
 			echo ' disabled';
 		}
+		echo '/></td></tr>';
 	}
-	echo '/></td></tr>';
 	?>
 	<tr><td colspan='2'><input type='submit' name='in-submit' <?php if($null){ echo "value='Confirm Password'"; }else{ echo'Submit'; } ?> /><?php if(isset($output)){
 	echo $output;}; ?></td></tr>
