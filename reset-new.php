@@ -32,38 +32,8 @@ $text = "<tr><td>Password:</td><td><input type='password' name='in-pass' /></td>
 		}
 		return false;
 	};
-	function allgood($array){ // returns false if not alphanumeric
-		$minlength = 1;
-		$maxlength = 100;
-		$fc = '<font color="red">';
-		$efc = '</font><br/>';
-		$a = $fc . 'Length of <b>' . $key . '</b> is <b>' . $length . '</b>' . $efc;
-		foreach($array as $key => $value){
-			$length = strlen($value);
-			if($length < $minlength){
-				echo $a;
-				return false;
-			}
-			if($length > $maxlength){
-				echo $a;
-				return false;
-			}
-			if (ctype_alnum($value)) {
-				echo '<font color="green">The field (<b>' . $key . '</b>) is completely alphanumeric.' . $efc;
-			} else {
-				echo $fc . 'The field (<b>' . $key . '</b>) is not completely alphanumeric.' . $efc;
-				return false;
-			}
-	
-		}
-	return true;
-	};
-if($_POST['in-submit']){ // executed everytime submit button is pressed
-	if(allgood($_POST)){
-	echo 'POST is good!';
+if($_POST['in-submit']){ // executed everytime
 	$username = $_POST['in-user'];
-	}
-	
 	if(user_exist($username)){
 		echo 'User exists!';
 		$password = $_POST['in-pass'];
@@ -78,7 +48,7 @@ if($_POST['in-submit']){ // executed everytime submit button is pressed
 	}else{
 		$output = '<b>User does not exist<b>!';
 	}
-	if($null){ // executed if password is NULL
+	if($null){ // executed on third reload
 		if(isset($_POST['in-user']) && isset($_POST['in-pass'])){
 			$plength = strlen($_POST['in-pass']);
 			$ulength = strlen($_POST['in-user']);
@@ -91,7 +61,7 @@ if($_POST['in-submit']){ // executed everytime submit button is pressed
 			}
 		}
 	}
-	if($_POST['in-submit'] === "Confirm Password"){ // executed when all critera met
+	if($_POST['in-submit'] === "Confirm Password"){ // executed on fourth reload
 	$set = true;
 		$output = 'Password Confirmed!';
 		echo '<pre>';
