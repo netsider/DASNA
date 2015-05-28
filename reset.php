@@ -9,6 +9,7 @@ $text = "<tr><td>Password:</td><td><input type='password' name='in-pass' /></td>
 		$result = mysqli_query($db, "SELECT name FROM users");
 		while($row = mysqli_fetch_array($result)){
 			if($row[0] === $u){
+				echo 'True - User exists!';
 				return true;
 			}
 		}
@@ -59,14 +60,15 @@ $text = "<tr><td>Password:</td><td><input type='password' name='in-pass' /></td>
 	return true;
 	};
 if($_POST['in-submit']){ // executed everytime submit button is pressed
-	if(allgood($_POST)){
-	echo 'POST is good!';
-	$username = $_POST['in-user'];
+	if(allgood($_POST)){ // Filter input to prevent injection attacks
+		if(isset($_POST['in-pass'])){
+			$username = $_POST['in-user'];
+		}
+		if(isset($_POST['in-pass'])){
+			$password = $_POST['in-pass'];
+		}
 	}
-	
 	if(user_exist($username)){
-		echo 'User exists!';
-		$password = $_POST['in-pass'];
 		if(phash_null($username) === true){
 			$output = '<font color="green"><b>Type an alphanumeric password to be your password.</font></b>';
 			$null = true;
@@ -110,7 +112,7 @@ if($_POST['in-submit']){ // executed everytime submit button is pressed
 	<center>
 	<table width='25%' border='1'>
 	<tr><td colspan="2"><center>Set Password</center></td></tr>
-	<form action='reset-new.php' method='POST'>
+	<form action='reset.php' method='POST'>
 	<tr><td>Username:</td><td><input type='text' name='in-user' <?php 
 	if(isset($username)){ echo "value='$username'";}; if(isset($username)){ echo 'disabled';};?>
 	
