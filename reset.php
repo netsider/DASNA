@@ -9,7 +9,6 @@ $text = "<tr><td>Password:</td><td><input type='password' name='in-pass' /></td>
 		$result = mysqli_query($db, "SELECT name FROM users");
 		while($row = mysqli_fetch_array($result)){
 			if($row[0] === $u){
-				echo 'True - User exists!';
 				return true;
 			}
 		}
@@ -24,46 +23,32 @@ $text = "<tr><td>Password:</td><td><input type='password' name='in-pass' /></td>
 		$array = mysqli_fetch_array($result);
 		$plength = strlen($array[0]);
 		$phash = $array[0];
-		echo '<font color="green">' . $phash . '</font><br/>';
-		echo '<font color="blue">' . $plength . '</font><br/>';
-		if($array[0] === NULL){
-				return true;
-			}else{
-				return false;
+		echo '<font color="green">Field Value: "' . $phash . '"</font><br/>';
+		echo '<font color="blue">Length: ' . $plength . '</font><br/>';
+		// if($array[0] === NULL){
+			// return true;
+		// }
+		if($phash === NULL){
+			return true;
 		}
 		return false;
 	};
 	function allgood($array){ // returns false if not alphanumeric
-		$minlength = 1;
-		$maxlength = 100;
 		$fc = '<font color="red">';
 		$efc = '</font><br/>';
-		$a = $fc . 'Length of <b>' . $key . '</b> is <b>' . $length . '</b>' . $efc;
 		foreach($array as $key => $value){
-			$length = strlen($value);
-			if($length < $minlength){
-				echo $a;
-				return false;
-			}
-			if($length > $maxlength){
-				echo $a;
-				return false;
-			}
 			if (ctype_alnum($value)) {
 				echo '<font color="green">The field (<b>' . $key . '</b>) is completely alphanumeric.' . $efc;
+				return true;
 			} else {
 				echo $fc . 'The field (<b>' . $key . '</b>) is not completely alphanumeric.' . $efc;
 				return false;
 			}
-	
 		}
-	return true;
 	};
 if($_POST['in-submit']){ // executed everytime submit button is pressed
 	if(allgood($_POST)){ // Filter input to prevent injection attacks
-		if(isset($_POST['in-pass'])){
-			$username = $_POST['in-user'];
-		}
+		$username = $_POST['in-user'];
 		if(isset($_POST['in-pass'])){
 			$password = $_POST['in-pass'];
 		}
@@ -72,7 +57,6 @@ if($_POST['in-submit']){ // executed everytime submit button is pressed
 		if(phash_null($username) === true){
 			$output = '<font color="green"><b>Type an alphanumeric password to be your password.</font></b>';
 			$null = true;
-			echo 'PHASH is NULL!';
 		}else{
 			$output = '<font color="red"><b>Username not found, or already contains password.</font></b>';
 			$null = false;
@@ -126,20 +110,20 @@ if($_POST['in-submit']){ // executed everytime submit button is pressed
 	}
 	echo "/></td></tr>";
 	};
-	if(isset($username)){
-		echo "<input type='hidden' name='in-user' value='$username'>";
-	}
-	if(isset($password)){
-		echo "<input type='hidden' name='in-pass' value='$password'>";
-	}
 	if($set){
-		echo "<tr><td><b>Re-type Password</b>:</td><td><input type='text' name='in-pass-new'";
+		echo "<tr><td><b>Re-type Password</b>:</td><td><input type='password' name='in-pass-new'";
 		if(isset($_POST['in-pass-new'])){
 			$newpass = $_POST['in-pass-new'];
 			echo "value='$newpass'";
 			echo ' disabled';
 		}
 		echo '/></td></tr>';
+	}
+	if(isset($username)){
+		echo "<input type='hidden' name='in-user' value='$username'>";
+	}
+	if(isset($password)){
+		echo "<input type='hidden' name='in-pass' value='$password'>";
 	}
 	?>
 	<tr><td colspan='2'><input type='submit' name='in-submit' <?php if($null){ echo "value='Confirm Password'"; }else{ echo'Submit'; } ?> /><?php if(isset($output)){
