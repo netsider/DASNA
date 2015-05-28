@@ -98,9 +98,10 @@ if($_POST['in-submit']){ // executed everytime submit button is pressed
 	<tr><td colspan="2"><center>Set Password</center></td></tr>
 	<form action='reset.php' method='POST'>
 	<tr><td>Username:</td><td><input type='text' name='in-user' <?php 
-	if(isset($username)){ echo "value='$username'";}; if(isset($username)){ echo 'disabled';};?>
-	
-	<?php 
+	if(isset($username)){ echo "value='$username'";}; 
+	if(isset($username)){ 
+		echo 'disabled';
+	}
 	echo "/></td></tr>";
 	if($null){
 	echo "<tr><td><b>New Password</b>:</td><td><input type='password' name='in-pass'";
@@ -109,7 +110,7 @@ if($_POST['in-submit']){ // executed everytime submit button is pressed
 		echo ' disabled';
 	}
 	echo "/></td></tr>";
-	};
+	}
 	if($set){
 		echo "<tr><td><b>Re-type Password</b>:</td><td><input type='password' name='in-pass-new'";
 		if(isset($_POST['in-pass-new'])){
@@ -117,7 +118,20 @@ if($_POST['in-submit']){ // executed everytime submit button is pressed
 			echo "value='$newpass'";
 			echo ' disabled';
 		}
-		echo '/></td></tr>';
+		echo "/></td></tr>";
+		echo "<tr><td><b>Security Question #1:</b>:</td><td><b>Security Question #2:</b>:</td></tr>";
+		echo "<tr><td>";
+		echo "<select>";
+		echo '<option value="birthplace">Birthplace</option><option value="firstlove">First Girlfriend/Boyfriend</option>';
+		echo '<option value="favfood">Favorite Food</option><option value="favbook">Favorite Book</option>';
+		echo "</select>";
+		echo "</td><td>";
+		echo "<select>";
+		echo '<option value="birthplace">Birthplace</option><option value="firstlove">First Girlfriend/Boyfriend</option>';
+		echo '<option value="favfood">Favorite Food</option><option value="favbook">Favorite Book</option>';
+		echo "</select>";
+		echo "</td></tr>";
+		echo "<tr><td><input type='text' name='in-sec-1'/></td><td><input type='text' name='in-sec-2'/></td></tr>";
 	}
 	if(isset($username)){
 		echo "<input type='hidden' name='in-user' value='$username'>";
