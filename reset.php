@@ -152,7 +152,6 @@ if($_POST['in-submit']){
 	?>
 	<tr><td colspan='2'><input type='submit' name='in-submit' <?php if($null){ echo "value='Confirm'"; }else{ echo'Submit'; } ?> /><?php if(isset($output)){
 	echo $output;}; ?></td></tr>
-	</center><br/>
-	<?php echo '</form></table>'; ?>
+	</center><br/></form></table>
 </body>
 </html>
