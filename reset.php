@@ -141,7 +141,7 @@ if($_POST['in-submit']){ // executed everytime submit button is pressed
 	}
 	?>
 	<tr><td colspan='2'><input type='submit' name='in-submit' <?php if($null){ echo "value='Confirm Password'"; }else{ echo'Submit'; } ?> /><?php if(isset($output)){
-		echo $output;}; 
+		echo $output;};
 	?></td></tr></center><br/></form></table>
 </body>
 </html>
