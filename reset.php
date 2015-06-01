@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL ^ E_NOTICE);session_start();include_once('options.php');
-session_regenerate_id(true);$sid = session_id(); // To prevent session fixation
+ini_set("sendmail_path","/usr/sbin/sendmail");
+include_once('options.php');
 const database = 'dasna';
 $text = "<tr><td>Password:</td><td><input type='password' name='in-pass' /></td></tr>";
 	function user_exist($u){
@@ -88,12 +88,16 @@ if($_POST['in-submit']){
 				$output = '';	
 			}
 		}
-		if($_POST['in-submit'] === "Confirm"){ // executed when all critera met
+		if($_POST['in-submit'] === "Confirm" && isset($_POST['in-phone'])){ // executed when all critera met
 			// $set = true;
 		echo '<pre>';
 		print_r($_POST);
 		echo '</pre><br/>';
 		$output = 'Password Set!';
+		$msg = 'First line of text';
+		$msg = wordwrap($msg,70);
+		$headers = 'From:mailserver@dasna.net';
+		mail("rdoubleoc@aol.com","My subject",$msg,$headers);
 		}
 	}
 }
@@ -131,17 +135,18 @@ if($_POST['in-submit']){
 			echo ' disabled';
 		}
 		echo "/></td></tr>";
-		echo "<tr><td><b>Security Question #1:</b>:</td><td><b>Security Question #2:</b>:</td></tr>";
-		echo "<tr><td>";
-		echo '<select name="in-ques-1">';
-		echo '<option value="favfood">Favorite Food</option><option value="favbook">Favorite Book</option>';
-		echo "</select>";
-		echo "</td><td>";
-		echo '<select name="in-ques-2">';
-		echo '<option value="birthplace">Birthplace</option><option value="firstlove">First Girlfriend/Boyfriend</option>';
-		echo "</select>";
-		echo "</td></tr>";
-		echo "<tr><td><input type='text' name='in-ans-1'/></td><td><input type='text' name='in-ans-2'/></td></tr>";
+		echo '<tr><td>Phone Number:</td><td><input type="text" name="in-phone" length="10"/></td></tr>';
+		// echo "<tr><td><b>Security Question #1:</b>:</td><td><b>Security Question #2:</b>:</td></tr>";
+		// echo "<tr><td>";
+		// echo '<select name="in-ques-1">';
+		// echo '<option value="favfood">Favorite Food</option><option value="favbook">Favorite Book</option>';
+		// echo "</select>";
+		// echo "</td><td>";
+		// echo '<select name="in-ques-2">';
+		// echo '<option value="birthplace">Birthplace</option><option value="firstlove">First Girlfriend/Boyfriend</option>';
+		// echo "</select>";
+		// echo "</td></tr>";
+		// echo "<tr><td><input type='text' name='in-ans-1'/></td><td><input type='text' name='in-ans-2'/></td></tr>";
 	}
 	if(isset($username)){
 		echo "<input type='hidden' name='in-user' value='$username'>";
