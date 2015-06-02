@@ -90,14 +90,37 @@ if($_POST['in-submit']){
 		}
 		if($_POST['in-submit'] === "Confirm" && isset($_POST['in-phone'])){ // executed when all critera met
 			// $set = true;
+		echo 'Test';
 		echo '<pre>';
 		print_r($_POST);
 		echo '</pre><br/>';
+		$sp = '/r/n';
 		$output = 'Password Set!';
-		$msg = 'First line of text';
+		$msg = 'First line of text /n';
 		$msg = wordwrap($msg,70);
-		$headers = 'From:mailserver@dasna.net';
-		mail("rdoubleoc@aol.com","My subject",$msg,$headers);
+		$headers = 'From: mailserver@dasna.net' . $sp . "X-Mailer: PHP/" . phpversion() . $sp;
+		$headers .= "MIME-Version: 1.0" . $sp;
+		echo 'Attempting Mail...'; 
+		$headers .= "Content-type:text/html;charset=UTF-8" . $sp;
+		mail('rdoubleoc@gmail.com','My subject',$msg,$headers);
+		mail('rdoubleoc@aol.com','My subject',$msg,$headers);
+		mail('netside@excite.com','My subject',$msg,$headers);
+		echo '<br/><pre>';
+		print_r(ini_get('sendmail_path'));
+		echo '<br/>';
+		print_r(ini_get('sendmail_from'));
+		echo '<br/>';
+		echo 'SMTP:';
+		print_r(ini_get('SMTP'));
+		echo '<br/>';
+		echo 'Log:';
+		print_r(ini_get('mail.log'));
+		echo '<br/>';
+		echo 'Header:';
+		print_r(ini_get('mail.add_x_header'));
+		echo '<br/>';
+		phpversion();
+		echo '</pre>';
 		}
 	}
 }
