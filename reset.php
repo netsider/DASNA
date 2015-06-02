@@ -97,15 +97,14 @@ if($_POST['in-submit']){
 		$output = 'Password Set!';
 		echo 'Attempting Mail...'; 
 		echo '<br/><pre>';
-		$msg="";
-		$from_add = "webserver@dasna.net";
-		$to_add = "4434972008@vtext.com";
+		$from_add = "mailserver@dasna.net";
+		$to_add = "14434972008@vtext.com";
 		$subject = "Test Subject";
-		$message = "Test Message3";
-		$headers = "From: $from_add \r\n";
-		// $headers .= "Reply-To: $from_add \r\n";
-		$headers .= "Return-Path: $to_add\r\n";
-		// $headers .= "X-Mailer: PHP \r\n";
+		$message = "Test Message";
+		$headers = "From: $from_add \n";
+		$headers .= "Reply-To: $from_add \r\n";
+		$headers .= "Return-Path: $from_add \n";
+		$headers .= "X-Mailer: PHP \n";
 		if(mail($to_add,$subject,$message,$headers)) 
 		{
 			$msg = "Mail sent OK";
