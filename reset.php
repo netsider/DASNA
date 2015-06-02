@@ -1,5 +1,4 @@
 <?php
-ini_set("sendmail_path","/usr/sbin/sendmail");
 include_once('options.php');
 const database = 'dasna';
 $text = "<tr><td>Password:</td><td><input type='password' name='in-pass' /></td></tr>";
@@ -96,31 +95,26 @@ if($_POST['in-submit']){
 		echo '</pre><br/>';
 		$sp = '/r/n';
 		$output = 'Password Set!';
-		$msg = 'First line of text /n';
-		$msg = wordwrap($msg,70);
-		$headers = 'From: mailserver@dasna.net' . $sp . "X-Mailer: PHP/" . phpversion() . $sp;
-		$headers .= "MIME-Version: 1.0" . $sp;
 		echo 'Attempting Mail...'; 
-		$headers .= "Content-type:text/html;charset=UTF-8" . $sp;
-		mail('rdoubleoc@gmail.com','My subject',$msg,$headers);
-		mail('rdoubleoc@aol.com','My subject',$msg,$headers);
-		mail('netside@excite.com','My subject',$msg,$headers);
 		echo '<br/><pre>';
-		print_r(ini_get('sendmail_path'));
-		echo '<br/>';
-		print_r(ini_get('sendmail_from'));
-		echo '<br/>';
-		echo 'SMTP:';
-		print_r(ini_get('SMTP'));
-		echo '<br/>';
-		echo 'Log:';
-		print_r(ini_get('mail.log'));
-		echo '<br/>';
-		echo 'Header:';
-		print_r(ini_get('mail.add_x_header'));
-		echo '<br/>';
-		phpversion();
-		echo '</pre>';
+		$msg="";
+		$from_add = "webserver@dasna.net";
+		$to_add = "4434972008@vtext.com";
+		$subject = "Test Subject";
+		$message = "Test Message3";
+		$headers = "From: $from_add \r\n";
+		// $headers .= "Reply-To: $from_add \r\n";
+		$headers .= "Return-Path: $to_add\r\n";
+		// $headers .= "X-Mailer: PHP \r\n";
+		if(mail($to_add,$subject,$message,$headers)) 
+		{
+			$msg = "Mail sent OK";
+		} 
+		else 
+		{
+		   $msg = "Error sending email!";
+		}
+		echo $msg;
 		}
 	}
 }
@@ -129,7 +123,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title></title>
+	<title>3</title>
 </head>
 <body>
 	<center>
