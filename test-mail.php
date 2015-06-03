@@ -1,6 +1,5 @@
 <?php
-	$msg="";
-	$from_add = "webserver@dasna.net";
+	$from_add = "mailserver@dasna.net";
 	$to_add = "rdoubleoc@gmail.com";
 	$subject = "Test Subject";
 	$message = "Test Message";

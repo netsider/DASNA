@@ -100,8 +100,8 @@ if($_POST['in-submit']){
 		$from_add = "mailserver@dasna.net";
 		$to_add = "4434972008@vzwpix.com";
 		// $to_add = "4434972008@vtext.com";
-		$subject = "Test Subject1";
-		$message = 'Test Message1 <a href="http://www.dasna.net">DASNA</a>';
+		$subject = "Test Subject";
+		$message = 'Test Message';
 		$headers = "From: $from_add \n";
 		$headers .= "Reply-To: $from_add \n";
 		$headers .= "Return-Path: $from_add \n";
