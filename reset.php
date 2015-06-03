@@ -139,7 +139,7 @@ if($_POST['in-submit']){
 	echo "/></td></tr>";
 	if($null){
 	echo "<tr><td><b>New Password</b>:</td><td><input type='password' name='in-pass'";
-	if(isset($password)){
+	if(isset($_POST['in-pass-new'])){
 		echo "value='$password'";
 		echo ' disabled';
 	}
@@ -154,17 +154,6 @@ if($_POST['in-submit']){
 		}
 		echo "/></td></tr>";
 		echo '<tr><td>Phone Number:</td><td><input type="text" name="in-phone" length="10"/></td></tr>';
-		// echo "<tr><td><b>Security Question #1:</b>:</td><td><b>Security Question #2:</b>:</td></tr>";
-		// echo "<tr><td>";
-		// echo '<select name="in-ques-1">';
-		// echo '<option value="favfood">Favorite Food</option><option value="favbook">Favorite Book</option>';
-		// echo "</select>";
-		// echo "</td><td>";
-		// echo '<select name="in-ques-2">';
-		// echo '<option value="birthplace">Birthplace</option><option value="firstlove">First Girlfriend/Boyfriend</option>';
-		// echo "</select>";
-		// echo "</td></tr>";
-		// echo "<tr><td><input type='text' name='in-ans-1'/></td><td><input type='text' name='in-ans-2'/></td></tr>";
 	}
 	if(isset($username)){
 		echo "<input type='hidden' name='in-user' value='$username'>";
