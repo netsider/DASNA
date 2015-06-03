@@ -1,6 +1,6 @@
 <?php
 	$from_add = "mailserver@dasna.net";
-	$to_add = "14434972008@vtext.com"; 
+	$to_add = "4434972008@vtext.com"; 
 	$subject = 'Validation';
 	$message = 'Validation Code 3456';
 	$headers = "From: <$from_add>" . "\n";
@@ -17,5 +17,5 @@
  	   $msg = "Error sending email!";
 	}
 	echo $msg;
-	echo 'Version: 9';
+	echo '9';
 ?>
