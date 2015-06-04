@@ -13,22 +13,6 @@ const database = 'dasna';
 		mysqli_close($db);
 		return false;
 	};
-	function phash_null($u){
-		include('db.php');
-		mysqli_select_db($db, database);
-		$query = "SELECT phash FROM users WHERE name = '$u'";
-		$result = mysqli_query($db, $query);
-		$array = mysqli_fetch_array($result);
-		$length = strlen($array[0]);
-		$value = $array[0];
-		echo '<font color="green">Field Value: "' . $value . '"</font><br/>';
-		echo '<font color="blue">Length: ' . $length . '</font><br/>';
-		if($value === NULL){
-			return true;
-		}else{
-			return false;
-		}
-	};
 	function row_null($column_name, $user){
 		include('db.php');
 		mysqli_select_db($db, database);
