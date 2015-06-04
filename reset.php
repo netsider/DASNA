@@ -29,10 +29,10 @@ const database = 'dasna';
 			return false;
 		}
 	};
-	function temp_null($u){
+	function row_null($column_name, $user){
 		include('db.php');
 		mysqli_select_db($db, database);
-		$query = "SELECT temp FROM users WHERE name = '$u'";
+		$query = "SELECT $column_name FROM users WHERE name = '$user'";
 		$result = mysqli_query($db, $query);
 		$array = mysqli_fetch_array($result);
 		$length = strlen($array[0]);
@@ -86,7 +86,7 @@ if($_POST['in-submit']){
 		}
 		if(user_exist($username)){
 			$user_exist = true;
-			if(phash_null($username) === true){
+			if(row_null('phash', $username) === true){
 				$output = '<font color="green"><b>Type an alphanumeric password to be your password.</font></b>';
 				$null = true;
 			}else{
@@ -99,18 +99,13 @@ if($_POST['in-submit']){
 		}
 		if($null){ // If password for username entered is NULL
 			if($user_exist && $phone_set){
-				$output = 'Username exists, but confirmation code already has value.  Confirmation code NOT null.';
-				if(temp_null($username) === true){
+				$output = 'Username exists, and phone set';
+				if(row_null('temp', $username) === true){
 					$output = 'Confirmation code value null.  Confirmation code has been generated and sent to phone number in database.';
-					if($_POST['in-submit'] === "Confirm" && isset($_POST['in-phone'])){ // executed when all critera met (Change so that in-phone is in-verify)
-					echo 'Test';
-					echo '<pre>';
-					print_r($_POST);
-					echo '</pre><br/>';
 					$sp = '/r/n';
 					$output = 'Password Set!';
 					echo 'Attempting Mail...'; 
-					echo '<br/><pre>';
+					echo '<br/>';
 					$from_add = "mailserver@dasna.net";
 					$to_add = "4434972008@vzwpix.com";
 					// $to_add = "4434972008@vtext.com";
@@ -121,22 +116,16 @@ if($_POST['in-submit']){
 					$headers .= "Return-Path: $from_add \n";
 					$headers .= "X-Mailer: PHP \n";
 					$headers .= "Content-type:text/plain;charset=UTF-8" . "\n";
-					if(mail($to_add,$subject,$message,$headers)) 
-					{
+					if(mail($to_add,$subject,$message,$headers)){
 						$msg = "Mail sent OK";
-					} 
-					else 
-					{
+					}else{
 					   $msg = "Error sending email!";
 					}
-					echo $msg;
 					}		
-			}}
+			}
+			}
 		}
-		
 		}
-	}
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -166,7 +155,7 @@ if($_POST['in-submit']){
 		} 
 		echo '/></td></tr>';
 	}
-	if($user_exist && $phone_set){
+	if($user_exist && $phone_set && $null){
 		echo "<tr><td><b>Confirmation Code</b>:</td><td><input type='text' name='in-conf'";
 		// if(isset($new_pass)){
 			// echo "value='$pass_new'";
@@ -174,7 +163,7 @@ if($_POST['in-submit']){
 		// }
 		echo "/></td></tr>";
 	}
-	if($user_exist && $phone_set){
+	if($user_exist && $phone_set && $null){
 	echo "<tr><td><b>New Password</b>:</td><td><input type='password' name='in-pass'";
 	if(isset($_POST['in-pass-new'])){
 		echo "value='$password'";
@@ -182,7 +171,7 @@ if($_POST['in-submit']){
 	}
 	echo "/></td></tr>";
 	}
-	if($user_exist && $phone_set){
+	if($user_exist && $phone_set && $null){
 		echo "<tr><td><b>Re-type Password</b>:</td><td><input type='password' name='in-pass-new'";
 		if(isset($new_pass)){
 			echo "value='$pass_new'";
