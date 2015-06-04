@@ -20,17 +20,15 @@ $text = "<tr><td>Password:</td><td><input type='password' name='in-pass' /></td>
 		$query = "SELECT phash FROM users WHERE name = '$u'";
 		$result = mysqli_query($db, $query);
 		$array = mysqli_fetch_array($result);
-		$plength = strlen($array[0]);
-		$phash = $array[0];
-		echo '<font color="green">Field Value: "' . $phash . '"</font><br/>';
-		echo '<font color="blue">Length: ' . $plength . '</font><br/>';
-		// if($array[0] === NULL){
-			// return true;
-		// }
-		if($phash === NULL){
+		$length = strlen($array[0]);
+		$value = $array[0];
+		echo '<font color="green">Field Value: "' . $value . '"</font><br/>';
+		echo '<font color="blue">Length: ' . $length . '</font><br/>';
+		if($value === NULL){
 			return true;
+		}else{
+			return false;
 		}
-		return false;
 	};
 	function allgood($array){ // returns false if not alphanumeric
 		$alpha = true;
@@ -58,13 +56,18 @@ $text = "<tr><td>Password:</td><td><input type='password' name='in-pass' /></td>
 		}
 	};
 if($_POST['in-submit']){
-	if(allgood($_POST)){ 
+	if(allgood($_POST)){
+		$input_clean = true;
 		$username = $_POST['in-user'];
 		if(isset($_POST['in-pass'])){
 			$password = $_POST['in-pass'];
 		}
 		if(isset($_POST['in-phone'])){
 			$phone = $_POST['in-phone'];
+			$phone_set = true;
+		}
+		if(isset($_POST['in-pass-new'])){
+			$pass_new = $_POST['in-pass-new'];
 		}
 		if(user_exist($username)){
 			$user_exist = true;
@@ -72,27 +75,17 @@ if($_POST['in-submit']){
 				$output = '<font color="green"><b>Type an alphanumeric password to be your password.</font></b>';
 				$null = true;
 			}else{
-				$output = '<font color="red"><b>Username not found, or not NULL!</font></b>';
+				$output = '<font color="red"><b>Username exists, but has password value!</font></b>';
 				$null = false;
 			}
 		}else{
-			$output = '<b>User does not exist<b>!';
+			$output = '<font color="red"><b>User does not exist<b></font>!';
 			$user_exist = false;
 		}
 		if($null){ // If password for username entered is NULL
-			if(isset($_POST['in-user'])){
+			if($user_exist){
 				$set = true;
-				$output = 'Username set.';
-				if(isset($_POST['in-pass'])){
-					$plength = strlen($_POST['in-pass']);
-					$ulength = strlen($_POST['in-user']);
-					if($plength > 0){
-					// if passwork not blank
-					$output = 'Username and Password set.';
-					}else{
-						$output = 'Password Field Blank';	
-					}
-				}
+				$output = 'Username exists, and password value NULL.';
 			}
 			if($_POST['in-submit'] === "Confirm" && isset($_POST['in-phone'])){ // executed when all critera met (Change so that in-phone is in-verify)
 				// $set = true;
@@ -132,22 +125,24 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>3</title>
+	<title>4</title>
 </head>
 <body>
 	<center>
 	<table width='25%' border='1'>
 	<tr><td colspan="2"><center>Set Password</center></td></tr>
 	<form action='reset.php' method='POST'>
-	<tr><td>Username:</td><td><input type='text' name='in-user' <?php 
-	if(isset($username)){ echo "value='$username'";}; 
-	if(isset($username)){ 
+	<tr><td>Username:</td><td>
+	<?php 
+	echo "<input type='text' name='in-user'";
+	if($user_exist){ echo "value='$username'";}; 
+	if($user_exist){ 
 		echo 'disabled';
 	}
 	echo "/></td></tr>";
 	if($user_exist){
 		echo '<tr><td>Phone Number:</td><td><input type="text" name="in-phone"';
-		if(isset($_POST['in-phone'])){
+		if(isset($phone)){
 		echo "value='$phone'";
 			echo ' disabled';
 		} 
@@ -163,22 +158,35 @@ if($_POST['in-submit']){
 	}
 	if($user_exist && $phone_set){
 		echo "<tr><td><b>Re-type Password</b>:</td><td><input type='password' name='in-pass-new'";
-		if(isset($_POST['in-pass-new'])){
-			$newpass = $_POST['in-pass-new'];
-			echo "value='$newpass'";
+		if(isset($new_pass)){
+			echo "value='$pass_new'";
 			echo ' disabled';
 		}
 		echo "/></td></tr>";
 	}
-	if(isset($username)){
-		echo "<input type='hidden' name='in-user' value='$username'>";
+
+	
+	// Submit button
+	echo "<tr><td colspan='2'><input type='submit' name='in-submit'";
+	if($null){ 
+		echo "value='ConfirmUserandPhone'";
+	}else{ 
+		echo "value='ConfirmUsername'"; 
+	} 
+	echo '/>';
+	if(isset($output)){ echo $output;};
+	
+	// Retain data between submits
+	if(isset($username) && $user_exist){
+		echo "<input type='hidden' name='in-user' value='$username' />";
 	}
 	if(isset($password)){
-		echo "<input type='hidden' name='in-pass' value='$password'>";
+		echo "<input type='hidden' name='in-pass' value='$password' />";
 	}
-	if(isset($_POST['in-phone'])){ echo "value='$username'";}; 
+	if(isset($phone)){
+		echo "<input type='hidden' name='in-phone' value='$phone' />";
+	} 
 	?>
-	<tr><td colspan='2'><input type='submit' name='in-submit' <?php if($null){ echo "value='Confirm'"; }else{ echo'Submit'; } ?> /><?php if(isset($output)){
-	echo $output;}; ?></td></tr></center><br/></form></table>
+	</td></tr></center><br/></form></table>
 </body>
 </html>
