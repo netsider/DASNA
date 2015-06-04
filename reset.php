@@ -1,7 +1,6 @@
 <?php
 include_once('options.php');
 const database = 'dasna';
-$text = "<tr><td>Password:</td><td><input type='password' name='in-pass' /></td></tr>";
 	function user_exist($u){
 		include('db.php');
 		mysqli_select_db($db, database);
@@ -18,6 +17,22 @@ $text = "<tr><td>Password:</td><td><input type='password' name='in-pass' /></td>
 		include('db.php');
 		mysqli_select_db($db, database);
 		$query = "SELECT phash FROM users WHERE name = '$u'";
+		$result = mysqli_query($db, $query);
+		$array = mysqli_fetch_array($result);
+		$length = strlen($array[0]);
+		$value = $array[0];
+		echo '<font color="green">Field Value: "' . $value . '"</font><br/>';
+		echo '<font color="blue">Length: ' . $length . '</font><br/>';
+		if($value === NULL){
+			return true;
+		}else{
+			return false;
+		}
+	};
+	function temp_null($u){
+		include('db.php');
+		mysqli_select_db($db, database);
+		$query = "SELECT temp FROM users WHERE name = '$u'";
 		$result = mysqli_query($db, $query);
 		$array = mysqli_fetch_array($result);
 		$length = strlen($array[0]);
@@ -83,40 +98,42 @@ if($_POST['in-submit']){
 			$user_exist = false;
 		}
 		if($null){ // If password for username entered is NULL
-			if($user_exist){
-				$set = true;
-				$output = 'Username exists, and password value NULL.';
-			}
-			if($_POST['in-submit'] === "Confirm" && isset($_POST['in-phone'])){ // executed when all critera met (Change so that in-phone is in-verify)
-				// $set = true;
-			echo 'Test';
-			echo '<pre>';
-			print_r($_POST);
-			echo '</pre><br/>';
-			$sp = '/r/n';
-			$output = 'Password Set!';
-			echo 'Attempting Mail...'; 
-			echo '<br/><pre>';
-			$from_add = "mailserver@dasna.net";
-			$to_add = "4434972008@vzwpix.com";
-			// $to_add = "4434972008@vtext.com";
-			$subject = "Test Subject";
-			$message = 'Test Message';
-			$headers = "From: $from_add \n";
-			$headers .= "Reply-To: $from_add \n";
-			$headers .= "Return-Path: $from_add \n";
-			$headers .= "X-Mailer: PHP \n";
-			$headers .= "Content-type:text/plain;charset=UTF-8" . "\n";
-			if(mail($to_add,$subject,$message,$headers)) 
-			{
-				$msg = "Mail sent OK";
-			} 
-			else 
-			{
-			   $msg = "Error sending email!";
-			}
-			echo $msg;
-			}
+			if($user_exist && $phone_set){
+				$output = 'Username exists, but confirmation code already has value.  Confirmation code NOT null.';
+				if(temp_null($username) === true){
+					$output = 'Confirmation code value null.  Confirmation code has been generated and sent to phone number in database.';
+					if($_POST['in-submit'] === "Confirm" && isset($_POST['in-phone'])){ // executed when all critera met (Change so that in-phone is in-verify)
+					echo 'Test';
+					echo '<pre>';
+					print_r($_POST);
+					echo '</pre><br/>';
+					$sp = '/r/n';
+					$output = 'Password Set!';
+					echo 'Attempting Mail...'; 
+					echo '<br/><pre>';
+					$from_add = "mailserver@dasna.net";
+					$to_add = "4434972008@vzwpix.com";
+					// $to_add = "4434972008@vtext.com";
+					$subject = "Test Subject";
+					$message = 'Test Message';
+					$headers = "From: $from_add \n";
+					$headers .= "Reply-To: $from_add \n";
+					$headers .= "Return-Path: $from_add \n";
+					$headers .= "X-Mailer: PHP \n";
+					$headers .= "Content-type:text/plain;charset=UTF-8" . "\n";
+					if(mail($to_add,$subject,$message,$headers)) 
+					{
+						$msg = "Mail sent OK";
+					} 
+					else 
+					{
+					   $msg = "Error sending email!";
+					}
+					echo $msg;
+					}		
+			}}
+		}
+		
 		}
 	}
 }
@@ -125,9 +142,10 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>4</title>
+	<title>5</title>
 </head>
 <body>
+	<?php echo '1'; ?> 
 	<center>
 	<table width='25%' border='1'>
 	<tr><td colspan="2"><center>Set Password</center></td></tr>
@@ -149,6 +167,14 @@ if($_POST['in-submit']){
 		echo '/></td></tr>';
 	}
 	if($user_exist && $phone_set){
+		echo "<tr><td><b>Confirmation Code</b>:</td><td><input type='text' name='in-conf'";
+		// if(isset($new_pass)){
+			// echo "value='$pass_new'";
+			// echo ' disabled';
+		// }
+		echo "/></td></tr>";
+	}
+	if($user_exist && $phone_set){
 	echo "<tr><td><b>New Password</b>:</td><td><input type='password' name='in-pass'";
 	if(isset($_POST['in-pass-new'])){
 		echo "value='$password'";
@@ -164,18 +190,16 @@ if($_POST['in-submit']){
 		}
 		echo "/></td></tr>";
 	}
-
-	
-	// Submit button
-	echo "<tr><td colspan='2'><input type='submit' name='in-submit'";
+	echo "<tr><td colspan='2'><center><input type='submit' name='in-submit'"; // Submit button
 	if($null){ 
 		echo "value='ConfirmUserandPhone'";
 	}else{ 
-		echo "value='ConfirmUsername'"; 
+		echo "value='Submit'"; 
 	} 
-	echo '/>';
+	echo '/></center></td></tr>';
+	echo '<tr><td colspan="2"><u><center>Notes:</center></u>';
 	if(isset($output)){ echo $output;};
-	
+	echo '</td></tr>';
 	// Retain data between submits
 	if(isset($username) && $user_exist){
 		echo "<input type='hidden' name='in-user' value='$username' />";
@@ -187,6 +211,6 @@ if($_POST['in-submit']){
 		echo "<input type='hidden' name='in-phone' value='$phone' />";
 	} 
 	?>
-	</td></tr></center><br/></form></table>
+	</center><br/></form></table>
 </body>
 </html>
