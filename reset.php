@@ -3,6 +3,7 @@ error_reporting(E_ALL ^ E_NOTICE);ini_set('display_errors',1);
 include_once('options.php');
 $br = '<br/>';
 $output = '';
+$confirm = false;
 const database = 'dasna';
 	function user_exist($u){
 		include('db.php');
@@ -39,9 +40,9 @@ const database = 'dasna';
 		$array = mysqli_fetch_array($result);
 		$length = strlen($array[0]);
 		$value = $array[0];
-		echo '<font color="green">Field Value: "' . $value . '"</font><br/>';
-		echo '<font color="blue">Length: ' . $length . '</font><br/>';
-		// return $value;
+		echo '<font color="red">Field Value: "' . $value . '"</font><br/>';
+		echo '<font color="red">Length: ' . $length . '</font><br/>';
+		return $value;
 	};
 	function allgood($array){ // returns false if not alphanumeric
 		$alpha = true;
@@ -62,9 +63,6 @@ const database = 'dasna';
 		if($alpha){
 			return true;
 		}else{
-			echo '<pre>';
-			print_r($_POST);
-			echo '</pre><br/>';
 			return false;
 		}
 	};
@@ -95,35 +93,41 @@ if($_POST['in-submit']){
 			$output = '<font color="red"><b>User does not exist<b></font>!';
 			$user_exist = false;
 		}
-		if($null){ // If password for username entered is NULL
+		if($null){
 			if($user_exist && $phone_set){
-				$output = 'Username exists, and phone set';
-				if(row_value("phone", $username) == $phone){
-					echo '<b>Match!</b>';
-					$code_match = true;
-				}
-				echo (row_value("phone", $username));
-				if(row_null('temp', $username) === true){
-					$output = 'Attempting mail...';
-					echo 'Attempting Mail...';
-					$from_add = "mailserver@dasna.net";
-					$to_add = "4434972008@vzwpix.com";
-					// $to_add = "4434972008@vtext.com";
-					$sp = "/r/n";
-					$subject = "Test Subject";
-					$message = 'Test Message';
-					$headers = "From: $from_add /n";
-					$headers .= "Reply-To: $from_add /n";
-					$headers .= "Return-Path: $from_add /n";
-					$headers .= "X-Mailer: PHP /n";
-					$headers .= "Content-type:text/plain;charset=UTF-8 /n";
-					// if(mail($to_add,$subject,$message,$headers)){
-						// echo "Mail sent OK!";
-						// $output = 'Confirmation code value null.  Confirmation code generated & sent to phone number on record.';
-					// }else{
-						// echo "Error sending email!";
-					// }
-				}		
+				$output .= 'Username exists, and phone set';
+				// echo 'Phone in DB: <b>' . row_value('phone', $username) . '</b> AND ENTERED: <b>' . $phone . '</b><br/>';
+				if(row_value('phone', $username) === $phone){
+					$output .= '<b>Phone number verified!</b>';
+					echo '<b>Phone number verified!</b><br/>';
+					$phone_match = true;				
+					if(row_null('temp', $username) === true){
+						$c = mt_rand(10000000, 99999999);
+						include('db.php');
+						mysqli_select_db($db, database);
+						$query = "UPDATE users SET temp = '$c' WHERE name = '$username'";
+						$result = mysqli_query($db, $query);
+						$output = 'Attempting mail...';
+						echo 'Attempting Mail...';
+						$from_add = "mailserver@dasna.net";
+						$to_add = "4434972008@vzwpix.com";
+						// $to_add = "4434972008@vtext.com";
+						$sp = "\r\n";
+						$subject = "Confirmation";
+						$message = $c;
+						$headers = "From: $from_add \r\n";
+						$headers .= "Reply-To: $from_add \r\n";
+						$headers .= "Return-Path: $from_add\r\n";
+						$headers .= "X-Mailer: PHP \r\n";
+						$headers .= "Content-type:text/plain;charset=UTF-8 \r\n";
+						if(mail($to_add,$subject,$message,$headers)){
+							echo "Mail sent OK!";
+							$output = '<font color="green">Confirmation code generated & sent to phone number on record.</font>';
+						}else{
+							echo "Error sending email!";
+						}
+					}
+				}				
 			}
 		}
 	}
@@ -133,7 +137,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>6</title>
+	<title>11</title>
 </head>
 <body>
 	<center>
@@ -143,7 +147,7 @@ if($_POST['in-submit']){
 	<tr><td>Username:</td><td>
 	<?php 
 	echo "<input type='text' name='in-user'";
-	if($user_exist){ echo "value='$username'";}; 
+	if(isset($username)){ echo "value='$username'";}; 
 	if($user_exist){ 
 		echo 'disabled';
 	}
@@ -151,12 +155,14 @@ if($_POST['in-submit']){
 	if($user_exist){
 		echo '<tr><td>Phone Number:</td><td><input type="text" name="in-phone"';
 		if(isset($phone)){
-		echo "value='$phone'";
+			echo "value='$phone'";
+		}
+		if($phone_match){
 			echo ' disabled';
-		} 
+		}
 		echo '/></td></tr>';
 	}
-	if($user_exist && $phone_set && $null){
+	if($phone_match && $phone_set){
 		echo "<tr><td><b>Confirmation Code</b>:</td><td><input type='text' name='in-conf'";
 		// if(isset($new_pass)){
 			// echo "value='$pass_new'";
@@ -164,7 +170,7 @@ if($_POST['in-submit']){
 		// }
 		echo "/></td></tr>";
 	}
-	if($user_exist && $phone_set && $null){
+	if($confirm){
 	echo "<tr><td><b>New Password</b>:</td><td><input type='password' name='in-pass'";
 	if(isset($_POST['in-pass-new'])){
 		echo "value='$password'";
@@ -172,7 +178,7 @@ if($_POST['in-submit']){
 	}
 	echo "/></td></tr>";
 	}
-	if($user_exist && $phone_set && $null){
+	if($confirm){
 		echo "<tr><td><b>Re-type Password</b>:</td><td><input type='password' name='in-pass-new'";
 		if(isset($new_pass)){
 			echo "value='$pass_new'";
@@ -199,7 +205,8 @@ if($_POST['in-submit']){
 	}
 	if(isset($phone)){
 		echo "<input type='hidden' name='in-phone' value='$phone' />";
-	} 
+	}
+	
 	?>
 	</center><br/></form></table>
 </body>
