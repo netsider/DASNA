@@ -1,5 +1,8 @@
 <?php
+error_reporting(E_ALL ^ E_NOTICE);ini_set('display_errors',1);
 include_once('options.php');
+$br = '<br/>';
+$output = '';
 const database = 'dasna';
 	function user_exist($u){
 		include('db.php');
@@ -10,7 +13,6 @@ const database = 'dasna';
 				return true;
 			}
 		}
-		mysqli_close($db);
 		return false;
 	};
 	function row_null($column_name, $user){
@@ -28,6 +30,18 @@ const database = 'dasna';
 		}else{
 			return false;
 		}
+	};
+	function row_value($column_name, $user){
+		include('db.php');
+		mysqli_select_db($db, database);
+		$query = "SELECT $column_name FROM users WHERE name = '$user'";
+		$result = mysqli_query($db, $query);
+		$array = mysqli_fetch_array($result);
+		$length = strlen($array[0]);
+		$value = $array[0];
+		echo '<font color="green">Field Value: "' . $value . '"</font><br/>';
+		echo '<font color="blue">Length: ' . $length . '</font><br/>';
+		// return $value;
 	};
 	function allgood($array){ // returns false if not alphanumeric
 		$alpha = true;
@@ -84,41 +98,44 @@ if($_POST['in-submit']){
 		if($null){ // If password for username entered is NULL
 			if($user_exist && $phone_set){
 				$output = 'Username exists, and phone set';
+				if(row_value("phone", $username) == $phone){
+					echo '<b>Match!</b>';
+					$code_match = true;
+				}
+				echo (row_value("phone", $username));
 				if(row_null('temp', $username) === true){
-					$output = 'Confirmation code value null.  Confirmation code has been generated and sent to phone number in database.';
-					$sp = '/r/n';
-					$output = 'Password Set!';
-					echo 'Attempting Mail...'; 
-					echo '<br/>';
+					$output = 'Attempting mail...';
+					echo 'Attempting Mail...';
 					$from_add = "mailserver@dasna.net";
 					$to_add = "4434972008@vzwpix.com";
 					// $to_add = "4434972008@vtext.com";
+					$sp = "/r/n";
 					$subject = "Test Subject";
 					$message = 'Test Message';
-					$headers = "From: $from_add \n";
-					$headers .= "Reply-To: $from_add \n";
-					$headers .= "Return-Path: $from_add \n";
-					$headers .= "X-Mailer: PHP \n";
-					$headers .= "Content-type:text/plain;charset=UTF-8" . "\n";
-					if(mail($to_add,$subject,$message,$headers)){
-						$msg = "Mail sent OK";
-					}else{
-					   $msg = "Error sending email!";
-					}
-					}		
-			}
+					$headers = "From: $from_add /n";
+					$headers .= "Reply-To: $from_add /n";
+					$headers .= "Return-Path: $from_add /n";
+					$headers .= "X-Mailer: PHP /n";
+					$headers .= "Content-type:text/plain;charset=UTF-8 /n";
+					// if(mail($to_add,$subject,$message,$headers)){
+						// echo "Mail sent OK!";
+						// $output = 'Confirmation code value null.  Confirmation code generated & sent to phone number on record.';
+					// }else{
+						// echo "Error sending email!";
+					// }
+				}		
 			}
 		}
-		}
+	}
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>5</title>
+	<title>6</title>
 </head>
 <body>
-	<?php echo '1'; ?> 
 	<center>
 	<table width='25%' border='1'>
 	<tr><td colspan="2"><center>Set Password</center></td></tr>
