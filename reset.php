@@ -146,6 +146,17 @@ const database = 'dasna';
 			return false;
 		}
 	};
+	function create_hash($userinput, $salt, $algo, $iter){
+		$i = 1;
+		$hash = hash($algo, $salt . $userinput);
+		// echo 'String: ' . $userinput . ' Salt: ' . $salt . ' Hash: ' . $hash . $br;
+		while($i < $iter){
+		$hash = hash($algo, $salt . $hash);
+		// echo $i . '.-->Hash(' . $algo . '):' . $hash . $br;
+		$i++;
+		}
+		return $hash;
+	};
 if($_POST['in-submit']){
 	if(allgood($_POST)){
 		$input_clean = true;
@@ -210,40 +221,21 @@ if($_POST['in-submit']){
 						if(isset($password) && isset($pass_new)){
 							$bothset = true;
 							if(check_equal($pass_new, $password)){
-								$output .= $fcg . 'Passwords OK!' . $efc . $br;
-								
-								function create_hash($userinput, $salt, $algo){
-									$i = 1;
-									$hash = hash($algo, $salt . $userinput);
-									echo 'String: ' . $userinput . ' Salt: ' . $salt . ' Hash: ' . $hash . $br;
-									while($i < 75000){
-										$hash = hash($algo, $salt . $hash);
-										// echo $i . '.-->Hash(' . $algo . '):' . $hash . $br;
-										$i++;
-									}
-									return $hash;
-								};
-								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));  //Can also or openssl_random_psuedo_bytes()
-								$hash = create_hash($password, $salt, 'whirlpool');
-								$output .= 'Attempting to save to database...' . $efcbr;
+								$output .= $fcg . 'Password OK!' . $efc . $br;
+								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));
+								$hash = create_hash($password, $salt, 'whirlpool', 75000);
 								$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
-								$hash2 = create_hash($password, $salt, 'whirlpool');
-								$output .= '<b>Verification Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
-								if(check_equal($hash, $hash2)){
-									$output .= $fcg . 'Hashes Match!' . $efc . $br;
+								$output .= 'Attempting to save to database...' . $efcbr;
+								if(save_hash($username, $hash)){
+									$output .= $fcg . 'Password hash saved to database!' . $efcbr;
 								}else{
-									$output .= $fcr . 'Hashes DONT Match!' . $efc . $br;
+									$output .= $fcr . 'Password hash NOT saved to database!' . $efcbr;
 								}
-								// if(save_hash($username, $hash)){
-									// $output .= $fcg . 'Password hash saved to database!' . $efcbr;
-								// }else{
-									// $output .= $fcr . 'Password hash NOT saved to database!' . $efcbr;
-								// }
-								// if(save_salt($username, $salt)){
-									// $output .= $fcg . 'Password salt saved to database!' . $efcbr;
-								// }else{
-									// $output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
-								// }
+								if(save_salt($username, $salt)){
+									$output .= $fcg . 'Password salt saved to database!' . $efcbr;
+								}else{
+									$output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
+								}
 							}
 						}
 					}else{
@@ -259,7 +251,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
-	<title>39</title>
+	<title>40</title>
 </head>
 <body>
 	<center>
