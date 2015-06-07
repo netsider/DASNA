@@ -127,6 +127,26 @@ const database = 'dasna';
 			return false;
 		}
 	};
+	function save_hash($user, $hash){
+		include('db.php');
+		mysqli_select_db($db, database);
+		$query = "UPDATE users SET phash = '$hash' WHERE name = '$user'";
+		if(mysqli_query($db, $query)){
+			return true;
+		}else{
+			return false;
+		}
+	};
+	function save_salt($user, $salt){
+		include('db.php');
+		mysqli_select_db($db, database);
+		$query = "UPDATE users SET salt = '$salt' WHERE name = '$user'";
+		if(mysqli_query($db, $query)){
+			return true;
+		}else{
+			return false;
+		}
+	};
 if($_POST['in-submit']){
 	if(allgood($_POST)){
 		$input_clean = true;
@@ -172,8 +192,8 @@ if($_POST['in-submit']){
 						$mobile_carrier = pick_carrier($carrier);
 						if(save_carrier($mobile_carrier, $username)){
 							$to_add = $phone_fromDB . $mobile_carrier;
-							$c = mt_rand(10000000, 99999999);
-							$output .= 'Attempting to send SMS...' . $br;
+							$c = mt_rand(1000000, 9999999);
+							// $output .= 'Attempting to send SMS...' . $br;
 							// if(sendSMS($to_add, 'mailserver@dasna.net', $c)){
 								// $output .= $fcg . "Confirmation code sent to $to_add. Check your mobile device text messages for the code." . $efcbr;
 								// if(save_confirm_code($c, $username)){
@@ -193,8 +213,25 @@ if($_POST['in-submit']){
 							$parray['p1'] = $password;
 							$parray['p2'] = $pass_new;
 							if(validate($pass_new, $password)){
-								
-								$output .= $fcg . 'Password Good!' . $efc;
+								$output .= $fcg . 'Passwords OK!' . $efc;
+								// $iterations = 250000;
+								// $salt = mcrypt_create_iv(20, MCRYPT_RAND);  //Can also or openssl_random_psuedo_bytes()
+								$salt = 'russell1aaa';
+								// $hash = hash_pbkdf2("sha256", $password, $salt, $iterations, 0);
+								$output .= 'Attempting to save to database...' . $efcbr;
+								$options = '$2a$07$' . $salt . '$';
+								$hash = crypt($password, $options);
+								$output .= 'Hash Generated: <b>' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
+								// if(save_hash($username, $hash)){
+									// $output .= $fcg . 'Password hash saved to database!' . $efcbr;
+								// }else{
+									// $output .= $fcr . 'Password hash NOT saved to database!' . $efcbr;
+								// }
+								// if(save_salt($username, $salt)){
+									// $output .= $fcg . 'Password salt saved to database!' . $efcbr;
+								// }else{
+									// $output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
+								// }
 							}
 						}
 					}else{
@@ -209,8 +246,8 @@ if($_POST['in-submit']){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>25</title>
+	<meta charset="ISO-8859-1">
+	<title>33</title>
 </head>
 <body>
 	<center>
