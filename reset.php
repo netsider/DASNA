@@ -210,8 +210,6 @@ if($_POST['in-submit']){
 						$parray = array(); // create an array to pass into the allgood function
 						if(isset($password) && isset($pass_new)){
 							$bothset = true;
-							$parray['p1'] = $password;
-							$parray['p2'] = $pass_new;
 							if(validate($pass_new, $password)){
 								$output .= $fcg . 'Passwords OK!' . $efc;
 								// $iterations = 250000;
