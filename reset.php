@@ -213,15 +213,16 @@ if($_POST['in-submit']){
 							if(validate($pass_new, $password)){
 								$output .= $fcg . 'Passwords OK!' . $efc;
 								// $iterations = 250000;
-								// $salt = mcrypt_create_iv(20, MCRYPT_RAND);  //Can also or openssl_random_psuedo_bytes()
+								$salt = mcrypt_create_iv(20, MCRYPT_RAND);  //Can also or openssl_random_psuedo_bytes()
 								$i = 1;
 								$string = $password;
-								$salt = 'russell';
+								// $salt = 'russell';
+								$hash = hash('whirlpool', $string . $salt);
 								while($i < 10000){
-									$hash = hash('whirlpool', $string . $salt);
-									echo 'String: ' . $string . ' Salt: ' . $salt . $br;
+									$hash = hash('whirlpool', $hash);
+									// echo 'String: ' . $string . ' Salt: ' . $salt . $br;
 									echo $i . '.-->Hash: ' . $hash . $br;
-									$string = $hash;
+									// $string = $hash;
 									$i++;
 								}
 								// $hash = hash_pbkdf2("sha256", $password, $salt, $iterations, 0);
