@@ -31,7 +31,6 @@ const database = 'dasna';
 					break;
 				default:
 					$carrier = false;
-					echo $fcr . 'Carrier not set!' . $efcbr;
 				return $carrier;
 			}
 	}
@@ -40,10 +39,10 @@ const database = 'dasna';
 			mysqli_select_db($db, database);
 			$query = "UPDATE users SET carrier = '$carrier' WHERE name = '$username'";
 			if($result = mysqli_query($db, $query)){
-					echo 'Carrier saved in database!<br/>';
+					// echo 'Carrier saved in database!<br/>';
 					return true;
 			}else{
-					echo 'Carrier not stored in database!<br/>';
+					// echo 'Carrier not stored in database!<br/>';
 					return false;
 			}
 	}
@@ -72,7 +71,7 @@ const database = 'dasna';
 		$length = strlen($array[0]);
 		$value = $array[0];
 		echo '<font color="red">Field Value: "' . $value . '"</font><br/>';
-		echo '<font color="red">Length: ' . $length . '</font><br/>';
+		// echo '<font color="red">Length: ' . $length . '</font><br/>';
 		return $value;
 	};
 	function allgood($array){ // returns false if not alphanumeric
@@ -120,7 +119,7 @@ const database = 'dasna';
 			return false;
 		}
 	};
-	function validate($p1, $p2){
+	function check_equal($p1, $p2){
 		if($p1 === $p2){
 			return true;
 		}else{
@@ -210,26 +209,31 @@ if($_POST['in-submit']){
 						$parray = array(); // create an array to pass into the allgood function
 						if(isset($password) && isset($pass_new)){
 							$bothset = true;
-							if(validate($pass_new, $password)){
-								$output .= $fcg . 'Passwords OK!' . $efc;
-								// $iterations = 250000;
-								$salt = mcrypt_create_iv(20, MCRYPT_RAND);  //Can also or openssl_random_psuedo_bytes()
-								$i = 1;
-								$string = $password;
-								// $salt = 'russell';
-								$hash = hash('whirlpool', $string . $salt);
-								while($i < 10000){
-									$hash = hash('whirlpool', $hash);
-									// echo 'String: ' . $string . ' Salt: ' . $salt . $br;
-									echo $i . '.-->Hash: ' . $hash . $br;
-									// $string = $hash;
-									$i++;
-								}
-								// $hash = hash_pbkdf2("sha256", $password, $salt, $iterations, 0);
+							if(check_equal($pass_new, $password)){
+								$output .= $fcg . 'Passwords OK!' . $efc . $br;
+								
+								function create_hash($userinput, $salt, $algo){
+									$i = 1;
+									$hash = hash($algo, $salt . $userinput);
+									echo 'String: ' . $userinput . ' Salt: ' . $salt . ' Hash: ' . $hash . $br;
+									while($i < 75000){
+										$hash = hash($algo, $salt . $hash);
+										// echo $i . '.-->Hash(' . $algo . '):' . $hash . $br;
+										$i++;
+									}
+									return $hash;
+								};
+								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));  //Can also or openssl_random_psuedo_bytes()
+								$hash = create_hash($password, $salt, 'whirlpool');
 								$output .= 'Attempting to save to database...' . $efcbr;
-								// $options = '$2a$07$' . $salt . '$';
-								// $hash = crypt($password, $options);
-								$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . ' Salted-Hash: ' . $salted_pass . $efcbr;
+								$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
+								$hash2 = create_hash($password, $salt, 'whirlpool');
+								$output .= '<b>Verification Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
+								if(check_equal($hash, $hash2)){
+									$output .= $fcg . 'Hashes Match!' . $efc . $br;
+								}else{
+									$output .= $fcr . 'Hashes DONT Match!' . $efc . $br;
+								}
 								// if(save_hash($username, $hash)){
 									// $output .= $fcg . 'Password hash saved to database!' . $efcbr;
 								// }else{
@@ -254,8 +258,8 @@ if($_POST['in-submit']){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="ISO-8859-1">
-	<title>38</title>
+	<meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
+	<title>39</title>
 </head>
 <body>
 	<center>
