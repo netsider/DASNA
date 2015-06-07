@@ -214,12 +214,24 @@ if($_POST['in-submit']){
 								$output .= $fcg . 'Passwords OK!' . $efc;
 								// $iterations = 250000;
 								// $salt = mcrypt_create_iv(20, MCRYPT_RAND);  //Can also or openssl_random_psuedo_bytes()
-								$salt = 'russell1aaa';
+								function hashit($string){
+									$salt = 'russell';
+									$salted_string = $salt . $string;
+									$hashed_string = hash('whirlpool', $salted_string);
+									return $hashed_string;
+								};
+								$i = 1;
+								$string = $password;
+								while($i < 1000){
+									$hash = hashit($string);
+									$string = $hash;
+									$i++;
+								}
 								// $hash = hash_pbkdf2("sha256", $password, $salt, $iterations, 0);
 								$output .= 'Attempting to save to database...' . $efcbr;
-								$options = '$2a$07$' . $salt . '$';
-								$hash = crypt($password, $options);
-								$output .= 'Hash Generated: <b>' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
+								// $options = '$2a$07$' . $salt . '$';
+								// $hash = crypt($password, $options);
+								$output .= 'Hash Generated: <b>' . $hash . '</b><br/> Salt: ' . $salt . ' Salted-Hash: ' . $salted_pass . $efcbr;
 								// if(save_hash($username, $hash)){
 									// $output .= $fcg . 'Password hash saved to database!' . $efcbr;
 								// }else{
@@ -245,7 +257,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta charset="ISO-8859-1">
-	<title>33</title>
+	<title>36</title>
 </head>
 <body>
 	<center>
