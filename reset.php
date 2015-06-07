@@ -157,6 +157,32 @@ const database = 'dasna';
 		}
 		return $hash;
 	};
+	function read_hash($user){
+		include('db.php');
+		mysqli_select_db($db, database);
+		$query = "SELECT phash FROM users WHERE name = '$user'";
+		if($result = mysqli_query($db, $query)){
+			$array = mysqli_fetch_array($result);
+			if ($array[0] === NULL){
+				return 'Row is null!';
+			}else{
+			return $array[0];
+			}
+		}else{
+			return false;
+		}
+	};
+	function read_salt($user){
+		include('db.php');
+		mysqli_select_db($db, database);
+		$query = "SELECT salt FROM users WHERE name = '$user'";
+		if($result = mysqli_query($db, $query)){
+			$array = mysqli_fetch_array($result);
+			return $array[0];
+		}else{
+			return false;
+		}
+	};
 if($_POST['in-submit']){
 	if(allgood($_POST)){
 		$input_clean = true;
@@ -221,21 +247,45 @@ if($_POST['in-submit']){
 						if(isset($password) && isset($pass_new)){
 							$bothset = true;
 							if(check_equal($pass_new, $password)){
+								
 								$output .= $fcg . 'Password OK!' . $efc . $br;
 								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));
-								$hash = create_hash($password, $salt, 'whirlpool', 75000);
+								
+								$hash = create_hash($password, $salt, 'whirlpool', 15000);
 								$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
+								$hash = create_hash($password, $salt, 'whirlpool', 15000);
+								$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
+								
+								
+								
+								// $output .=rtffff 'Generating Crypt() Hash: ' . $br;
+								// $rounds = 5;
+								// $options = sprintf('$2$%02d$', $rounds) . $salt;
+								// $output .= 'Options: ' . $options . $efcbr;
+								// $hash2 = crypt($password, $options);
+								// $output .= '<b>Final Hash Generated: ' . $hash2 . '</b><br/> Salt: ' . $salt . $efcbr;
+								
 								$output .= 'Attempting to save to database...' . $efcbr;
-								if(save_hash($username, $hash)){
-									$output .= $fcg . 'Password hash saved to database!' . $efcbr;
+								if($hash_fromDB = read_hash($username)){
+									echo $fcg . 'Hash from Database: ' . $hash_fromDB . $efcbr;
 								}else{
-									$output .= $fcr . 'Password hash NOT saved to database!' . $efcbr;
+									echo $fcr. 'Reading hash from database failed!' . $efcbr;
 								}
-								if(save_salt($username, $salt)){
-									$output .= $fcg . 'Password salt saved to database!' . $efcbr;
+								if($salt_fromDB = read_salt($username)){
+									echo $fcg . 'Salt from Database: ' . $salt_fromDB . $efcbr;
 								}else{
-									$output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
+									echo $fcr. 'Reading salt from database failed!' . $efcbr;
 								}
+								// if(save_hash($username, $hash)){
+									// $output .= $fcg . 'Password hash saved to database!' . $efcbr;
+								// }else{
+									// $output .= $fcr . 'Password hash NOT saved to database!' . $efcbr;
+								// }
+								// if(save_salt($username, $salt)){
+									// $output .= $fcg . 'Password salt saved to database!' . $efcbr;
+								// }else{
+									// $output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
+								// }
 							}
 						}
 					}else{
@@ -251,7 +301,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
-	<title>40</title>
+	<title>43</title>
 </head>
 <body>
 	<center>
