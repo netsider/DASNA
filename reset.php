@@ -1,9 +1,14 @@
 <?php
-error_reporting(E_ALL ^ E_NOTICE);ini_set('display_errors',1);
+error_reporting(E_ALL ^ E_NOTICE);
 include_once('options.php');
 $br = '<br/>';
-$output = '';
-$confirm = false;
+$fcg = '<font color="green">';
+$fcr = '<font color="red">';
+$efc = '</font>';
+$efcbr = '</font><br/>';
+$output = '<br/>';
+$confirm = false; // Whether or not confirmation code has been entered by user and present in POST
+$phone_set = false; // Whether phone number present in POST data
 const database = 'dasna';
 	function user_exist($u){
 		include('db.php');
@@ -16,6 +21,32 @@ const database = 'dasna';
 		}
 		return false;
 	};
+	function pick_carrier($string){
+			switch ($string){
+				case "verizon":
+					$carrier = '@vzwpix.com';
+					break;
+				case "att":
+					$carrier = '@txt.att.net';
+					break;
+				default:
+					$carrier = false;
+					echo $fcr . 'Carrier not set!' . $efcbr;
+				return $carrier;
+			}
+	}
+	function save_carrier($carrier, $username){
+			include('db.php');
+			mysqli_select_db($db, database);
+			$query = "UPDATE users SET carrier = '$carrier' WHERE name = '$username'";
+			if($result = mysqli_query($db, $query)){
+					echo 'Carrier saved in database!<br/>';
+					return true;
+			}else{
+					echo 'Carrier not stored in database!<br/>';
+					return false;
+			}
+	}
 	function row_null($column_name, $user){
 		include('db.php');
 		mysqli_select_db($db, database);
@@ -66,6 +97,36 @@ const database = 'dasna';
 			return false;
 		}
 	};
+	function sendSMS($to_add, $from_add, $message){
+		$subject = "Confirmation";
+		$headers = "From: $from_add \r\n";
+		$headers .= "Reply-To: $from_add \r\n";
+		$headers .= "Return-Path: $from_add\r\n";
+		$headers .= "X-Mailer: PHP \r\n";
+		$headers .= "Content-type:text/plain;charset=UTF-8 \r\n";
+		if(mail($to_add,$subject,$message,$headers)){
+			return true;
+		}else{
+			return false;
+		}
+	};
+	function save_confirm_code($code, $user){
+		include('db.php');
+		mysqli_select_db($db, database);
+		$query = "UPDATE users SET temp = '$code' WHERE name = '$user'";
+		if($result = mysqli_query($db, $query)){
+			return true;
+		}else{
+			return false;
+		}
+	};
+	function validate($p1, $p2){
+		if($p1 === $p2){
+			return true;
+		}else{
+			return false;
+		}
+	};
 if($_POST['in-submit']){
 	if(allgood($_POST)){
 		$input_clean = true;
@@ -80,52 +141,64 @@ if($_POST['in-submit']){
 		if(isset($_POST['in-pass-new'])){
 			$pass_new = $_POST['in-pass-new'];
 		}
+		if(isset($_POST['in-conf'])){
+			$confirm_code = $_POST['in-conf'];
+			$confirm_set = true;
+		}
+		if(isset($_POST['in-carrier'])){
+			$carrier = $_POST['in-carrier'];
+			$carrier_set = true;
+		}	
 		if(user_exist($username)){
 			$user_exist = true;
 			if(row_null('phash', $username) === true){
-				$output = '<font color="green"><b>Type an alphanumeric password to be your password.</font></b>';
+				$output .= 'Username has no password value.  Proceed to set.' . $br;
 				$null = true;
 			}else{
-				$output = '<font color="red"><b>Username exists, but has password value!</font></b>';
+				$output .= $fcr . 'Username exists, but already has value!' . $efcbr;
 				$null = false;
 			}
 		}else{
-			$output = '<font color="red"><b>User does not exist<b></font>!';
+			$output .= $fcr . '<b>User does not exist<b>!' . $efcbr;
 			$user_exist = false;
 		}
 		if($null){
 			if($user_exist && $phone_set){
-				$output .= 'Username exists, and phone set';
-				// echo 'Phone in DB: <b>' . row_value('phone', $username) . '</b> AND ENTERED: <b>' . $phone . '</b><br/>';
-				if(row_value('phone', $username) === $phone){
-					$output .= '<b>Phone number verified!</b>';
-					echo '<b>Phone number verified!</b><br/>';
-					$phone_match = true;				
-					if(row_null('temp', $username) === true){
-						$c = mt_rand(10000000, 99999999);
-						include('db.php');
-						mysqli_select_db($db, database);
-						$query = "UPDATE users SET temp = '$c' WHERE name = '$username'";
-						$result = mysqli_query($db, $query);
-						$output = 'Attempting mail...';
-						echo 'Attempting Mail...';
-						$from_add = "mailserver@dasna.net";
-						$to_add = "4434972008@vzwpix.com";
-						// $to_add = "4434972008@vtext.com";
-						$sp = "\r\n";
-						$subject = "Confirmation";
-						$message = $c;
-						$headers = "From: $from_add \r\n";
-						$headers .= "Reply-To: $from_add \r\n";
-						$headers .= "Return-Path: $from_add\r\n";
-						$headers .= "X-Mailer: PHP \r\n";
-						$headers .= "Content-type:text/plain;charset=UTF-8 \r\n";
-						if(mail($to_add,$subject,$message,$headers)){
-							echo "Mail sent OK!";
-							$output = '<font color="green">Confirmation code generated & sent to phone number on record.</font>';
-						}else{
-							echo "Error sending email!";
+				$phone_fromDB = row_value('phone', $username);
+				if($phone_fromDB === $phone){
+					$output .= $fcg . 'Phone number exists/matches!' . $efcbr;
+					$phone_match = true;
+					if(!$confirm_set && $carrier_set){
+						$mobile_carrier = pick_carrier($carrier);
+						if(save_carrier($mobile_carrier, $username)){
+							$to_add = $phone_fromDB . $mobile_carrier;
+							$c = mt_rand(10000000, 99999999);
+							$output .= 'Attempting to send SMS...' . $br;
+							// if(sendSMS($to_add, 'mailserver@dasna.net', $c)){
+								// $output .= $fcg . "Confirmation code sent to $to_add. Check your mobile device text messages for the code." . $efcbr;
+								// if(save_confirm_code($c, $username)){
+									// $output .= $fcg . "Confirmation code recorded. Please enter it continue" . $efcbr;
+								// }
+							// }else{
+								// $output .= $fcr . 'Error sending SMS!' . $efcbr;
+							// }
 						}
+					}
+					if(row_value('temp', $username) === $confirm_code){
+						$output .= $fcg . 'Confirmation code confirmed by database!  You can now set your new password.' . $efcbr;
+						$confirm = true;
+						$parray = array(); // create an array to pass into the allgood function
+						if(isset($password) && isset($pass_new)){
+							$bothset = true;
+							$parray['p1'] = $password;
+							$parray['p2'] = $pass_new;
+							if(validate($pass_new, $password)){
+								
+								$output .= $fcg . 'Password Good!' . $efc;
+							}
+						}
+					}else{
+						$confirm = false;
 					}
 				}				
 			}
@@ -137,7 +210,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>11</title>
+	<title>25</title>
 </head>
 <body>
 	<center>
@@ -154,33 +227,41 @@ if($_POST['in-submit']){
 	echo "/></td></tr>";
 	if($user_exist){
 		echo '<tr><td>Phone Number:</td><td><input type="text" name="in-phone"';
-		if(isset($phone)){
+		if($phone_set){
 			echo "value='$phone'";
 		}
-		if($phone_match){
-			echo ' disabled';
-		}
+		if($phone_match){ echo ' disabled';};
 		echo '/></td></tr>';
 	}
-	if($phone_match && $phone_set){
+	if($user_exist){
+		echo '<tr><td>Mobile Carrier:</td><td>';
+		echo '<select name="in-carrier"';
+		if(isset($carrier)){ echo ' disabled';};
+		echo '>';
+			echo '<option value="verizon">Verizon</option>';
+			echo '<option value="att">ATT</option>';
+		echo '</select>';
+		echo '</td></tr>';
+	}
+	if($phone_match){
 		echo "<tr><td><b>Confirmation Code</b>:</td><td><input type='text' name='in-conf'";
-		// if(isset($new_pass)){
-			// echo "value='$pass_new'";
-			// echo ' disabled';
-		// }
+		if(isset($confirm_code)){
+			echo "value='$confirm_code'";
+			if($confirm){ echo ' disabled';};
+		}
 		echo "/></td></tr>";
 	}
 	if($confirm){
-	echo "<tr><td><b>New Password</b>:</td><td><input type='password' name='in-pass'";
-	if(isset($_POST['in-pass-new'])){
-		echo "value='$password'";
-		echo ' disabled';
-	}
-	echo "/></td></tr>";
+		echo "<tr><td><b>New Password</b>:</td><td><input type='password' name='in-pass'";
+		if(isset($_POST['in-pass'])){
+			echo "value='$password'";
+			echo ' disabled';
+		}
+		echo "/></td></tr>";
 	}
 	if($confirm){
 		echo "<tr><td><b>Re-type Password</b>:</td><td><input type='password' name='in-pass-new'";
-		if(isset($new_pass)){
+		if(isset($_POST['in-pass-new'])){
 			echo "value='$pass_new'";
 			echo ' disabled';
 		}
@@ -188,7 +269,7 @@ if($_POST['in-submit']){
 	}
 	echo "<tr><td colspan='2'><center><input type='submit' name='in-submit'"; // Submit button
 	if($null){ 
-		echo "value='ConfirmUserandPhone'";
+		echo "value='Finish'";
 	}else{ 
 		echo "value='Submit'"; 
 	} 
@@ -200,13 +281,22 @@ if($_POST['in-submit']){
 	if(isset($username) && $user_exist){
 		echo "<input type='hidden' name='in-user' value='$username' />";
 	}
-	if(isset($password)){
+	if($bothset){
 		echo "<input type='hidden' name='in-pass' value='$password' />";
+	}
+	if($bothset){
+		echo "<input type='hidden' name='in-pass-new' value='$pass_new' />";
 	}
 	if(isset($phone)){
 		echo "<input type='hidden' name='in-phone' value='$phone' />";
 	}
-	
+	if(isset($carrier)){
+		echo "<input type='hidden' name='in-carrier' value='$carrier' />";
+	}
+	if($confirm){
+		$confirm_code = $_POST['in-conf'];
+		echo "<input type='hidden' name='in-conf' value='$confirm_code' />";
+	}
 	?>
 	</center><br/></form></table>
 </body>
