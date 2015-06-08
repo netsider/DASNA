@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL);
 include_once('options.php');
 $br = '<br/>';
 $fcg = '<font color="green">';
@@ -7,8 +6,6 @@ $fcr = '<font color="red">';
 $efc = '</font>';
 $efcbr = '</font><br/>';
 $output = '<br/>';
-$confirm = false; // Whether or not confirmation code has been entered by user and present in POST
-$phone_set = false; // Whether phone number present in POST data
 const debug = false;
 const database = 'dasna';
 	function user_exist($u){
@@ -28,22 +25,22 @@ const database = 'dasna';
 					$carrier = '@vzwpix.com';
 					break;
 				case "att":
-					$carrier = '@txt.att.net';
+					$carrier = '@mms.att.net';
 					break;
 				default:
-					$carrier = false;
-				return $carrier;
+					$carrier = '@vtext.com';
 			}
+			return $carrier;
 	}
 	function save_carrier($carrier, $username){
 			include('db.php');
 			mysqli_select_db($db, database);
 			$query = "UPDATE users SET carrier = '$carrier' WHERE name = '$username'";
 			if($result = mysqli_query($db, $query)){
-					// echo 'Carrier saved in database!<br/>';
+					if(debug){echo 'Carrier saved in database!<br/>';};
 					return true;
 			}else{
-					// echo 'Carrier not stored in database!<br/>';
+					if(debug){echo 'Carrier not stored in database!<br/>';};
 					return false;
 			}
 	}
@@ -55,8 +52,8 @@ const database = 'dasna';
 		$array = mysqli_fetch_array($result);
 		$length = strlen($array[0]);
 		$value = $array[0];
-		echo '<font color="green">Field Value: "' . $value . '"</font><br/>';
-		echo '<font color="blue">Length: ' . $length . '</font><br/>';
+		if(debug){echo '<font color="green">Field Value: "' . $value . '"</font><br/>';};
+		if(debug){echo '<font color="green">Length: ' . $length . '</font><br/>';};
 		if($value === NULL){
 			return true;
 		}else{
@@ -71,8 +68,8 @@ const database = 'dasna';
 		$array = mysqli_fetch_array($result);
 		$length = strlen($array[0]);
 		$value = $array[0];
-		echo '<font color="red">Field Value: "' . $value . '"</font><br/>';
-		// echo '<font color="red">Length: ' . $length . '</font><br/>';
+		if(debug){echo '<font color="red">Field Value: "' . $value . '"</font><br/>';};
+		if(debug){echo '<font color="red">Length: ' . $length . '</font><br/>';};
 		return $value;
 	};
 	function allgood($array){ // returns false if not alphanumeric
@@ -81,13 +78,14 @@ const database = 'dasna';
 		$efc = '</font><br/>';
 		foreach($array as $key => $value){
 			if (ctype_alnum($value)) {
-				echo '<font color="green">The field (<b>' . $key . '</b>) is completely alphanumeric.' . $efc;
+				if(debug){echo '<font color="green">The field (<b>' . $key . '</b>) is completely alphanumeric.' . $efc;};
 			} else {
 				$alpha = false;
 				if(empty($value)){
-					echo $fc . '<b>Field Empty!</b>' . $efc;
+					$output .= $fc . '<b>Field Empty!</b>' . $efc;
 				}else{
-					echo $fc . 'The field (<b>' . $key . '</b>) is not completely alphanumeric.' . $efc;
+					$output .= $fc . 'Fields may only contain alphanumeric characters!' . $efc;
+					if(debug){echo $fc . 'The field (<b>' . $key . '</b>) is not completely alphanumeric.' . $efc;};
 				}
 			}
 		}
@@ -148,13 +146,13 @@ const database = 'dasna';
 		}
 	};
 	function create_hash($userinput, $salt, $algo, $iter){
-		$i = 1;
+		$i = 0;
 		$hash = hash($algo, $salt . $userinput);
-		// echo 'String: ' . $userinput . ' Salt: ' . $salt . ' Hash: ' . $hash . $br;
+		// if(debug){echo 'String: ' . $userinput . ' Salt: ' . $salt . ' Hash: ' . $hash . '<br/>';};
 		while($i < $iter){
-		$hash = hash($algo, $salt . $hash);
-		// if(debug){echo $i . '.-->Hash(' . $algo . '):' . $hash . $br;};
-		$i++;
+			$hash = hash($algo, $hash);
+			// if(debug){echo '[' . $i . '](' . $algo . ')' . '->' . $hash . '<br/>';};
+			$i++;
 		}
 		return $hash;
 	};
@@ -209,17 +207,17 @@ if($_POST['in-submit']){
 		if(user_exist($username)){
 			$user_exist = true;
 			if(row_null('phash', $username) === true){
-				$output .= 'Username has no password value.  Proceed to set.' . $br;
+				$output .= 'Password for user has no value.  Proceed to set.' . $br;
 				$null = true;
 			}else{
-				$output .= $fcr . 'Username exists, but already has value!' . $efcbr;
+				$output .= $fcr . 'Password for user exists.  If proceeding, password will be reset.' . $efcbr;
 				$null = false;
 			}
 		}else{
-			$output .= $fcr . '<b>User does not exist<b>!' . $efcbr;
+			$output .= $fcr . 'User does not exist!' . $efcbr;
 			$user_exist = false;
 		}
-		if($null){
+		if($null OR !$null){
 			if($user_exist && $phone_set){
 				$phone_fromDB = row_value('phone', $username);
 				if($phone_fromDB === $phone){
@@ -229,16 +227,22 @@ if($_POST['in-submit']){
 						$mobile_carrier = pick_carrier($carrier);
 						if(save_carrier($mobile_carrier, $username)){
 							$to_add = $phone_fromDB . $mobile_carrier;
-							$c = mt_rand(1000000, 9999999);
-							// $output .= 'Attempting to send SMS...' . $br;
-							// if(sendSMS($to_add, 'mailserver@dasna.net', $c)){
-								// $output .= $fcg . "Confirmation code sent to $to_add. Check your mobile device text messages for the code." . $efcbr;
-								// if(save_confirm_code($c, $username)){
-									// $output .= $fcg . "Confirmation code recorded. Please enter it continue" . $efcbr;
-								// }
-							// }else{
-								// $output .= $fcr . 'Error sending SMS!' . $efcbr;
-							// }
+							// $c = mt_rand(1000000, 9999999);
+							$conf_length = 7;
+							for ($x = 0; $x < $conf_length; $x++) {
+							$int = mt_rand(0, 9);
+							// if(debug){echo $x . '-->' . $int . '<br/>';};
+							$c .= $int;
+							}					
+							$output .= 'Attempting to send SMS...' . $br;
+							if(sendSMS($to_add, 'mailserver@dasna.net', $c)){
+								$output .= $fcg . "Confirmation code sent to $to_add. Check your mobile device text messages for the code." . $efcbr;
+								if(save_confirm_code($c, $username)){
+									$output .= $fcg . "Confirmation code recorded. Please enter it continue" . $efcbr;
+								}
+							}else{
+								$output .= $fcr . 'Error sending SMS!' . $efcbr;
+							}
 						}
 					}
 					if(row_value('temp', $username) === $confirm_code){
@@ -249,13 +253,11 @@ if($_POST['in-submit']){
 							$bothset = true;
 							if(check_equal($pass_new, $password)){
 								$output .= $fcg . 'Password OK!' . $efcbr;
-								
 								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));						
 								$hash = create_hash($password, $salt, 'ripemd320', 10000);
 								$output .= '<b>First Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
 								$hash = create_hash($hash, $salt, 'whirlpool', 10000);
-								$output .= '<b>Final Hash Generated: ' . $final_hash . '</b><br/> Salt: ' . $salt . $efcbr;
-								
+								$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
 								//save hash and salt to DB
 								$output .= 'Attempting to save to database...' . $efcbr;			
 								if(save_hash($username, $hash)){
@@ -268,26 +270,23 @@ if($_POST['in-submit']){
 								}else{
 									$output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
 								}
-								
 								//read hash and salt from DB
 								if($hash_fromDB = read_hash($username)){
-									echo $fcg . 'Hash from Database: ' . $hash_fromDB . $efcbr;
+									$output .= $fcg . 'Hash from Database: ' . $hash_fromDB . $efcbr;
 								}else{
-									echo $fcr. 'Reading hash from database failed!' . $efcbr;
+									$output .= $fcr . 'Reading hash from database failed!' . $efcbr;
 								}
 								if($salt_fromDB = read_salt($username)){
-									echo $fcg . 'Salt from Database: ' . $salt_fromDB . $efcbr;
+									$output .= $fcg . 'Salt from Database: ' . $salt_fromDB . $efcbr;
 								}else{
-									echo $fcr. 'Reading salt from database failed!' . $efcbr;
+									$output .= $fcr . 'Reading salt from database failed!' . $efcbr;
 								}
-								
 								//run salt and userinput through original hash function, to verify
 								$salt = $salt_fromDB;
 								$hash2 = create_hash($password, $salt, 'ripemd320', 10000);
 								$output .= '<b>First Hash Generated: ' . $hash2 . '</b><br/> Salt: ' . $salt . $efcbr;
 								$second_hash = create_hash($hash2, $salt, 'whirlpool', 10000);
 								$output .= '<b>Final Hash Generated: ' . $second_hash . '</b><br/> Salt: ' . $salt . $efcbr;
-								
 								// check hash generated from database salt and current user input against stored hash in database, to check.
 								if($hash_fromDB === $second_hash){
 									echo $fcg . 'Hashes Match!' . $efcbr;
@@ -309,7 +308,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
-	<title>46</title>
+	<title>52</title>
 </head>
 <body>
 	<center>
