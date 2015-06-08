@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL ^ E_NOTICE);
+error_reporting(E_ALL);
 include_once('options.php');
 $br = '<br/>';
 $fcg = '<font color="green">';
@@ -153,7 +153,7 @@ const database = 'dasna';
 		// echo 'String: ' . $userinput . ' Salt: ' . $salt . ' Hash: ' . $hash . $br;
 		while($i < $iter){
 		$hash = hash($algo, $salt . $hash);
-		if(debug){echo $i . '.-->Hash(' . $algo . '):' . $hash . $br;};
+		// if(debug){echo $i . '.-->Hash(' . $algo . '):' . $hash . $br;};
 		$i++;
 		}
 		return $hash;
@@ -248,37 +248,52 @@ if($_POST['in-submit']){
 						if(isset($password) && isset($pass_new)){
 							$bothset = true;
 							if(check_equal($pass_new, $password)){
+								$output .= $fcg . 'Password OK!' . $efcbr;
 								
-								$output .= $fcg . 'Password OK!' . $efc . $br;
-								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));
+								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));						
+								$hash = create_hash($password, $salt, 'ripemd320', 10000);
+								$output .= '<b>First Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
+								$hash = create_hash($hash, $salt, 'whirlpool', 10000);
+								$output .= '<b>Final Hash Generated: ' . $final_hash . '</b><br/> Salt: ' . $salt . $efcbr;
 								
-								$hash = create_hash($password, $salt, 'ripemd320', 25000);
+								//save hash and salt to DB
+								$output .= 'Attempting to save to database...' . $efcbr;			
+								if(save_hash($username, $hash)){
+									$output .= $fcg . 'Password hash saved to database!' . $efcbr;
+								}else{
+									$output .= $fcr . 'Password hash NOT saved to database!' . $efcbr;
+								}
+								if(save_salt($username, $salt)){
+									$output .= $fcg . 'Password salt saved to database!' . $efcbr;
+								}else{
+									$output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
+								}
+								
+								//read hash and salt from DB
+								if($hash_fromDB = read_hash($username)){
+									echo $fcg . 'Hash from Database: ' . $hash_fromDB . $efcbr;
+								}else{
+									echo $fcr. 'Reading hash from database failed!' . $efcbr;
+								}
+								if($salt_fromDB = read_salt($username)){
+									echo $fcg . 'Salt from Database: ' . $salt_fromDB . $efcbr;
+								}else{
+									echo $fcr. 'Reading salt from database failed!' . $efcbr;
+								}
+								
+								//run salt and userinput through original hash function, to verify
+								$salt = $salt_fromDB;
+								$hash2 = create_hash($password, $salt, 'ripemd320', 10000);
 								$output .= '<b>First Hash Generated: ' . $hash2 . '</b><br/> Salt: ' . $salt . $efcbr;
-								$hash = create_hash($hash, $salt, 'whirlpool', 25000); // Create two hashes so that if database is compromised, script obscurity may provide some protection
-								$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
+								$second_hash = create_hash($hash2, $salt, 'whirlpool', 10000);
+								$output .= '<b>Final Hash Generated: ' . $second_hash . '</b><br/> Salt: ' . $salt . $efcbr;
 								
-																
-								// $output .= 'Attempting to save to database...' . $efcbr;
-								// if($hash_fromDB = read_hash($username)){
-									// echo $fcg . 'Hash from Database: ' . $hash_fromDB . $efcbr;
-								// }else{
-									// echo $fcr. 'Reading hash from database failed!' . $efcbr;
-								// }
-								// if($salt_fromDB = read_salt($username)){
-									// echo $fcg . 'Salt from Database: ' . $salt_fromDB . $efcbr;
-								// }else{
-									// echo $fcr. 'Reading salt from database failed!' . $efcbr;
-								// }
-								// if(save_hash($username, $hash)){
-									// $output .= $fcg . 'Password hash saved to database!' . $efcbr;
-								// }else{
-									// $output .= $fcr . 'Password hash NOT saved to database!' . $efcbr;
-								// }
-								// if(save_salt($username, $salt)){
-									// $output .= $fcg . 'Password salt saved to database!' . $efcbr;
-								// }else{
-									// $output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
-								// }
+								// check hash generated from database salt and current user input against stored hash in database, to check.
+								if($hash_fromDB === $second_hash){
+									echo $fcg . 'Hashes Match!' . $efcbr;
+								}else{
+									echo $fcr . 'Hashes do NOT match!' . $efcbr;
+								}
 							}
 						}
 					}else{
@@ -294,7 +309,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
-	<title>44</title>
+	<title>46</title>
 </head>
 <body>
 	<center>
