@@ -1,5 +1,5 @@
 <?php
-session_start();include_once('options.php');
+require('options.php');
 session_regenerate_id(true);$sid = session_id(); // To prevent session fixation
 ?>
 <!DOCTYPE html>

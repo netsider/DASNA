@@ -1,4 +1,6 @@
 <?php
+// make inputs correct for use with magic quotes
+// do the singleton thing for database
 include_once('options.php');
 $br = '<br/>';
 $fcg = '<font color="green">';
@@ -6,32 +8,9 @@ $fcr = '<font color="red">';
 $efc = '</font>';
 $efcbr = '</font><br/>';
 $output = '<br/>';
+include_once('functions.php');
 const debug = false;
 const database = 'dasna';
-	function user_exist($u){
-		include('db.php');
-		mysqli_select_db($db, database);
-		$result = mysqli_query($db, "SELECT name FROM users");
-		while($row = mysqli_fetch_array($result)){
-			if($row[0] === $u){
-				return true;
-			}
-		}
-		return false;
-	};
-	function pick_carrier($string){
-			switch ($string){
-				case "verizon":
-					$carrier = '@vzwpix.com';
-					break;
-				case "att":
-					$carrier = '@mms.att.net';
-					break;
-				default:
-					$carrier = '@vtext.com';
-			}
-			return $carrier;
-	}
 	function save_carrier($carrier, $username){
 			include('db.php');
 			mysqli_select_db($db, database);
@@ -182,6 +161,9 @@ const database = 'dasna';
 			return false;
 		}
 	};
+if(get_magic_quotes_gpc()){
+	echo 'Magic quotes on!';
+}
 if($_POST['in-submit']){
 	if(allgood($_POST)){
 		$input_clean = true;
@@ -308,7 +290,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
-	<title>52</title>
+	<title>53</title>
 </head>
 <body>
 	<center>
