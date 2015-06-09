@@ -73,7 +73,6 @@ if($_POST['in-submit']){
 			$phone_set = true;
 		}
 		if(isset($_POST['in-pass-new'])){
-			// $pass_new = $_POST['in-pass-new'];
 			$pass_new = determine_magic_quotes($_POST['in-pass-new']);
 		}
 		if(isset($_POST['in-conf'])){
