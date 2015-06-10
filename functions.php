@@ -45,7 +45,10 @@ function allgood($array){ // Returns false if not alphanumeric or is empty
 	foreach($array as $key => $value){
 		if (ctype_alnum($value)) {
 			if(debug){echo 'Field(' . $key . ') is alphanumeric.<br/>';};
-		} else {
+			if(strlen($value) < 3){
+				return false;
+			}
+		}else{
 			$alpha = false;
 			if(empty($value)){
 				echo '<b>Field Empty!</b><br/>';

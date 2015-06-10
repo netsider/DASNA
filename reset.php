@@ -1,16 +1,11 @@
 <?php
 require_once('options.php');
 require_once('functions.php');
+require_once('vars.php');
 const debug = false;
 const database = 'dasna';
 // make inputs correct for use with magic quotes
 // do the singleton thing for database
-$br = '<br/>';
-$fcg = '<font color="green">';
-$fcr = '<font color="red">';
-$efc = '</font>';
-$efcbr = '</font><br/>';
-$output = '<br/>';
 function pick_carrier($string){
 		switch ($string){
 			case "verizon":
@@ -64,7 +59,9 @@ function check_equal($str1, $str2){
 if($_POST['in-submit']){
 	if(allgood($_POST)){
 		$input_clean = true;
-		$username = $_POST['in-user'];
+		if(isset($_POST['in-user'])){
+			$username = determine_magic_quotes($_POST['in-user']);
+		}
 		if(isset($_POST['in-pass'])){
 			$password = determine_magic_quotes($_POST['in-pass']);
 		}
@@ -76,20 +73,20 @@ if($_POST['in-submit']){
 			$pass_new = determine_magic_quotes($_POST['in-pass-new']);
 		}
 		if(isset($_POST['in-conf'])){
-			$confirm_code = $_POST['in-conf'];
+			$confirm_code = determine_magic_quotes($_POST['in-conf']);
 			$confirm_set = true;
 		}
 		if(isset($_POST['in-carrier'])){
-			$carrier = $_POST['in-carrier'];
+			$carrier = determine_magic_quotes($_POST['in-carrier']);
 			$carrier_set = true;
 		}	
 		if(user_exist($username)){
 			$user_exist = true;
 			if(row_null('phash', $username) === true){
-				$output .= 'Password for user has no value.  Proceed to set.' . $br;
+				$output .= $fcg . 'Password for user has no value.  Proceed to set.' . $efcbr;
 				$null = true;
 			}else{
-				$output .= $fcr . 'Password for user exists.  If proceeding, password will be reset.' . $efcbr;
+				$output .= $fcr . 'Password for user exists.  Password will be reset...' . $efcbr;
 				$null = false;
 			}
 		}else{
@@ -99,7 +96,7 @@ if($_POST['in-submit']){
 		if($null OR !$null){
 			if($user_exist && $phone_set){
 				$phone_fromDB = row_value('phone', $username);
-				if($phone_fromDB === $phone){
+				if(check_equal($phone_fromDB, $phone)){
 					$output .= $fcg . 'Phone number exists/matches!' . $efcbr;
 					$phone_match = true;
 					if(!$confirm_set && $carrier_set){
@@ -134,9 +131,7 @@ if($_POST['in-submit']){
 								$iterations = 100000;
 								$output .= $fcg . 'Password OK!' . $efcbr;
 								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));						
-								$hash = create_hash($password, $salt, 'ripemd320', $iterations);
-								$output .= '<b>First Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
-								$hash = create_hash($hash, $salt, 'whirlpool', $iterations);
+								$hash = create_hash(create_hash($password, $salt, 'ripemd320', $iterations), $salt, 'whirlpool', $iterations);
 								$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
 								
 								//save hash and salt to DB
@@ -150,31 +145,6 @@ if($_POST['in-submit']){
 									$output .= $fcg . 'Password salt saved to database!' . $efcbr;
 								}else{
 									$output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
-								}
-								
-								//read hash and salt from DB
-								if($hash_fromDB = read_hash($username)){
-									$output .= $fcg . 'Hash from Database: ' . $hash_fromDB . $efcbr;
-								}else{
-									$output .= $fcr . 'Reading hash from database failed!' . $efcbr;
-								}
-								if($salt_fromDB = read_salt($username)){
-									$output .= $fcg . 'Salt from Database: ' . $salt_fromDB . $efcbr;
-								}else{
-									$output .= $fcr . 'Reading salt from database failed!' . $efcbr;
-								}
-								
-								//run salt and userinput through original hash function, to verify
-								$hash2 = create_hash($password, $salt_fromDB, 'ripemd320', $iterations);
-								$output .= '<b>First Hash Generated: ' . $hash2 . '</b><br/> Salt(from DB): ' . $salt_fromDB . $efcbr;
-								$second_hash = create_hash($hash2, $salt_fromDB, 'whirlpool', $iterations);
-								$output .= '<b>Final Hash Generated: ' . $second_hash . '</b><br/> Salt(from DB): ' . $salt_fromDB . $efcbr;
-								
-								// check hash generated from database salt and current user input against stored hash in database, to check.
-								if(hash_equals($hash_fromDB, $second_hash)){ // To prevent timing attacks
-									echo $fcg . 'Hashes Match!' . $efcbr;
-								}else{
-									echo $fcr . 'Hashes do NOT match!' . $efcbr;
 								}
 							}
 						}
@@ -191,7 +161,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
-	<title>57</title>
+	<title>59</title>
 </head>
 <body>
 	<center>
@@ -258,7 +228,6 @@ if($_POST['in-submit']){
 	echo '<tr><td colspan="2"><u><center>Notes:</center></u>';
 	if(isset($output)){ echo $output;};
 	echo '</td></tr>';
-	
 	if(isset($username) && $user_exist){ // To retain data between submits
 		echo "<input type='hidden' name='in-user' value='$username' />";
 	}

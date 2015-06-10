@@ -64,7 +64,9 @@ function check_equal($str1, $str2){
 if($_POST['in-submit']){
 	if(allgood($_POST)){
 		$input_clean = true;
-		$username = $_POST['in-user'];
+		if(isset($_POST['in-user'])){
+			$username = determine_magic_quotes($_POST['in-user']);
+		}
 		if(isset($_POST['in-pass'])){
 			$password = determine_magic_quotes($_POST['in-pass']);
 		}
@@ -73,24 +75,23 @@ if($_POST['in-submit']){
 			$phone_set = true;
 		}
 		if(isset($_POST['in-pass-new'])){
-			// $pass_new = $_POST['in-pass-new'];
 			$pass_new = determine_magic_quotes($_POST['in-pass-new']);
 		}
 		if(isset($_POST['in-conf'])){
-			$confirm_code = $_POST['in-conf'];
+			$confirm_code = determine_magic_quotes($_POST['in-conf']);
 			$confirm_set = true;
 		}
 		if(isset($_POST['in-carrier'])){
-			$carrier = $_POST['in-carrier'];
+			$carrier = determine_magic_quotes($_POST['in-carrier']);
 			$carrier_set = true;
 		}	
 		if(user_exist($username)){
 			$user_exist = true;
 			if(row_null('phash', $username) === true){
-				$output .= 'Password for user has no value.  Proceed to set.' . $br;
+				$output .= $fcg . 'Password for user has no value.  Proceed to set.' . $efcbr;
 				$null = true;
 			}else{
-				$output .= $fcr . 'Password for user exists.  If proceeding, password will be reset.' . $efcbr;
+				$output .= $fcr . 'Password for user exists.  Password will be reset...' . $efcbr;
 				$null = false;
 			}
 		}else{
@@ -100,7 +101,7 @@ if($_POST['in-submit']){
 		if($null OR !$null){
 			if($user_exist && $phone_set){
 				$phone_fromDB = row_value('phone', $username);
-				if($phone_fromDB === $phone){
+				if(check_equal($phone_fromDB, $phone)){
 					$output .= $fcg . 'Phone number exists/matches!' . $efcbr;
 					$phone_match = true;
 					if(!$confirm_set && $carrier_set){
@@ -167,9 +168,9 @@ if($_POST['in-submit']){
 								
 								//run salt and userinput through original hash function, to verify
 								$hash2 = create_hash($password, $salt_fromDB, 'ripemd320', $iterations);
-								$output .= '<b>First Hash Generated: ' . $hash2 . '</b><br/> Salt(from DB): ' . $salt_fromDB . $efcbr;
+								$output .= '<b>First Verify/Second Hash Generated: ' . $hash2 . '</b><br/> Salt(from DB): ' . $salt_fromDB . $efcbr;
 								$second_hash = create_hash($hash2, $salt_fromDB, 'whirlpool', $iterations);
-								$output .= '<b>Final Hash Generated: ' . $second_hash . '</b><br/> Salt(from DB): ' . $salt_fromDB . $efcbr;
+								$output .= '<b>Final Verify/Second Hash Generated: ' . $second_hash . '</b><br/> Salt(from DB): ' . $salt_fromDB . $efcbr;
 								
 								// check hash generated from database salt and current user input against stored hash in database, to check.
 								if(hash_equals($hash_fromDB, $second_hash)){ // To prevent timing attacks
@@ -192,7 +193,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
-	<title>57</title>
+	<title>58</title>
 </head>
 <body>
 	<center>

@@ -1,54 +1,41 @@
 <?php
-session_start();include_once('options.php');
-session_regenerate_id(true);$sid = session_id(); // To prevent session fixation
-$TABLE = 'users';$database = 'dasna';
-if($_POST){ // If submit button has been pressed
-	echo '<pre>';
-	print_r($_POST);
-	echo '</pre><br/>';
-	function allgood($array){ // returns false if not alphanumeric
-		$minlength = 1;
-		$maxlength = 100;
-		$fc = '<font color="red">';
-		$efc = '</font><br/>';
-		$a = $fc . 'Length of <b>' . $key . '</b> is <b>' . $length . '</b>' . $efc;
-		foreach($array as $key => $value){
-			$length = strlen($value);
-			if($length < $minlength){
-				echo $a;
-				return false;
-			}
-			if($length > $maxlength){
-				echo $a;
-				return false;
-			}
-			if (ctype_alnum($value)) {
-				echo '<font color="green">The field (<b>' . $key . '</b>) is completely alphanumeric.' . $efc;
-			} else {
-				echo $fc . 'The field (<b>' . $key . '</b>) is not completely alphanumeric.' . $efc;
-				return false;
-			}
-	
-		}
-	return true;
-	};
+session_start();
+require_once('options.php');
+require_once('functions.php');
+require_once('vars.php');
+session_regenerate_id(true);
+$sid = session_id(); // To prevent session fixation
+const debug = true;
+if($_POST['in-submit']){ // If submit button has been pressed
 	if (allgood($_POST)){
-		$username = $_POST['in-user'];
-		$password = $_POST['in-pass'];
-		include_once('db.php');
-		mysqli_select_db($db, $database);
-		$result = mysqli_query($db, "SELECT name FROM users");
-		while($row = mysqli_fetch_array($result)){
-			if($row[0] === $username){
-				echo 'User <b>' . $username . '</b> found!';
-				$user_exist = true;
-			}
+		if(isset($_POST['in-user'])){
+			$username = determine_magic_quotes($_POST['in-user']);
 		}
-		mysqli_close($db);
-		if($user_exist){
-			
+		if(isset($_POST['in-pass'])){
+			$password = determine_magic_quotes($_POST['in-pass']);
+		}
+		if(user_exist($username)){
+			if(debug){$output .= 'User exists!' . $efcbr;};
+			if($hash_fromDB = read_hash($username)){
+					if(debug){$output .= $fcg . 'Hash from Database: ' . $hash_fromDB . $efcbr;};
+			}else{
+					if(debug){$output .= $fcr . 'Reading hash from database failed!' . $efcbr;};
+			}
+			if($salt_fromDB = read_salt($username)){
+					if(debug){$output .= $fcg . 'Salt from Database: ' . $salt_fromDB . $efcbr;};
+			}else{
+					if(debug){$output .= $fcr . 'Reading salt from database failed!' . $efcbr;};
+			}
+			$iterations = 100000;
+			$final_hash = create_hash($hash = create_hash($password, $salt_fromDB, 'ripemd320', $iterations), $salt_fromDB, 'whirlpool', $iterations);
+			if(debug){$output .= '<b>Final Hash Generated: ' . $final_hash . '</b><br/> Salt(from DB): ' . $salt_fromDB . $efcbr;};
+			if(hash_equals($hash_fromDB, $final_hash)){ // To prevent timing attacks
+				if(debug){echo $fcg . 'Hashes Match!' . $efcbr;};
+			}else{
+				if(debug){echo $fcr . 'Hashes do NOT match!' . $efcbr;};
+			}
 		}else{
-			echo 'User does not exist!';
+			$ouput .= $fcr . 'User does not exist!' . $efcbr;
 		}
 	}
 }
@@ -57,8 +44,19 @@ if($_POST){ // If submit button has been pressed
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title></title>
+	<title>Login</title>
 </head>
 <body>
+	<table width='20%' border='1'>
+	<tr><td colspan="2">Login</td></tr>
+	<form action='login.php' method='POST'>
+	<tr><td>Username:</td><td><input type='text' name='in-user' /></td></tr>
+	<tr><td>Password:</td><td><input type='password' name='in-pass' /></td></tr>
+	<tr><td colspan='2'><input type='submit' name='in-submit' value='Login' /></td></tr>
+	<tr><td colspan='2'><?php if(isset($output)){ echo $output;}; ?></td></tr>
+	</form>
+	</table>
+	
+
 </body>
 </html>
