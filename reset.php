@@ -2,7 +2,7 @@
 require_once('options.php');
 require_once('functions.php');
 require_once('vars.php');
-const debug = false;
+const debug = true;
 const database = 'dasna';
 // make inputs correct for use with magic quotes
 // do the singleton thing for database
@@ -146,6 +146,11 @@ if($_POST['in-submit']){
 								}else{
 									$output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
 								}
+								if(validate($username, $password)){
+								$output .= 'Pass!';
+								}else{
+								$output .= 'Fail!';
+								}
 							}
 						}
 					}else{
@@ -161,7 +166,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
-	<title>59</title>
+	<title>60</title>
 </head>
 <body>
 	<center>

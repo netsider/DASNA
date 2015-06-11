@@ -3,36 +3,47 @@ session_start();
 require_once('options.php');
 require_once('functions.php');
 require_once('vars.php');
-session_regenerate_id(true);
-$sid = session_id(); // To prevent session fixation
 const debug = true;
-if($_POST['in-submit']){ // If submit button has been pressed
-	if (allgood($_POST)){
+$min_length = 1;
+$authenticated = false;
+$SID = session_id();
+if(debug){ echo $fcb . 'Session ID: ' . $SID . $efcbr;};
+if($_POST['in-submit']){
+	if(allgood($_POST)){
 		if(isset($_POST['in-user'])){
 			$username = determine_magic_quotes($_POST['in-user']);
+			$user_set = true;
+			$_SESSION['in-user'] = $username;
+		}elseif(isset($_SESSION['in-user'])){
+			if(debug){ echo 'Username set via $_SESSION' . $br;};
+			$username = $_SESSION['in-user'];
+			$user_set = true;
+		}else{
+			$output .= $fcr . 'Username not set!' . $efcbr;
 		}
 		if(isset($_POST['in-pass'])){
-			$password = determine_magic_quotes($_POST['in-pass']);
+				$password = determine_magic_quotes($_POST['in-pass']);
+				$pass_set = true;
+		}else{
+			$output .= $fcr . 'Password not set!' . $efcbr;
 		}
 		if(user_exist($username)){
-			if(debug){$output .= 'User exists!' . $efcbr;};
-			if($hash_fromDB = read_hash($username)){
-					if(debug){$output .= $fcg . 'Hash from Database: ' . $hash_fromDB . $efcbr;};
-			}else{
-					if(debug){$output .= $fcr . 'Reading hash from database failed!' . $efcbr;};
-			}
-			if($salt_fromDB = read_salt($username)){
-					if(debug){$output .= $fcg . 'Salt from Database: ' . $salt_fromDB . $efcbr;};
-			}else{
-					if(debug){$output .= $fcr . 'Reading salt from database failed!' . $efcbr;};
-			}
-			$iterations = 100000;
-			$final_hash = create_hash($hash = create_hash($password, $salt_fromDB, 'ripemd320', $iterations), $salt_fromDB, 'whirlpool', $iterations);
-			if(debug){$output .= '<b>Final Hash Generated: ' . $final_hash . '</b><br/> Salt(from DB): ' . $salt_fromDB . $efcbr;};
-			if(hash_equals($hash_fromDB, $final_hash)){ // To prevent timing attacks
-				if(debug){echo $fcg . 'Hashes Match!' . $efcbr;};
-			}else{
-				if(debug){echo $fcr . 'Hashes do NOT match!' . $efcbr;};
+			$user_exist = true;
+			if($pass_set){
+				if(debug){$output .= $fcg . 'User exists!' . $efcbr;};
+				if(validate($username, $password)){
+					if(debug){$output .= $fcg . 'Validation Passed!' . $efcbr;};
+					$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
+					
+					save_to_DB($username, 'ipv4', $ip);
+					if(setcookie($username, $cookie_value, time() + (3600), "/")){
+						if(debug){ echo $fcg . 'Cookie Set!' . $efcbr;};
+					}else{
+						if(debug){ echo $fcr . 'Cookie NOT Set!' . $efcbr;};
+					}
+				}else{
+					if(debug){$output .= $fcr . 'Validation Failed!' . $efcbr;};
+				}
 			}
 		}else{
 			$ouput .= $fcr . 'User does not exist!' . $efcbr;
@@ -44,19 +55,16 @@ if($_POST['in-submit']){ // If submit button has been pressed
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Login</title>
+	<title>Login 6</title>
 </head>
 <body>
-	<table width='20%' border='1'>
-	<tr><td colspan="2">Login</td></tr>
-	<form action='login.php' method='POST'>
-	<tr><td>Username:</td><td><input type='text' name='in-user' /></td></tr>
-	<tr><td>Password:</td><td><input type='password' name='in-pass' /></td></tr>
-	<tr><td colspan='2'><input type='submit' name='in-submit' value='Login' /></td></tr>
-	<tr><td colspan='2'><?php if(isset($output)){ echo $output;}; ?></td></tr>
-	</form>
-	</table>
-	
-
+	<?php 
+	if($authenticated === true){
+		
+	}else{
+		echo "<form action='login.php' method='POST'>";
+		require_once 'login-table.php';
+	}
+	?>
 </body>
 </html>

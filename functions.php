@@ -1,8 +1,14 @@
 <?php
 const database = 'dasna';
 const debug = true;
+$br = '<br/>';
+$fcg = '<font color="green">';
+$fcr = '<font color="red">';
+$fcb = '<font color="blue">';
+$efc = '</font>';
+$efcbr = '</font><br/>';
 function user_exist($u){
-	include_once 'db.php';
+	include 'db.php';
 	mysqli_select_db($db, database);
 	$result = mysqli_query($db, "SELECT name FROM users");
 	while($row = mysqli_fetch_array($result)){
@@ -16,7 +22,7 @@ function save_carrier($carrier, $username){
 		include 'db.php';
 		mysqli_select_db($db, database);
 		$query = "UPDATE users SET carrier = '$carrier' WHERE name = '$username'";
-		if($result = mysqli_query($db, $query)){
+		if(mysqli_query($db, $query)){
 				if(debug){echo 'Carrier saved in database!<br/>';};
 				return true;
 		}else{
@@ -24,8 +30,20 @@ function save_carrier($carrier, $username){
 				return false;
 		}
 };
+function save_to_DB($user, $column, $value){
+		include 'db.php';
+		mysqli_select_db($db, database);
+		$query = "UPDATE users SET $column = '$value' WHERE name = '$user'";
+		if(mysqli_query($db, $query)){
+				if(debug){echo 'Column(' . $column . ') saved in database. Value:<b>' . $value . '</b><br/>';};
+				return true;
+		}else{
+				if(debug){echo 'Column not saved successfully!<br/>';};
+				return false;
+		}
+};
 function row_null($column_name, $user){
-	include('db.php');
+	include 'db.php';
 	mysqli_select_db($db, database);
 	$query = "SELECT $column_name FROM users WHERE name = '$user'";
 	$result = mysqli_query($db, $query);
@@ -65,7 +83,7 @@ function allgood($array){ // Returns false if not alphanumeric or is empty
 	}
 };
 function row_value($column_name, $user){
-	include('db.php');
+	include 'db.php';
 	mysqli_select_db($db, database);
 	$query = "SELECT $column_name FROM users WHERE name = '$user'";
 	$result = mysqli_query($db, $query);
@@ -77,7 +95,7 @@ function row_value($column_name, $user){
 	return $value;
 };
 function read_hash($user){
-	include('db.php');
+	include 'db.php';
 	mysqli_select_db($db, database);
 	$query = "SELECT phash FROM users WHERE name = '$user'";
 	if($result = mysqli_query($db, $query)){
@@ -92,7 +110,7 @@ function read_hash($user){
 	}
 };
 function read_salt($user){
-	include('db.php');
+	include 'db.php';
 	mysqli_select_db($db, database);
 	$query = "SELECT salt FROM users WHERE name = '$user'";
 	if($result = mysqli_query($db, $query)){
@@ -137,8 +155,8 @@ if(!function_exists('hash_equals')) {
     if(strlen($str1) != strlen($str2)){
       return false;
     }else{
-    $string = $str1 ^ $str2;
-    $return = 0;
+		$string = $str1 ^ $str2;
+		$return = 0;
 	for($i = strlen($string) - 1;$i >= 0;$i--){
 		$return |= ord($string[$i]);
 	}
@@ -148,10 +166,33 @@ if(!function_exists('hash_equals')) {
 }
 function determine_magic_quotes($str){
 	if(get_magic_quotes_gpc()){
-		$ret = stripslashes($str);
+		return stripslashes($str);
 	}else{
-		$ret = $str;
+		return $str;
 	}
-	return $ret;
+};
+function validate($username, $password){
+	include 'db.php';
+	$iterations = 100000;
+	if($hash_fromDB = read_hash($username)){
+		// if(debug){echo '<br/>Hash read from Database: ' . $hash_fromDB . $br;};
+	}else{
+		if(debug){echo 'Reading hash failed!<br/>';};
+	}
+	if($salt_fromDB = read_salt($username)){
+		// if(debug){echo '<br/>Salt read from Database: ' . $salt_fromDB . $br;};
+	}else{
+		if(debug){echo 'Reading salt failed!<br/>';};
+	}
+	if(hash_equals($hash_fromDB, $final_hash = create_hash(create_hash($password, $salt_fromDB, 'ripemd320', $iterations), $salt_fromDB, 'whirlpool', $iterations))){
+		// if(debug){echo $fcg . 'Hashes Match!' . $efcbr;};
+		if(debug){echo '<b>Final Hash Generated: ' . $final_hash . '</b><br/> <b>Hash(from DB): ' . $hash_fromDB . '</b>' . $efcbr;};
+		return true;
+	}else{
+		// if(debug){echo $fcr . 'Hashes do NOT match!' . $efcbr;};
+		if(debug){echo '<b>Final Hash Generated: ' . $final_hash . '</b><br/> <b>Hash(from DB): ' . $hash_fromDB . '</b>' . $efcbr;};
+		return false;
+	}
+
 };
 ?>
