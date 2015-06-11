@@ -97,6 +97,7 @@ function row_value($column_name, $user){
 	if(debug){echo 'Length: ' . $length . '<br/>';};
 	return $value;
 };
+
 function read_hash($user){
 	include 'db.php';
 	mysqli_select_db($db, database);

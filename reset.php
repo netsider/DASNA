@@ -4,7 +4,6 @@ require_once('functions.php');
 require_once('vars.php');
 const debug = true;
 const database = 'dasna';
-// make inputs correct for use with magic quotes
 // do the singleton thing for database
 function pick_carrier($string){
 		switch ($string){
@@ -113,7 +112,7 @@ if($_POST['in-submit']){
 							if(sendSMS($to_add, 'mailserver@dasna.net', $c, 'Confirmation')){ // change back to "" if not working later
 								$output .= $fcg . "Confirmation code sent to $to_add. Check your mobile device text messages for the code." . $efcbr;
 								if(save_confirm_code($c, $username)){
-									$output .= $fcg . "Confirmation code recorded. Please enter it continue" . $efcbr;
+									$output .= $fcg . "Confirmation code recorded. Please enter it to continue" . $efcbr;
 								}
 							}else{
 								$output .= $fcr . 'Error sending SMS!' . $efcbr;
@@ -131,22 +130,21 @@ if($_POST['in-submit']){
 								$output .= $fcg . 'Password OK!' . $efcbr;
 								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));						
 								$hash = create_hash(create_hash($password, $salt, 'ripemd320', $iterations), $salt, 'whirlpool', $iterations);
-								$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;
-								
+								if(debug){$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;};
 								//save hash and salt to DB
 								$output .= 'Attempting to save to database...' . $efcbr;			
 								if(save_hash($username, $hash)){
-									$output .= $fcg . 'Password hash saved to database!' . $efcbr;
+									$output .= $fcg . 'Password saved to database!' . $efcbr;
 								}else{
-									$output .= $fcr . 'Password hash NOT saved to database!' . $efcbr;
+									$output .= $fcr . 'Password NOT saved to database!' . $efcbr;
 								}
 								if(save_salt($username, $salt)){
-									$output .= $fcg . 'Password salt saved to database!' . $efcbr;
+									// $output .= $fcg . 'Password salt saved to database!' . $efcbr;
 								}else{
-									$output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
+									// $output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
 								}
-								if(validate($username, $password)){
-								$output .= 'Pass!';
+								if(validate($username, $password)){ // Check it
+								$output .= 'Password Successfully set!  Please close this window completely, and proceed to the login area.';
 								}else{
 								$output .= 'Fail!';
 								}

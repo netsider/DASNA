@@ -72,11 +72,11 @@ if($authenticated === true){
 	require_once 'login-table.php';
 	echo '</center>';
 }
-	// if(debug){
-	// echo '<pre>';
-	// var_dump($_SESSION);
-	// echo '<br/>';
-	// var_dump($_COOKIE);
-	// echo '</pre>';
-	// }
+	if(debug){
+	echo '<pre>';
+	var_dump($_SESSION);
+	echo '<br/>';
+	var_dump($_COOKIE);
+	echo '</pre>';
+	}
 ?>
