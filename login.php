@@ -8,7 +8,7 @@ require_once('options.php');
 require_once('functions.php');
 require_once('vars.php');
 if($_SESSION['authenticated'] === true){
-	$expires = 3600 / 10;
+	$expires = 3600 * 24 * 365; // 1 year
 	setrawcookie('DCOUNT', $_SESSION['count'], time() + ($expires), "/");
 	$authenticated = true;
 }else{
@@ -16,9 +16,13 @@ if($_SESSION['authenticated'] === true){
 	$_SESSION['authenticated'] = false;
 }
 if(empty($_SESSION['count'])){
-   $_SESSION['count'] = 1;
-} else {
-   $_SESSION['count']++;
+	if(!empty($_COOKIE['DCOUNT'])){
+		$_SESSION['count'] = $_COOKIE['DCOUNT'];
+	}else{
+		$_SESSION['count'] = 1;
+	}
+}else{
+	$_SESSION['count']++;
 }
 if($_POST['in-submit']){
 	if(allgood($_POST)){
@@ -47,7 +51,7 @@ if($_POST['in-submit']){
 					if(debug){$output .= $fcg . 'Validation Passed!' . $efcbr;};
 					$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
 					$_SESSION['authenticated'] = true;
-					$authenticated = true;
+					$authenticated = true; // needed so form hides very first time
 					save_to_DB($username, 'ipv4', $ip);
 				}else{
 					if(debug){$output .= $fcr . 'Validation Failed!' . $efcbr;};
@@ -59,15 +63,15 @@ if($_POST['in-submit']){
 		}
 	}
 }
-	if($authenticated === true){ // Require cookie AND session (can change to OR to make it easier)
-		if(debug){echo $fcg . 'Password has been verified!' . $efcbr;};
-		require_once 'editor.php';
-	}else{
-		echo '<form action="login.php" method="POST">';
-		echo '<center>';
-		require_once 'login-table.php';
-		echo '</center>';
-	}
+if($authenticated === true){
+	if(debug){echo $fcg . 'Password has been verified!' . $efcbr;};
+	require_once 'editor.php';
+}else{
+	echo '<form action="login.php" method="POST">';
+	echo '<center>';
+	require_once 'login-table.php';
+	echo '</center>';
+}
 	// if(debug){
 	// echo '<pre>';
 	// var_dump($_SESSION);
