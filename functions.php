@@ -60,6 +60,9 @@ function row_null($column_name, $user){
 };
 function allgood($array){ // Returns false if not alphanumeric or is empty
 	$alpha = true; // true unless something changes it
+	// echo '<pre>';
+	// print_r($array);
+	// echo '</pre>';
 	foreach($array as $key => $value){
 		if (ctype_alnum($value)) {
 			if(debug){echo 'Field(' . $key . ') is alphanumeric.<br/>';};
@@ -136,7 +139,7 @@ function create_hash($userinput, $salt, $algo, $iter){
 	if(debug){echo '<b>Iterations:' . $iter . '</b><br/>';};
 	$i = 0;
 	$hash = hash($algo, $salt . $userinput);
-	if(debug){echo '<b>Input:</b> ' . $userinput . ' <b>Salt:</b> ' . $salt . ' <b>Hash:</b> ' . $hash . '<br/>';};
+	// if(debug){echo '<br/><b>Input:</b> ' . $userinput . ' <b>Salt:</b> ' . $salt . ' <b>Hash:</b> ' . $hash . '<br/>';};
 	while($i <= $iter){
 		if($i % 100 == 0){ // to create variation
 			$hash = str_rot13($hash);

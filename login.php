@@ -1,22 +1,38 @@
 <?php
+session_name("DASNAID");
+ini_set('session.hash_function','whirlpool');
+date_default_timezone_set("America/New_york");
 session_start();
+session_regenerate_id(true);
 require_once('options.php');
 require_once('functions.php');
 require_once('vars.php');
 const debug = true;
-$min_length = 1;
-$authenticated = false;
-$SID = session_id();
-if(debug){ echo $fcb . 'Session ID: ' . $SID . $efcbr;};
+if($_SESSION['authenticated'] === true){
+	// setrawcookie('DID', session_id(), time() + (20000), "/"); // DASNAID already contains session ID!
+	setrawcookie('DUSER', $_SESSION['username'], time() + (36000), "/");
+	setrawcookie('DCOUNT', $_SESSION['count'], time() + (36000), "/");
+	setrawcookie('DCOOKIE', true, time() + (20000), "/");
+	$authenticated = true;
+}else{
+	$authenticated = false;
+}
+if(empty($_SESSION['count'])){
+   $_SESSION['count'] = 1;
+} else {
+   $_SESSION['count']++;
+}
+if(debug){ echo $fcb . 'You have requested this page <b>' . $_SESSION['count'] . '</b> times.' . $efcbr;};
+if(debug){ echo $fcb . 'session_id(): ' . session_id() . $efcbr;};
 if($_POST['in-submit']){
 	if(allgood($_POST)){
 		if(isset($_POST['in-user'])){
 			$username = determine_magic_quotes($_POST['in-user']);
 			$user_set = true;
-			$_SESSION['in-user'] = $username;
-		}elseif(isset($_SESSION['in-user'])){
+			$_SESSION['username'] = $_POST['in-user'];
+		}elseif(isset($_SESSION['username'])){
 			if(debug){ echo 'Username set via $_SESSION' . $br;};
-			$username = $_SESSION['in-user'];
+			$username = $_SESSION['username'];
 			$user_set = true;
 		}else{
 			$output .= $fcr . 'Username not set!' . $efcbr;
@@ -34,15 +50,11 @@ if($_POST['in-submit']){
 				if(validate($username, $password)){
 					if(debug){$output .= $fcg . 'Validation Passed!' . $efcbr;};
 					$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
-					
+					$_SESSION['authenticated'] = true;
 					save_to_DB($username, 'ipv4', $ip);
-					if(setcookie($username, $cookie_value, time() + (3600), "/")){
-						if(debug){ echo $fcg . 'Cookie Set!' . $efcbr;};
-					}else{
-						if(debug){ echo $fcr . 'Cookie NOT Set!' . $efcbr;};
-					}
 				}else{
 					if(debug){$output .= $fcr . 'Validation Failed!' . $efcbr;};
+					$_SESSION['authenticated'] = false;
 				}
 			}
 		}else{
@@ -50,21 +62,21 @@ if($_POST['in-submit']){
 		}
 	}
 }
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Login 6</title>
-</head>
-<body>
-	<?php 
-	if($authenticated === true){
-		
+	if($authenticated === true && $_COOKIE['DCOOKIE'] === "1"){ // Require cookie AND session (can change to OR to make it easier)
+		echo $fcg . 'Password has been verified!' . $efcbr;
+		require_once 'editor.php';
 	}else{
-		echo "<form action='login.php' method='POST'>";
+		echo '<form action="login.php" method="POST">';
+		echo '<center>';
 		require_once 'login-table.php';
+		echo '</center>';
 	}
-	?>
-</body>
-</html>
+	if(debug){
+	echo '<pre>';
+	var_dump($_SESSION);
+	echo '<br/>';
+	var_dump($_COOKIE);
+	echo '</pre>';
+	}
+
+?>

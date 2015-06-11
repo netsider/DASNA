@@ -95,8 +95,7 @@ if($_POST['in-submit']){
 		}
 		if($null OR !$null){
 			if($user_exist && $phone_set){
-				$phone_fromDB = row_value('phone', $username);
-				if(check_equal($phone_fromDB, $phone)){
+				if(check_equal($phone_fromDB = row_value('phone', $username), $phone)){
 					$output .= $fcg . 'Phone number exists/matches!' . $efcbr;
 					$phone_match = true;
 					if(!$confirm_set && $carrier_set){
