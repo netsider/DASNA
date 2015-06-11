@@ -36,19 +36,24 @@ if($A = read_content('A')){
 <script src="jquery.min.js"></script>
 <title>1</title></head>
 <body>
+<div id="saved"></div>
 <script>
 function myFunction(){
 	var div = document.getElementById("editor");
     var myData = div.textContent;
     var json_object = {"data": myData};
-	
+	var output = '';
+	for (var property in json_object) {
+	output += property + ': ' + json_object[property]+'; ';
+	}
+	console.log(output); // Outputs HTML from form successfully
     $.ajax({
         url: "ajax_save.php",
         data: json_object,
         dataType: 'json',
         type: 'POST',
         success: function(json_object){
-            console.log(json_object);
+			$("#saved").text('Data: ' +JSON.stringify(json_object));
             console.log("Saved");
         },
         error: function(json_object){
@@ -59,3 +64,6 @@ function myFunction(){
 </script>
 </body>
 </html>
+<?php
+	print_r($_POST);
+?>
