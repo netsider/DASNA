@@ -7,23 +7,19 @@ session_regenerate_id(true);
 require_once('options.php');
 require_once('functions.php');
 require_once('vars.php');
-const debug = true;
 if($_SESSION['authenticated'] === true){
-	// setrawcookie('DID', session_id(), time() + (20000), "/"); // DASNAID already contains session ID!
-	setrawcookie('DUSER', $_SESSION['username'], time() + (36000), "/");
-	setrawcookie('DCOUNT', $_SESSION['count'], time() + (36000), "/");
-	setrawcookie('DCOOKIE', true, time() + (20000), "/");
+	$expires = 3600 / 10;
+	setrawcookie('DCOUNT', $_SESSION['count'], time() + ($expires), "/");
 	$authenticated = true;
 }else{
 	$authenticated = false;
+	$_SESSION['authenticated'] = false;
 }
 if(empty($_SESSION['count'])){
    $_SESSION['count'] = 1;
 } else {
    $_SESSION['count']++;
 }
-if(debug){ echo $fcb . 'You have requested this page <b>' . $_SESSION['count'] . '</b> times.' . $efcbr;};
-if(debug){ echo $fcb . 'session_id(): ' . session_id() . $efcbr;};
 if($_POST['in-submit']){
 	if(allgood($_POST)){
 		if(isset($_POST['in-user'])){
@@ -51,10 +47,11 @@ if($_POST['in-submit']){
 					if(debug){$output .= $fcg . 'Validation Passed!' . $efcbr;};
 					$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
 					$_SESSION['authenticated'] = true;
+					$authenticated = true;
 					save_to_DB($username, 'ipv4', $ip);
 				}else{
 					if(debug){$output .= $fcr . 'Validation Failed!' . $efcbr;};
-					$_SESSION['authenticated'] = false;
+					// $_SESSION['authenticated'] = false;
 				}
 			}
 		}else{
@@ -62,8 +59,8 @@ if($_POST['in-submit']){
 		}
 	}
 }
-	if($authenticated === true && $_COOKIE['DCOOKIE'] === "1"){ // Require cookie AND session (can change to OR to make it easier)
-		echo $fcg . 'Password has been verified!' . $efcbr;
+	if($authenticated === true){ // Require cookie AND session (can change to OR to make it easier)
+		if(debug){echo $fcg . 'Password has been verified!' . $efcbr;};
 		require_once 'editor.php';
 	}else{
 		echo '<form action="login.php" method="POST">';
@@ -71,12 +68,11 @@ if($_POST['in-submit']){
 		require_once 'login-table.php';
 		echo '</center>';
 	}
-	if(debug){
-	echo '<pre>';
-	var_dump($_SESSION);
-	echo '<br/>';
-	var_dump($_COOKIE);
-	echo '</pre>';
-	}
-
+	// if(debug){
+	// echo '<pre>';
+	// var_dump($_SESSION);
+	// echo '<br/>';
+	// var_dump($_COOKIE);
+	// echo '</pre>';
+	// }
 ?>

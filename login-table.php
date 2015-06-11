@@ -16,7 +16,7 @@ if($user_exist){
 	echo '/></td></tr>';
 }
 	echo "<tr><td colspan='2'><input type='submit' name='in-submit'";
-if($user_exist){
+if($user_exist && $user_set){
 		echo 'value="Login"';
 	}else{
 		echo 'value="Submit"';
