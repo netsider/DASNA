@@ -40,7 +40,7 @@ if($A = read_content('A')){
 <script>
 function myFunction(){
 	var div = document.getElementById("editor");
-    var myData = div.textContent;
+    var myData = div.value;
     var json_object = {"data": myData};
 	var output = '';
 	for (var property in json_object) {
@@ -53,7 +53,7 @@ function myFunction(){
         dataType: 'json',
         type: 'POST',
         success: function(json_object){
-			$("#saved").text('Data: ' +JSON.stringify(json_object));
+			$("#saved").text(json_object);
             console.log("Saved");
         },
         error: function(json_object){
