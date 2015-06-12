@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<!-- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> --> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!-- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> --> 
 	<link rel="stylesheet" type="text/css" href="http://www.dasna.net/dasna_main.css" />
 	<title>Development Association of Shire: North America</title>
 	<meta name="keywords" content="DASNA, non-profit, ethiopia, development association, shire, endasilassie, alumni, tigrai, tigray, africa, library" />
@@ -30,7 +30,18 @@
       -moz-animation-name: slidein;
       -webkit-animation-name: slidein;
     }
-    
+	#rightcolumn 
+	{	
+    height: 2000px;
+	}
+	#leftcolumn 
+	{	
+    height: 2000px;
+	}
+	#content 
+	{	
+    height: 2000px;
+	}
     @-moz-keyframes slidein {
       from {
         margin-left:100%;
@@ -75,7 +86,25 @@
     </div><div id="leftcolumn"><?php include 'left.php'; ?></div>
     <div id="content">
 		<h2>Welcome to Development Association of Shire</h2><span style="font-size:13px">
-		<?php include 'content.html'; ?>
+		<?php
+		const database = 'dasna';
+		const debug = false;
+		function read_content($section){
+			include 'db.php';
+			mysqli_select_db($db, database);
+			$query = "SELECT data FROM content WHERE section = '$section'";
+			$result = mysqli_query($db, $query);
+			$array = mysqli_fetch_array($result);
+			$length = strlen($array[0]);
+			$value = $array[0];
+			if(debug){echo 'Field Value: "' . $value . '"<br/>';};
+			if(debug){echo 'Length: ' . $length . '<br/>';};
+			return $value;
+		};
+		if($A = read_content('A')){
+			echo $A;
+		}
+		?>
 	</div>
 	<div id="rightcolumn">
 	<?php include 'right.html'; ?>

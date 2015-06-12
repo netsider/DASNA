@@ -7,6 +7,18 @@ $fcr = '<font color="red">';
 $fcb = '<font color="blue">';
 $efc = '</font>';
 $efcbr = '</font><br/>';
+function read_content($section){
+	include 'db.php';
+	mysqli_select_db($db, database);
+	$query = "SELECT data FROM content WHERE section = '$section'";
+	$result = mysqli_query($db, $query);
+	$array = mysqli_fetch_array($result);
+	$length = strlen($array[0]);
+	$value = $array[0];
+	if(debug){echo 'Field Value: "' . $value . '"<br/>';};
+	if(debug){echo 'Length: ' . $length . '<br/>';};
+	return $value;
+};
 function user_exist($u){
 	include 'db.php';
 	mysqli_select_db($db, database);
