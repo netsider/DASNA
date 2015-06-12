@@ -9,9 +9,11 @@ if($_SESSION['authenticated'] === true){
 		echo '<tr><td colspan="2"><center>Edit HTML</center></td></tr>';
 		echo '<form action="editor.php" method="POST">';
 		echo '<tr><td colspan="2">';
-		echo '<textarea rows="30" cols="80" spellcheck="true" id="editor" onkeydown="myFunction()" onkeyup="myFunction()">>' . htmlspecialchars($A) . '</textarea>';
+		echo '<textarea rows="30" cols="80" spellcheck="true" id="editor" onkeyup="myFunction()">>' . htmlspecialchars($A) . '</textarea>';
 		echo '</td></tr>';
-		echo '<tr><td colspan="2"><input type="submit" name="in-submit" value="Login" /></td></tr>';
+		echo '<tr><td colspan="2">';
+		echo '<div id="saved"></div>';
+		echo '</td></tr>';
 		echo '</form></table></center>';
 		echo '<br/></center>';
 	}else{
@@ -25,7 +27,7 @@ if($_SESSION['authenticated'] === true){
 <script src="jquery.min.js"></script>
 <title>1</title></head>
 <body>
-<div id="saved"></div>
+
 <script>
 function myFunction(){
 	var div = document.getElementById("editor");
@@ -33,9 +35,9 @@ function myFunction(){
     var json_object = {"data": myData};
 	var output = '';
 	for (var property in json_object) {
-	output += property + ': ' + json_object[property]+'; ';
+	output += property + ': ' + json_object[property];
 	}
-	console.log(output); // Outputs HTML from form successfully
+	console.log(output); // Outputs HTML from form
     $.ajax({
         url: "ajax_save.php",
         data: json_object,

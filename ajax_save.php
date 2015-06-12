@@ -12,6 +12,6 @@ function save_content($user, $data){
 };
 $post_data = $_POST['data'];
 if(save_content('A', $post_data)){
-	echo json_encode('success');
+	echo json_encode('<font color="green">success</font>');
 }
 ?>
