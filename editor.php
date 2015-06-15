@@ -32,10 +32,7 @@ if($_SESSION['authenticated'] === true){
 var bodyEditor = CKEDITOR.replace('editor1',
 {
     readOnly: false
-	customConfig: ''
 });
-
-
 bodyEditor.on('mode', function () {
     if (this.mode == 'source') {
         var editable = bodyEditor.editable();
