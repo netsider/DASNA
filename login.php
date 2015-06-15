@@ -8,12 +8,11 @@ require_once('options.php');
 require_once('functions.php');
 require_once('vars.php');
 if($_SESSION['authenticated'] === true){
-	$expires = 3600 * 24 * 365; // 1 year
+	$expires = 3600 * 24 * 365 * 5; // 5 years
 	setrawcookie('DCOUNT', $_SESSION['count'], time() + ($expires), "/");
 	$authenticated = true;
 }else{
 	$authenticated = false;
-	$_SESSION['authenticated'] = false;
 }
 if(empty($_SESSION['count'])){
 	if(!empty($_COOKIE['DCOUNT'])){

@@ -5,16 +5,15 @@ if($_SESSION['authenticated'] === true){
 	echo '<br/><center>Welcome to the DASNA Page Editing System<br/></center><br/>';
 	if($A = read_content('A')){
 		echo '<center>';
-		echo '<table width="20%" border="1">';
-		echo '<tr><td colspan="2"><center>Edit HTML</center></td></tr>';
-		echo '<form action="editor.php" method="POST">';
+		echo '<table width="75%" border="1"><form>';
+		echo '<tr><td colspan="2"><center><span style="font-size: 11px;">Edit HTML</span></center></td></tr>';
 		echo '<tr><td colspan="2">';
-		echo '<textarea rows="30" cols="80" spellcheck="true" id="editor" onkeyup="myFunction()">>' . htmlspecialchars($A) . '</textarea>';
+		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . $A . '</textarea>';
 		echo '</td></tr>';
 		echo '<tr><td colspan="2">';
 		echo '<div id="saved"></div>';
 		echo '</td></tr>';
-		echo '</form></table></center>';
+		echo '</table></form></center>';
 		echo '<br/></center>';
 	}else{
 		echo 'Failed to read content from database!<br/>';
@@ -25,26 +24,55 @@ if($_SESSION['authenticated'] === true){
 <head>
 <meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
 <script src="jquery.min.js"></script>
-<title>1</title></head>
+<script src="ckeditor.js"></script>
+<title>DASNA Page Editing System</title>
+</head>
 <body>
-
 <script>
-function myFunction(){
-	var div = document.getElementById("editor");
-    var myData = div.value;
+var bodyEditor = CKEDITOR.replace('editor1',
+{
+    readOnly: false
+	customConfig: ''
+});
+
+
+bodyEditor.on('mode', function () {
+    if (this.mode == 'source') {
+        var editable = bodyEditor.editable();
+        editable.attachListener(editable, 'input', function () {
+			console.log("Change Occured!");
+        });
+    }
+});
+bodyEditor.on('change', function () {
+    console.log("Change Occured!");
+	var data = CKEDITOR.instances.editor1.getData();
+	saveFunction(data);
+});
+function saveFunction(dataIn){
+	var output = {};
+	// var element = document.getElementById("editor1");
+    // var myData = element.value;
+	var myData = dataIn;
     var json_object = {"data": myData};
-	var output = '';
 	for (var property in json_object) {
 	output += property + ': ' + json_object[property];
 	}
-	console.log(output); // Outputs HTML from form
+	console.log(output);
     $.ajax({
         url: "ajax_save.php",
         data: json_object,
         dataType: 'json',
         type: 'POST',
         success: function(json_object){
-			$("#saved").text(json_object);
+		var date = new Date();
+		var options = {
+			weekday: "long", year: "numeric", month: "short",
+			day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit"
+		};
+			var newdate = date.toLocaleTimeString("en-us", options);
+			document.getElementById("saved").style.color = "green";
+			$("#saved").text(json_object + ' on ' + newdate);
             console.log("Saved");
         },
         error: function(json_object){

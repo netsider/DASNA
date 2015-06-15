@@ -102,7 +102,7 @@
 			return $value;
 		};
 		if($A = read_content('A')){
-			echo $A;
+			echo html_entity_decode($A);
 		}
 		?>
 	</div>
