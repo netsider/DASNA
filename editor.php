@@ -5,15 +5,15 @@ if($_SESSION['authenticated'] === true){
 	echo '<br/><center>Welcome to the DASNA Page Editing System<br/></center><br/>';
 	if($A = read_content('A')){
 		echo '<center>';
-		echo '<table width="75%" border="1"><form>';
+		echo '<table width="75%" border="1">';
 		echo '<tr><td colspan="2"><center><span style="font-size: 11px;">Edit HTML</span></center></td></tr>';
 		echo '<tr><td colspan="2">';
-		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . $A . '</textarea>';
+		echo '<form action="ajax_publish.php"><textarea class="ckeditor" name="editor1" id="editor1">' . $A . '</textarea></form>';
 		echo '</td></tr>';
 		echo '<tr><td colspan="2">';
 		echo '<div id="saved"></div>';
 		echo '</td></tr>';
-		echo '</table></form></center>';
+		echo '</table></center>';
 		echo '<br/></center>';
 	}else{
 		echo 'Failed to read content from database!<br/>';
@@ -37,14 +37,27 @@ bodyEditor.on('mode', function () {
     if (this.mode == 'source') {
         var editable = bodyEditor.editable();
         editable.attachListener(editable, 'input', function () {
-			console.log("Change Occured!");
+			console.log("Change(mode) Occured!");
         });
     }
 });
 bodyEditor.on('change', function () {
-    console.log("Change Occured!");
+    console.log("Change(change) Occured!");
 	var data = CKEDITOR.instances.editor1.getData();
 	saveFunction(data);
+});
+bodyEditor.on('save', function () {
+    console.log("Change(save) Occured!");
+	var data = CKEDITOR.instances.editor1.getData();
+	var date = new Date();
+	var options = {
+		weekday: "long", year: "numeric", month: "short",
+		day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit"
+	};
+	var newdate = date.toLocaleTimeString("en-us", options);
+	document.getElementById("saved").style.color = "green";
+	$("#saved").text('Published on ' + newdate);
+    console.log("Published!");
 });
 function saveFunction(dataIn){
 	var output = {};

@@ -3,8 +3,9 @@
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 CKEDITOR.editorConfig = function( config ) {
+	config.extraPlugins = "youtube";
 	config.toolbar = [
-	{ name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
+	{ name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'youtube' ] },
 	{ name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
 	{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
 	'/',
@@ -19,5 +20,4 @@ CKEDITOR.editorConfig = function( config ) {
 	{ name: 'others', items: [ '-' ] },
 	{ name: 'about', items: [ 'About' ] }
 ];
-	config.extraPlugins = "youtube";
 };
