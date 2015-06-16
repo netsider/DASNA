@@ -6,7 +6,7 @@ if($_SESSION['authenticated'] === true){
 	echo '<br/><center>Welcome to the DASNA Page Editing System<br/></center><br/>';
 	if($A = read_content('A')){
 		echo '<center>';
-		echo '<table width="75%" border="1">';
+		echo '<div id="editordiv" style="width: 75%;"><table width="100%" border="1">';
 		echo '<tr><td colspan="2"><center><span style="font-size: 11px;">Edit HTML</span></center></td></tr>';
 		echo '<tr><td colspan="2">';
 		echo '<form action="ajax_publish.php"><textarea class="ckeditor" name="editor1" id="editor1">' . $A . '</textarea></form>';
@@ -14,7 +14,8 @@ if($_SESSION['authenticated'] === true){
 		echo '<tr><td colspan="2">';
 		echo '<div id="saved"></div>';
 		echo '</td></tr>';
-		echo '</table></center>';
+		echo '<tr><td colspan="2"><div id="motd"></div></td></tr>';
+		echo '</table></div>';
 		echo '<br/></center>';
 	}else{
 		echo 'Failed to read content from database!<br/>';
@@ -27,6 +28,8 @@ if($_SESSION['authenticated'] === true){
 </head>
 <body>
 <script>
+$('#saved').html('&nbsp');
+$('#motd').text('Click the "Publish button to save all changes."');
 var bodyEditor = CKEDITOR.replace('editor1',
 {
     readOnly: false
