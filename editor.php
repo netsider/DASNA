@@ -1,6 +1,7 @@
 <?php
 require_once 'functions.php';
 const database = 'dasna';
+echo '<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />';
 if($_SESSION['authenticated'] === true){
 	echo '<br/><center>Welcome to the DASNA Page Editing System<br/></center><br/>';
 	if($A = read_content('A')){
@@ -20,9 +21,6 @@ if($_SESSION['authenticated'] === true){
 	}
 }
 ?>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
 <script src="jquery.min.js"></script>
 <script src="ckeditor.js"></script>
 <title>DASNA Page Editing System</title>
