@@ -64,8 +64,6 @@ function get_DB(){
     // oReq.onload = function() {
         // console.log(this.responseText);
     // };
-	// var element = document.getElementById("dropdownDB");
-    // var dropdown = element.value;
     // var url = "get-db.php";
 	// var user = "<?php echo $_SESSION['username']; ?>";
 	// var params = "user=" + user;
