@@ -65,7 +65,6 @@ if($_POST['in-submit']){
 }
 if($authenticated === true){
 	if(debug){echo $fcg . 'Password has been verified!' . $efcbr;};
-	require_once 'editor.php';
 }else{
 	echo '<form action="login.php" method="POST">';
 	echo '<center>';
