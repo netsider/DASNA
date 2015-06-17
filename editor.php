@@ -3,16 +3,44 @@ require_once 'functions.php';
 const database = 'dasna';
 echo '<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />';
 if($_SESSION['authenticated'] === true){
-	echo '<br/><center>Welcome to the DASNA Page Editing System<br/></center><br/>';
+	if(debug){ echo 'Authenticated!'; };
+		echo '<center>';
+		if($columns = read_column_array('content')){
+			if(debug){echo '<pre>';print_r($columns);echo '</pre>';};
+		};
+		
+		
+		echo '<div id="selectDB_form" style="width:200px;border-style:solid;border-width:1px;">';
+		echo 'Select page to edit:<br/>';
+		echo '<select>';
+		foreach($columns as $column){
+		switch ($column){
+		case "A":
+			$col_name = 'Left Column';
+			break;
+		case "B":
+			$col_name = 'Right Column';
+			break;
+		case "C":
+			$col_name = 'Middle';
+			break;
+		}
+			echo '<option value="' . $column . '">';
+			echo $col_name;
+			echo '</option>';
+		}
+		echo '</select>';
+		echo '</div>';
+		echo '</center>';
 	if($A = read_content('A')){
 		echo '<center>';
-		echo '<div id="editordiv" style="width: 75%;"><table width="100%" border="1">';
-		echo '<tr><td colspan="2"><center><span style="font-size: 11px;">Edit HTML</span></center></td></tr>';
+		echo '<div id="editordiv" style="width: 75%;"><table width="100%" border="0">';
+
 		echo '<tr><td colspan="2">';
 		echo '<form action="ajax_publish.php"><textarea class="ckeditor" name="editor1" id="editor1">' . $A . '</textarea></form>';
 		echo '</td></tr>';
 		echo '<tr><td colspan="2">';
-		echo '<div id="saved"></div>';
+		echo '<div id="saved" style="font-weight: bold;"></div>';
 		echo '</td></tr>';
 		echo '<tr><td colspan="2"><div id="motd"></div></td></tr>';
 		echo '</table></div>';
@@ -58,7 +86,6 @@ bodyEditor.on('save', function () {
 	var newdate = date.toLocaleTimeString("en-us", options);
 	document.getElementById("saved").style.color = "green";
 	$("#saved").text('Published on ' + newdate);
-    console.log("Published!");
 });
 function saveFunction(dataIn){
 	var output = {};

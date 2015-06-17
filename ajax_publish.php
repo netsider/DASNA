@@ -12,5 +12,9 @@ function save_content($section, $data){
 if(save_content('middlecolumn', htmlentities($_POST['data']))){
 	header("refresh:5;url=login.php");
 	echo json_encode('Published');
+}else{
+	echo '<pre>';
+	var_export(_$POST);
+	echo '</pre>';
 }
 ?>

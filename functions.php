@@ -7,6 +7,19 @@ $fcr = '<font color="red">';
 $fcb = '<font color="blue">';
 $efc = '</font>';
 $efcbr = '</font><br/>';
+function read_column_array($table){
+	include 'db.php';
+	mysqli_select_db($db, database);
+	// $query = "SELECT section FROM '$table'";
+	$query = "SELECT section FROM `$table`";
+	$result = mysqli_query($db, $query);
+	$column_array = array();
+	while($array = mysqli_fetch_array($result)){
+	// if(debug){echo $array[0] . $br;};
+	$column_array[] = $array[0];
+	}
+	return $column_array;
+};
 function read_content($section){
 	include 'db.php';
 	mysqli_select_db($db, database);

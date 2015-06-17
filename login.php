@@ -1,10 +1,10 @@
 <?php
+error_reporting(E_ALL ^ E_NOTICE);
 session_name("DASNAID");
 ini_set('session.hash_function','whirlpool');
 date_default_timezone_set("America/New_york");
 session_start();
-session_regenerate_id(true);
-require_once('options.php');
+session_regenerate_id(true); // to prevent session fixation
 require_once('functions.php');
 require_once('vars.php');
 if($_SESSION['authenticated'] === true){
