@@ -3,6 +3,7 @@ require_once 'functions.php';
 const database = 'dasna';
 echo '<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />';
 if($_SESSION['authenticated'] === true){
+	echo 'Username: ' . $_SESSION['username'];
 	if(debug){ echo 'Authenticated!'; };
 		echo '<center>';
 		if($columns = read_column_array('content')){
@@ -12,7 +13,7 @@ if($_SESSION['authenticated'] === true){
 		
 		echo '<div id="selectDB_form" style="width:200px;border-style:solid;border-width:1px;">';
 		echo 'Select page to edit:<br/>';
-		echo '<select>';
+		echo '<form><select id="dropdownDB">';
 		foreach($columns as $column){
 		switch ($column){
 		case "A":
@@ -27,15 +28,14 @@ if($_SESSION['authenticated'] === true){
 		}
 			echo '<option value="' . $column . '">';
 			echo $col_name;
-			echo '</option>';
 		}
 		echo '</select>';
+		echo '</option><input type="button" id="changeDB" onclick="get_DB()"></input>';
 		echo '</div>';
 		echo '</center>';
 	if($A = read_content('A')){
 		echo '<center>';
 		echo '<div id="editordiv" style="width: 75%;"><table width="100%" border="0">';
-
 		echo '<tr><td colspan="2">';
 		echo '<form action="ajax_publish.php"><textarea class="ckeditor" name="editor1" id="editor1">' . $A . '</textarea></form>';
 		echo '</td></tr>';
@@ -56,6 +56,52 @@ if($_SESSION['authenticated'] === true){
 </head>
 <body>
 <script>
+function get_DB(){
+	// function reqListener () {
+      // console.log(this.responseText);
+    // }	
+	// var oReq = new XMLHttpRequest();
+    // oReq.onload = function() {
+        // console.log(this.responseText);
+    // };
+	// var element = document.getElementById("dropdownDB");
+    // var dropdown = element.value;
+    // var url = "get-db.php";
+	// var user = "<?php echo $_SESSION['username']; ?>";
+	// var params = "user=" + user;
+	// oReq.open("POST", url, true);
+	// oReq.send(params);
+	var output = {};
+	// var element = document.getElementById("editor1");
+    // var myData = element.value;
+	var myData = "<?php echo $_SESSION['username']; ?>";
+    var json_object = {"data": myData};
+
+    $.ajax({
+        url: "get-db.php",
+        data: json_object,
+        dataType: 'json',
+        type: 'POST',
+        success: function(json_object){
+		var date = new Date();
+		var options = {
+			weekday: "long", year: "numeric", month: "short",
+			day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit"
+		};
+			var newdate = date.toLocaleTimeString("en-us", options);
+			document.getElementById("saved").style.color = "green";
+			$("#saved").text(json_object + ' on ' + newdate);
+            console.log("Saved");
+				for (var property in json_object) {
+	output += property + ': ' + json_object[property];
+	}
+	console.log(output);
+        },
+        error: function(json_object){
+            console.log("Error!");   
+        }
+    });
+};
 $('#saved').html('&nbsp');
 $('#motd').text('Click the "Publish button to save all changes."');
 var bodyEditor = CKEDITOR.replace('editor1',
