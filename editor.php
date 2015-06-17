@@ -30,7 +30,7 @@ if($_SESSION['authenticated'] === true){
 			echo $col_name;
 		}
 		echo '</select>';
-		echo '</option><input type="button" id="changeDB" onclick="get_DB()"></input>';
+		echo '</option><input type="button" id="changeDB" onclick="set_DB()"></input>';
 		echo '</div>';
 		echo '</center>';
 	if($A = read_content('A')){
@@ -56,11 +56,36 @@ if($_SESSION['authenticated'] === true){
 </head>
 <body>
 <script>
+var username = "<?php echo $_SESSION['username']; ?>";
+function set_DB(){
+	var output = {};
+	var element = document.getElementById("dropdownDB");
+    var myData = element.value;
+	var user = username;
+    var json_object = {"user": user, "page": myData};
+    $.ajax({
+        url: "set-db.php",
+        data: json_object,
+        dataType: 'json',
+        type: 'POST',
+        success: function(json_object){
+			document.getElementById("saved").style.color = "green";
+			$("#saved").text(json_object);
+            console.log("Saved");
+			for (var property in json_object) {
+				output += property + ': ' + json_object[property];
+			}
+			console.log(output);
+			},
+		error: function(json_object){
+            console.log("Error!");   
+        }
+    });
+};
 function get_DB(){
 	var output = {};
-	// var element = document.getElementById("editor1");
-    // var myData = element.value;
-	var myData = "<?php echo $_SESSION['username']; ?>";
+	// var myData = "<?php echo $_SESSION['username']; ?>";
+	var myData = username;
     var json_object = {"data": myData};
     $.ajax({
         url: "get-db.php",
