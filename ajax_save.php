@@ -9,7 +9,7 @@ function save_content($section, $data){
 		return false;
 	}
 };
-if(save_content('A', htmlentities($_POST['data']))){
+if(save_content($_POST['page'], htmlentities($_POST['data']))){
 	echo json_encode('Saved');
 }
 ?>

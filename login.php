@@ -23,6 +23,7 @@ if(empty($_SESSION['count'])){
 }else{
 	$_SESSION['count']++;
 }
+const debug = true;
 if($_POST['in-submit']){
 	if(allgood($_POST)){
 		if(isset($_POST['in-user'])){
