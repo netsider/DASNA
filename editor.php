@@ -11,10 +11,9 @@ if($_SESSION['authenticated'] === true){
 	if($columns = read_column_array('content')){
 		if(debug){echo '<pre>';print_r($columns);echo '</pre>';};
 	};
-	echo '<center>';
-	echo '<div id="selectDB_form" style="width:200px;border-style:solid;border-width:1px;">';
-	echo 'Select page to edit:<br/>';
-	echo '<form><select id="dropdownDB" onchange="set_DB()">';
+	echo '<center><div style="width: 90%;border-style: solid;">';
+	echo '<div style="width: 150px;height: 25px;border-style:solid;border-width:1px;margin-left: 0%;">';
+	echo '<form>Select Page: <select id="dropdownDB" onchange="set_DB()">';
 	foreach($columns as $column){
 		switch ($column){
 		case "A":
@@ -39,23 +38,23 @@ if($_SESSION['authenticated'] === true){
 			}
 			echo '</option>';
 	}
-	echo '</select></div></form></center>';
+	echo '</select>';
+	echo '</div></form>';
 	if($html = read_content(trim($current_page))){
-		echo '<center>';
-		echo '<div id="editordiv" style="width: 75%;"><table width="100%" border="0">';
+		echo '<table width="100%" border="0">';
 		echo '<tr><td colspan="2">';
 		echo '<form action="ajax_publish.php"><textarea class="ckeditor" name="editor1" id="editor1">' . $html . '</textarea></form>';
 		echo '</td></tr>';
 		echo '<tr><td colspan="2">';
 		echo '<div id="saved" style="font-weight: bold;">&nbsp</div>';
 		echo '</td></tr>';
-		echo '<tr><td colspan="2"><div id="motd"></div></td></tr>';
-		echo '</table></div>';
-		echo '<br/></center>';
+		// echo '<tr><td colspan="2"><div id="motd"></div></td></tr>';
+		echo '</table></center>';
 	}else{
 		echo '<b>Failed to read content from database!</b>';
 	}
 }
+	echo '</div>';
 ?>
 <script src="jquery.min.js"></script>
 <script src="ckeditor.js"></script>
@@ -100,11 +99,10 @@ function set_DB(){
         success: function(json_object){
 			document.getElementById("saved").style.color = "green";
 			$("#saved").text(json_object);
-            console.log("Saved");
-			for (var property in json_object) {
-				output += property + ': ' + json_object[property];
-			}
-			console.log(output);
+			// for (var property in json_object) {
+				// output += property + ': ' + json_object[property];
+			// }
+			// console.log(output);
 			location.reload();
 			},
 		error: function(json_object){
@@ -127,8 +125,8 @@ function saveFunction(dataIn){
         type: 'POST',
         success: function(json_object){
 			var newdate = make_my_Date();
+			document.getElementById("saved").style.color = "green";
 			$("#saved").text(json_object + ' on ' + newdate);
-            // console.log("Saved");
         },
         error: function(json_object){
             console.log("Error!"); 

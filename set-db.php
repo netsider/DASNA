@@ -8,7 +8,7 @@ if(allgood($POST)){
 	$query = "UPDATE users SET db = '$page' WHERE name = '$user'";
 	if($result = mysqli_query($db, $query)){
 		$array = mysqli_fetch_array($result);
-		echo json_encode($array[0]);
+		echo json_encode('Changing Page...');
 	}
 }
 ?>
