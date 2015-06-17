@@ -57,24 +57,11 @@ if($_SESSION['authenticated'] === true){
 <body>
 <script>
 function get_DB(){
-	// function reqListener () {
-      // console.log(this.responseText);
-    // }	
-	// var oReq = new XMLHttpRequest();
-    // oReq.onload = function() {
-        // console.log(this.responseText);
-    // };
-    // var url = "get-db.php";
-	// var user = "<?php echo $_SESSION['username']; ?>";
-	// var params = "user=" + user;
-	// oReq.open("POST", url, true);
-	// oReq.send(params);
 	var output = {};
 	// var element = document.getElementById("editor1");
     // var myData = element.value;
 	var myData = "<?php echo $_SESSION['username']; ?>";
     var json_object = {"data": myData};
-
     $.ajax({
         url: "get-db.php",
         data: json_object,
