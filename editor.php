@@ -3,13 +3,6 @@ require_once 'functions.php';
 require_once 'login.php';
 const database = 'dasna';
 const debug = false;
-if($_GET['debug'] = true){
-	echo 'DEBUG ON!';
-	const debug = true;
-}else{
-	echo 'DEBUG OFF';
-	const debug = true;
-}
 if($_SESSION['authenticated'] === true){
 	echo '<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />';
 	if(debug){echo 'Authenticated!' . '<br/>'; };
