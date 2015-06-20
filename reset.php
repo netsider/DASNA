@@ -88,6 +88,13 @@ if($_POST['in-submit']){
 				$output .= $fcr . 'Password for user exists.  Password will be reset...' . $efcbr;
 				$null = false;
 			}
+			if(row_null('phone', $username)){
+				$output .= $fcr . 'Phone # not currently set.  Continue to set...' . $br;
+				$phone_null = true;
+			}else{
+				$output .= $fcg . 'Phone exist for user.  Continue to reset password.' . $br;
+				$phone_null = false;
+			}
 		}else{
 			$output .= $fcr . 'User does not exist!' . $efcbr;
 			$user_exist = false;
@@ -131,17 +138,16 @@ if($_POST['in-submit']){
 								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));						
 								$hash = create_hash(create_hash($password, $salt, 'ripemd320', $iterations), $salt, 'whirlpool', $iterations);
 								if(debug){$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;};
-								//save hash and salt to DB
 								$output .= 'Attempting to save to database...' . $efcbr;			
 								if(save_hash($username, $hash)){
-									$output .= $fcg . 'Password saved to database!' . $efcbr;
+									$output .= $fcg . 'Password saved to database.' . $efcbr;
 								}else{
-									$output .= $fcr . 'Password NOT saved to database!' . $efcbr;
+									$output .= $fcr . 'Password NOT saved to database.' . $efcbr;
 								}
 								if(save_salt($username, $salt)){
-									// $output .= $fcg . 'Password salt saved to database!' . $efcbr;
+									$output .= $fcg . 'Salt saved to database!' . $efcbr;
 								}else{
-									// $output .= $fcr . 'Password salt NOT saved to database!' . $efcbr;
+									$output .= $fcr . 'Salt NOT saved to database!' . $efcbr;
 								}
 								if(validate($username, $password)){ // Check it
 								$output .= 'Password Successfully set!  Please close this window completely, and proceed to the login area.';
@@ -153,7 +159,21 @@ if($_POST['in-submit']){
 					}else{
 						$confirm = false;
 					}
-				}				
+				}else{ // if phone doesn't match
+					if(row_null('phone', $username)){
+						echo '<b>Phone Null!</b><br/>';
+						include('db.php');
+						mysqli_select_db($db, database);
+						$query = "UPDATE users SET phone = '$phone' WHERE name = '$username'";
+						if($result = mysqli_query($db, $query)){
+							echo 'Phone number saved!<br/>';
+						}else{
+							echo 'Phone number NOT saved!<br/>';
+					}
+				}else{
+					echo '<b>Not Null!</b><br/>';
+				}
+			}						
 			}
 		}
 	}

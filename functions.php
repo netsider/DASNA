@@ -121,6 +121,7 @@ function allgood($array){ // Returns false if not alphanumeric or empty
 		if (ctype_alnum($value)) {
 			if(debug){echo 'Field(' . $key . ') is completely alphanumeric.<br/>';};
 			if(strlen($value) < 3){
+				echo '<b>Field too short!</b>';
 				return false;
 			}
 		}else{
