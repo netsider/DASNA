@@ -4,43 +4,6 @@ require_once('functions.php');
 require_once('vars.php');
 const debug = true;
 const database = 'dasna';
-function save_confirm_code($code, $user){
-	include('db.php');
-	mysqli_select_db($db, database);
-	$query = "UPDATE users SET temp = '$code' WHERE name = '$user'";
-	if($result = mysqli_query($db, $query)){
-		return true;
-	}else{
-		return false;
-	}
-};
-function save_hash($user, $hash){
-	include('db.php');
-	mysqli_select_db($db, database);
-	$query = "UPDATE users SET phash = '$hash' WHERE name = '$user'";
-	if(mysqli_query($db, $query)){
-		return true;
-	}else{
-		return false;
-	}
-};
-function save_salt($user, $salt){
-	include('db.php');
-	mysqli_select_db($db, database);
-	$query = "UPDATE users SET salt = '$salt' WHERE name = '$user'";
-	if(mysqli_query($db, $query)){
-		return true;
-	}else{
-		return false;
-	}
-};
-function check_equal($str1, $str2){
-	if(hash_equals($str1, $str2)){
-		return true;
-	}else{
-		return false;
-	}
-};
 if($_POST['in-submit']){
 	if(allgood($_POST)){
 		$input_clean = true;

@@ -3,21 +3,57 @@ const database = 'dasna';
 $br = '<br/>';
 $fcg = '<font color="green">';
 $fcr = '<font color="red">';
-$fcb = '<font color="blue">';
 $efc = '</font>';
 $efcbr = '</font><br/>';
+function save_salt($user, $salt){
+	include('db.php');
+	mysqli_select_db($db, database);
+	$query = "UPDATE users SET salt = '$salt' WHERE name = '$user'";
+	if(mysqli_query($db, $query)){
+		return true;
+	}else{
+		return false;
+	}
+};
+function check_equal($str1, $str2){
+	if(hash_equals($str1, $str2)){
+		return true;
+	}else{
+		return false;
+	}
+};
+function save_confirm_code($code, $user){
+	include('db.php');
+	mysqli_select_db($db, database);
+	$query = "UPDATE users SET temp = '$code' WHERE name = '$user'";
+	if($result = mysqli_query($db, $query)){
+		return true;
+	}else{
+		return false;
+	}
+};
+function save_hash($user, $hash){
+	include('db.php');
+	mysqli_select_db($db, database);
+	$query = "UPDATE users SET phash = '$hash' WHERE name = '$user'";
+	if(mysqli_query($db, $query)){
+		return true;
+	}else{
+		return false;
+	}
+};
 function pick_carrier($string){
-		switch ($string){
-			case "verizon":
-				$carrier = '@vzwpix.com';
-				break;
-			case "att":
-				$carrier = '@mms.att.net';
-				break;
-			default:
-				$carrier = '@vtext.com';
-		}
-		return $carrier;
+	switch ($string){
+	case "verizon":
+		$carrier = '@vzwpix.com';
+		break;
+	case "att":
+		$carrier = '@mms.att.net';
+		break;
+	default:
+		$carrier = '@vtext.com';
+	}
+	return $carrier;
 };
 function get_pageName($section){
 	include 'db.php';
