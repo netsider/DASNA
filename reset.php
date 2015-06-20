@@ -1,7 +1,6 @@
 <?php
-require_once('options.php');
-require_once('functions.php');
-require_once('vars.php');
+require_once 'functions.php';
+require_once 'vars.php';
 const debug = true;
 const database = 'dasna';
 if($_POST['in-submit']){
