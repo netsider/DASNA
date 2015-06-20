@@ -8,22 +8,21 @@ if($_SESSION['authenticated'] === true){
 	if (debug){echo 'Username: ' . $_SESSION['username'] . '<br/>';};
 	if(debug){echo 'Authenticated!' . '<br/>'; };
 	$current_page = read_page($_SESSION['username']);
-	if(debug){echo 'current page: ' . $current_page . '<br/>';};
+	if(debug){echo 'Current page: ' . $current_page . '<br/>';};
 	if($columns = read_column_array('content')){
 		// if(debug){echo '<pre>';print_r($columns);echo '</pre>';};
-		echo '<center><div style="width: 150px;height: 25px;border-style:solid;border-width:1px;margin-left: 0%;">';
+		echo '<center><div style="width: 150px;height: 40px;border-style:solid;border-width:1px;margin-left: 0%;">';
 		echo 'Select Page: <form><select id="dropdownDB" onchange="set_DB()">';
 		foreach($columns as $column){
 			switch ($column){
 			case "A":
-				// $col_name = 'Renamed Column';
-				$col_name = $column;
+				$col_name = get_pageName($column);
 				break;
 			case "B":
-				$col_name = $column;
+				$col_name = get_pageName($column);
 				break;
 			case "C":
-				$col_name = $column;
+				$col_name = get_pageName($column);
 				break;
 			}
 		if($current_page === $column){

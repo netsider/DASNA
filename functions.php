@@ -6,6 +6,15 @@ $fcr = '<font color="red">';
 $fcb = '<font color="blue">';
 $efc = '</font>';
 $efcbr = '</font><br/>';
+function get_pageName($section){
+	include 'db.php';
+	mysqli_select_db($db, database);
+	$query = "SELECT pagename FROM content WHERE section = '$section'";
+	$result = mysqli_query($db, $query);
+	$array = mysqli_fetch_array($result);
+	$value = $array[0];
+	return $value;
+};
 function read_page($user){
 	include 'db.php';
 	mysqli_select_db($db, database);
