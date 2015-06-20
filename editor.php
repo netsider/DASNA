@@ -11,7 +11,7 @@ if($_SESSION['authenticated'] === true){
 	if($columns = read_column_array('content')){
 		if(debug){echo '<pre>';print_r($columns);echo '</pre>';};
 	};
-	echo '<center><div style="width: 90%;border-style: solid;">';
+	echo '<center><div style="width: 90%;border-style: solid;border-width: 1px;">';
 	echo '<div style="width: 150px;height: 25px;border-style:solid;border-width:1px;margin-left: 0%;">';
 	echo '<form>Select Page: <select id="dropdownDB" onchange="set_DB()">';
 	foreach($columns as $column){
@@ -40,7 +40,7 @@ if($_SESSION['authenticated'] === true){
 	}
 	echo '</select>';
 	echo '</div></form>';
-	if($html = read_content(trim($current_page))){
+	if($html = read_content($current_page)){
 		echo '<table width="100%" border="0">';
 		echo '<tr><td colspan="2">';
 		echo '<form action="ajax_publish.php"><textarea class="ckeditor" name="editor1" id="editor1">' . $html . '</textarea></form>';
