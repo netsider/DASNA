@@ -6,7 +6,9 @@ date_default_timezone_set("America/New_york");
 session_start();session_regenerate_id(true); // to prevent session fixation
 require_once('functions.php');
 require_once('vars.php');
+const debug = true;
 $_SESSION['id'] = session_id();
+if(debug){ echo '$_SESSION[id]: ' . $_SESSION['id'] . '<br/>';};
 if($_SESSION['authenticated'] === true){
 	$expires = 3600 * 24 * 365 * 5; // 5 years
 	setrawcookie('DCOUNT', $_SESSION['count'], time() + ($expires), "/");
@@ -52,15 +54,15 @@ if($_POST['in-submit']){
 					$_SESSION['authenticated'] = true;
 					$authenticated = true; // needed so form hides very first time
 					if(save_to_DB($username, 'ipv4', $_SERVER['REMOTE_ADDR'])){
-						$output .= $fcg . 'User IP saved to database.' . $efcbr;
+						if(debug){echo 'User IP saved to database.' . $br;};
 					}else{
-						$output .= $fcr . 'User IP NOT saved to database.' . $efcbr;
+						if(debug){echo 'User IP NOT saved to database.' . $br;};
 					}
-					if(save_to_DB($username, 'sid', $_SESSION['id'])){
-						$output .= $fcg . 'User SID saved to database.' . $efcbr;
-					}else{
-						$output .= $fcr . 'User SID NOT saved to database.' . $efcbr;
-					}
+					// if(save_to_DB($username, 'sid', $_SESSION['id'])){
+						// if(debug){echo 'User SID saved to database.' . $br;};
+					// }else{
+						// if(debug){echo 'User SID NOT saved to database.' . $br;};
+					// }
 				}else{
 					if(debug){$output .= $fcr . 'Validation Failed!' . $efcbr;};
 					// $_SESSION['authenticated'] = false;

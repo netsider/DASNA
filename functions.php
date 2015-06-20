@@ -233,8 +233,8 @@ function validate($username, $password){
 		if(debug){echo 'Reading salt failed!<br/>';};
 	}
 	if(hash_equals($hash_fromDB, $final_hash = create_hash(create_hash($password, $salt_fromDB, 'ripemd320', $iterations), $salt_fromDB, 'whirlpool', $iterations))){
-		if(debug){echo 'Hashes Match!<br/>';};
 		if(debug){echo '<b>Final Hash Generated:</b> ' . $final_hash . '<br/> <b>Hash(from DB):</b> ' . $hash_fromDB . '<br/>';};
+		if(debug){echo 'Hashes Match!<br/>';};
 		return true;
 	}else{
 		if(debug){echo 'Hashes do NOT match!<br/>';};
