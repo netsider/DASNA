@@ -6,6 +6,19 @@ $fcr = '<font color="red">';
 $fcb = '<font color="blue">';
 $efc = '</font>';
 $efcbr = '</font><br/>';
+function pick_carrier($string){
+		switch ($string){
+			case "verizon":
+				$carrier = '@vzwpix.com';
+				break;
+			case "att":
+				$carrier = '@mms.att.net';
+				break;
+			default:
+				$carrier = '@vtext.com';
+		}
+		return $carrier;
+};
 function get_pageName($section){
 	include 'db.php';
 	mysqli_select_db($db, database);

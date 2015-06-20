@@ -4,20 +4,6 @@ require_once('functions.php');
 require_once('vars.php');
 const debug = true;
 const database = 'dasna';
-// do the singleton thing for database
-function pick_carrier($string){
-		switch ($string){
-			case "verizon":
-				$carrier = '@vzwpix.com';
-				break;
-			case "att":
-				$carrier = '@mms.att.net';
-				break;
-			default:
-				$carrier = '@vtext.com';
-		}
-		return $carrier;
-};
 function save_confirm_code($code, $user){
 	include('db.php');
 	mysqli_select_db($db, database);
@@ -161,7 +147,7 @@ if($_POST['in-submit']){
 					}
 				}else{ // if phone doesn't match
 					if(row_null('phone', $username)){
-						echo '<b>Phone Null!</b><br/>';
+						if(debug){echo '<b>Phone Null!</b><br/>';};
 						include('db.php');
 						mysqli_select_db($db, database);
 						$query = "UPDATE users SET phone = '$phone' WHERE name = '$username'";
