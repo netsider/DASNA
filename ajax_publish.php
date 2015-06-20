@@ -1,15 +1,15 @@
 <?php
-function save_content($section, $data){
+function insert_into($table, $values){
 	include 'db.php';
 	mysqli_select_db($db, 'dasna');
-	$query = "INSERT INTO $section (data) VALUES ('$data')";
+	$query = "INSERT INTO $table (data) VALUES ('$values')";
 	if(mysqli_query($db, $query)){
 		return true;
 	}else{
 		return false;
 	}
 };
-if(save_content('middlecolumn', htmlentities($_POST['data']))){
+if(insert_into('middlecolumn', htmlentities($_POST['data']))){
 	echo json_encode('Published');
 }else{
 	echo '<pre>';
