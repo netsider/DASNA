@@ -2,23 +2,16 @@
 require_once 'functions.php';
 require_once 'login.php';
 const database = 'dasna';
-const debug = false;
-if($_GET['debug'] = true){
-	echo 'DEBUG ON!';
-	const debug = true;
-}else{
-	echo 'DEBUG OFF';
-	const debug = true;
-}
+const debug = true;
 if($_SESSION['authenticated'] === true){
 	echo '<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />';
-	if(debug){echo 'Authenticated!' . '<br/>'; };
 	if (debug){echo 'Username: ' . $_SESSION['username'] . '<br/>';};
+	if(debug){echo 'Authenticated!' . '<br/>'; };
 	$current_page = read_page($_SESSION['username']);
 	if(debug){echo 'Current page: ' . $current_page . '<br/>';};
 	if($columns = read_column_array('content')){
 		// if(debug){echo '<pre>';print_r($columns);echo '</pre>';};
-		echo '<center><div style="width: 150px;height: 40px;border-width:1px;">';
+		echo '<center><div style="width: 150px;height: 40px;border-style:solid;border-width:1px;margin-left: 0%;">';
 		echo 'Select Page: <form><select id="dropdownDB" onchange="set_DB()">';
 		foreach($columns as $column){
 			switch ($column){
@@ -44,12 +37,16 @@ if($_SESSION['authenticated'] === true){
 		echo '</select></div></form>';
 	}
 	if($html = read_content($current_page)){
-		echo '<table width="100%" border="0"><tr><td colspan="2">';
-		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . $html . '</textarea></td></tr>';
-		echo '<tr><td colspan="2"><div id="saved" style="font-weight: bold;">&nbsp</div>';
-		echo '<input type="button" id="publish" name="publish" value="Publish" style="display: none;"></input></td></tr></table></center>';
+		echo '<table width="100%" border="0">';
+		echo '<tr><td colspan="2">';
+		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . $html . '</textarea>';
+		echo '</td></tr>';
+		echo '<tr><td colspan="2">';
+		echo '<div id="saved" style="font-weight: bold;">&nbsp</div>';
+		echo '</td></tr>';
+		echo '</table></center>';
 	}else{
-		echo 'Failed to read content!<br/>';
+		echo '<b>Failed to read content!</b>' . $br;
 	}
 }
 ?>
@@ -119,7 +116,6 @@ function saveFunction(dataIn){
         success: function(json_object){
 			var newdate = make_my_Date();
 			document.getElementById("saved").style.color = "green";
-			document.getElementById("saved").style.display = "inline";
 			$("#saved").text(json_object + ' on ' + newdate);
         },
         error: function(json_object){
