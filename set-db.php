@@ -1,6 +1,6 @@
 <?php
-	include_once 'db.php';
-	include_once 'functions.php';
+	require_once 'db.php';
+	require_once 'functions.php';
 	mysqli_select_db($db, 'dasna');
 if(allgood($POST)){
 	$user = $_POST['user'];

@@ -1,7 +1,7 @@
 <table width='20%' border='1'>
-<tr><td colspan="2">Login</td></tr>
+<tr><td colspan="2">Login</td></tr><tr><td>Username:</td><td>
 <?php 
-echo "<tr><td>Username:</td><td><input type='text' name='in-user'"; 
+echo "<input type='text' name='in-user'"; 
 if(!empty($username) && isset($username)){
 	echo ' value="' . addslashes($username) . '"';
 	echo ' disabled';
@@ -21,7 +21,6 @@ if($user_exist && $user_set){
 	}else{
 		echo 'value="Submit"';
 	}
-	echo '/></td></tr>';
+	echo '/>';
 ?>
-<tr><td colspan='2'><?php if(isset($output)){ echo $output;}; ?></td></tr>
-</form></table>
+</td></tr><tr><td colspan='2'><?php if(isset($output)){ echo $output;}; ?></td></tr></form></table>

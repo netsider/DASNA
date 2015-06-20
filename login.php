@@ -3,10 +3,10 @@ error_reporting(E_ALL ^ E_NOTICE);
 session_name("DASNAID");
 ini_set('session.hash_function','whirlpool');
 date_default_timezone_set("America/New_york");
-session_start();
-session_regenerate_id(true); // to prevent session fixation
+session_start();session_regenerate_id(true); // to prevent session fixation
 require_once('functions.php');
 require_once('vars.php');
+$_SESSION['id'] = session_id();
 if($_SESSION['authenticated'] === true){
 	$expires = 3600 * 24 * 365 * 5; // 5 years
 	setrawcookie('DCOUNT', $_SESSION['count'], time() + ($expires), "/");
@@ -23,11 +23,10 @@ if(empty($_SESSION['count'])){
 }else{
 	$_SESSION['count']++;
 }
-const debug = true;
 if($_POST['in-submit']){
 	if(allgood($_POST)){
 		if(isset($_POST['in-user'])){
-			$username = determine_magic_quotes($_POST['in-user']);
+			$username = $_POST['in-user'];
 			$user_set = true;
 			$_SESSION['username'] = $_POST['in-user'];
 		}elseif(isset($_SESSION['username'])){
@@ -35,13 +34,13 @@ if($_POST['in-submit']){
 			$username = $_SESSION['username'];
 			$user_set = true;
 		}else{
-			$output .= $fcr . 'Username not set!' . $efcbr;
+			$output .= $fcr . 'Username not set.' . $efcbr;
 		}
 		if(isset($_POST['in-pass'])){
-				$password = determine_magic_quotes($_POST['in-pass']);
+				$password = $_POST['in-pass'];
 				$pass_set = true;
 		}else{
-			$output .= $fcr . 'Password not set!' . $efcbr;
+			$output .= 'Please enter your password.' . $efcbr;
 		}
 		if(user_exist($username)){
 			$user_exist = true;
@@ -52,7 +51,16 @@ if($_POST['in-submit']){
 					$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
 					$_SESSION['authenticated'] = true;
 					$authenticated = true; // needed so form hides very first time
-					save_to_DB($username, 'ipv4', $ip);
+					if(save_to_DB($username, 'ipv4', $_SERVER['REMOTE_ADDR'])){
+						$output .= $fcg . 'User IP saved to database.' . $efcbr;
+					}else{
+						$output .= $fcr . 'User IP NOT saved to database.' . $efcbr;
+					}
+					if(save_to_DB($username, 'sid', $_SESSION['id'])){
+						$output .= $fcg . 'User SID saved to database.' . $efcbr;
+					}else{
+						$output .= $fcr . 'User SID NOT saved to database.' . $efcbr;
+					}
 				}else{
 					if(debug){$output .= $fcr . 'Validation Failed!' . $efcbr;};
 					// $_SESSION['authenticated'] = false;
@@ -64,10 +72,9 @@ if($_POST['in-submit']){
 	}
 }
 if($authenticated === true){
-	if(debug){echo $fcg . 'Password has been verified!' . $efcbr;};
+	if(debug){echo $fcg . 'User authenticated' . $efcbr;};
 }else{
-	echo '<form action="login.php" method="POST">';
-	echo '<center>';
+	echo '<center><form action="editor.php" method="POST">';
 	require_once 'login-table.php';
 	echo '</center>';
 }

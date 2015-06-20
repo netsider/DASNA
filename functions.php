@@ -1,6 +1,5 @@
 <?php
 const database = 'dasna';
-const debug = false;
 $br = '<br/>';
 $fcg = '<font color="green">';
 $fcr = '<font color="red">';
@@ -37,8 +36,8 @@ function read_content($section){
 	$array = mysqli_fetch_array($result);
 	$length = strlen($array[0]);
 	$value = $array[0];
-	if(debug){echo 'Field Value: "' . $value . '"<br/>';};
-	if(debug){echo 'Length: ' . $length . '<br/>';};
+	// if(debug){echo 'Field Value: "' . $value . '"<br/>';};
+	// if(debug){echo 'Length: ' . $length . '<br/>';};
 	return $value;
 };
 function user_exist($u){
@@ -69,11 +68,23 @@ function save_to_DB($user, $column, $value){
 		mysqli_select_db($db, database);
 		$query = "UPDATE users SET $column = '$value' WHERE name = '$user'";
 		if(mysqli_query($db, $query)){
-				if(debug){echo 'Column(' . $column . ') saved in database. Value:<b>' . $value . '</b><br/>';};
+				if(debug){echo 'Field(<b>' . $column . '</b>) saved in database. Value:<b>' . $value . '</b><br/>';};
 				return true;
 		}else{
-				if(debug){echo 'Column not saved successfully!<br/>';};
+				if(debug){echo 'Field not saved successfully!<br/>';};
 				return false;
+		}
+};
+function update_DB($table, $column, $value, $where){
+		include 'db.php';
+		mysqli_select_db($db, database);
+		$query = "UPDATE $table SET $column = '$value' WHERE $where";
+		if(mysqli_query($db, $query)){
+			if(debug){echo 'Column(<b>' . $column . '</b>) saved in database. Value:<b>' . $value . '</b><br/>';};
+			return true;
+		}else{
+			if(debug){echo 'Column not saved successfully!<br/>';};
+			return false;
 		}
 };
 function row_null($column_name, $user){
@@ -84,22 +95,22 @@ function row_null($column_name, $user){
 	$array = mysqli_fetch_array($result);
 	$length = strlen($array[0]);
 	$value = $array[0];
-	if(debug){echo 'Field Value: "' . $value . '"<br/>';};
-	if(debug){echo 'Length: ' . $length . '<br/>';};
+	// if(debug){echo 'Field Value: "' . $value . '"<br/>';};
+	// if(debug){echo 'Length: ' . $length . '<br/>';};
 	if($value === NULL){
 		return true;
 	}else{
 		return false;
 	}
 };
-function allgood($array){ // Returns false if not alphanumeric or is empty
+function allgood($array){ // Returns false if not alphanumeric or empty
 	$alpha = true; // true unless something changes it
 	// echo '<pre>';
 	// print_r($array);
 	// echo '</pre>';
 	foreach($array as $key => $value){
 		if (ctype_alnum($value)) {
-			if(debug){echo 'Field(' . $key . ') is alphanumeric.<br/>';};
+			if(debug){echo 'Field(' . $key . ') is completely alphanumeric.<br/>';};
 			if(strlen($value) < 3){
 				return false;
 			}
@@ -127,8 +138,8 @@ function row_value($column_name, $user){
 	$array = mysqli_fetch_array($result);
 	$length = strlen($array[0]);
 	$value = $array[0];
-	if(debug){echo 'Field Value: "' . $value . '"<br/>';};
-	if(debug){echo 'Length: ' . $length . '<br/>';};
+	// if(debug){echo 'Field Value: "' . $value . '"<br/>';};
+	// if(debug){echo 'Length: ' . $length . '<br/>';};
 	return $value;
 };
 function read_hash($user){
@@ -170,7 +181,7 @@ function sendSMS($to_add, $from_add, $message, $subject){
 	}
 };
 function create_hash($userinput, $salt, $algo, $iter){
-	if(debug){echo '<b>Iterations:' . $iter . '</b><br/>';};
+	if(debug){echo 'Running Hash Function with <b>' . $iter . '</b> iterations<br/>';};
 	$i = 0;
 	$hash = hash($algo, $salt . $userinput);
 	// if(debug){echo '<br/><b>Input:</b> ' . $userinput . ' <b>Salt:</b> ' . $salt . ' <b>Hash:</b> ' . $hash . '<br/>';};
@@ -184,7 +195,7 @@ function create_hash($userinput, $salt, $algo, $iter){
 		// if(debug){echo '[' . $i . '](' . $algo . ')' . '->' . $hash . '<br/>';};
 		$i++;
 	}
-	if(debug){echo '<b>Final Hash->' . $hash . '</b><br/>';};
+	if(debug){echo '<b>Final Hash-></b>' . $hash . '<br/>';};
 	return $hash;
 };
 if(!function_exists('hash_equals')) {
@@ -212,22 +223,22 @@ function validate($username, $password){
 	include 'db.php';
 	$iterations = 100000;
 	if($hash_fromDB = read_hash($username)){
-		// if(debug){echo '<br/>Hash read from Database: ' . $hash_fromDB . $br;};
+		if(debug){echo '<b>Hash read from Database:</b> ' . $hash_fromDB . '<br/>';};
 	}else{
 		if(debug){echo 'Reading hash failed!<br/>';};
 	}
 	if($salt_fromDB = read_salt($username)){
-		// if(debug){echo '<br/>Salt read from Database: ' . $salt_fromDB . $br;};
+		if(debug){echo 'Salt read from Database: ' . $salt_fromDB . '<br/>';};
 	}else{
 		if(debug){echo 'Reading salt failed!<br/>';};
 	}
 	if(hash_equals($hash_fromDB, $final_hash = create_hash(create_hash($password, $salt_fromDB, 'ripemd320', $iterations), $salt_fromDB, 'whirlpool', $iterations))){
-		// if(debug){echo $fcg . 'Hashes Match!' . $efcbr;};
-		if(debug){echo '<b>Final Hash Generated: ' . $final_hash . '</b><br/> <b>Hash(from DB): ' . $hash_fromDB . '</b>' . $efcbr;};
+		if(debug){echo 'Hashes Match!<br/>';};
+		if(debug){echo '<b>Final Hash Generated:</b> ' . $final_hash . '<br/> <b>Hash(from DB):</b> ' . $hash_fromDB . '<br/>';};
 		return true;
 	}else{
-		// if(debug){echo $fcr . 'Hashes do NOT match!' . $efcbr;};
-		if(debug){echo '<b>Final Hash Generated: ' . $final_hash . '</b><br/> <b>Hash(from DB): ' . $hash_fromDB . '</b>' . $efcbr;};
+		if(debug){echo 'Hashes do NOT match!<br/>';};
+		if(debug){echo '<b>Final Hash Generated:</b> ' . $final_hash . '<br/> <b>Hash(from DB):</b> ' . $hash_fromDB . '<br/>';};
 		return false;
 	}
 
