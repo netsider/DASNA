@@ -5,7 +5,7 @@ const database = 'dasna';
 // const debug = true; // uncomment for debug
 if($_SESSION['authenticated'] === true){
 	echo '<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />';
-	if (debug){echo '<b>Username:</b> ' . $_SESSION['username'] . '<br/>';};
+	// if (debug){echo '<b>Username:</b> ' . $_SESSION['username'] . '<br/>';};
 	$current_page = read_page($_SESSION['username']);
 	if(debug){echo '<b>Current page:</b> ' . $current_page . '<br/>';};
 	if($columns = read_column_array('content')){
@@ -32,11 +32,11 @@ if($_SESSION['authenticated'] === true){
 		}
 		echo '</option>';
 		}
-		echo '</select></form></div><br/>';
+		echo '</select></form></div><br/><br/><br/>';
 	}
 	if($html = read_content($current_page)){
 		echo '<div id="editordiv"><table width="100%" border="0"><tr><td colspan="2">';
-		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . $html . '</textarea></td></tr>';
+		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . html_entity_decode($html) . '</textarea></td></tr>';
 		echo '<tr><td colspan="2"><div id="saved"></div><input type="button" id="publish" name="publish" value="Publish" style="display: none;" onclick="publishFunction()"></input>';
 		echo '</td></tr></table></div>';
 		echo '<br/><div id="backups"></div>';
@@ -51,13 +51,14 @@ if($_SESSION['authenticated'] === true){
 #dropdownDBdiv{
 	width: 150px;
 	height: 40px;
-	border-width:1px;
+	border-width: 1px;
 	margin-left: auto;
-	margin-right; auto;
+	margin-right: auto;
 }
-$editordiv{
+#editordiv{
+	width: 75%;
 	margin-left: auto;
-	margin-right; auto;
+	margin-right: auto;
 }
 </style>
 </head><body>
@@ -116,7 +117,28 @@ function saveFunction(dataIn){
         dataType: 'json',
         type: 'POST',
         success: function(json_object){
-			// var newdate = make_Date();
+			document.getElementById("saved").style.color = "green";
+			// var btn = document.getElementById("publish");
+			// document.getElementById("publish").style.display = "inline";
+			$("#saved").text(json_object + ' on ' + make_Date() + ' ');
+			// $("#saved").append(btn);
+        },
+        error: function(json_object){
+            console.log("Error!"); 
+        }
+    });
+};
+function publishFunction(){
+	ajaxGet('A');
+	var dataIn = document.getElementById("editor1").value;
+	var current_page = page;
+    var json_object = {"data": dataIn, "page": current_page};
+    $.ajax({
+        url: "ajax_publish.php",
+        data: json_object,
+        dataType: 'json',
+        type: 'POST',
+        success: function(json_object){
 			document.getElementById("saved").style.color = "green";
 			var btn = document.getElementById("publish");
 			document.getElementById("publish").style.display = "inline";
@@ -128,24 +150,15 @@ function saveFunction(dataIn){
         }
     });
 };
-function publishFunction(){
-	ajaxGet("B");
-	var dataIn = document.getElementById("editor1").value;
-	var current_page = page;
-    var json_object = {"data": dataIn, "page": current_page};
-    $.ajax({
-        url: "ajax_publish.php",
+function ajaxGet(type){
+	var json_object = {'type': type};
+	$.ajax({
+        url: 'ajax_get.php',
         data: json_object,
         dataType: 'json',
         type: 'POST',
         success: function(json_object){
-			// var newdate = make_Date();
-			document.getElementById("saved").style.color = "green";
-			var btn = document.getElementById("publish");
-			document.getElementById("publish").style.display = "inline";
-			document.getElementById("publish").style.fontweight = "bolder";
-			$("#saved").text(json_object + ' on ' + make_Date() + ' ');
-			$("#saved").append(btn);
+			$("#backups").text(json_object[1]);
         },
         error: function(json_object){
             console.log("Error!"); 
@@ -160,21 +173,6 @@ function make_Date(){
 	};
 	var newdate = date.toLocaleTimeString("en-us", options);
 	return newdate;
-};
-function ajaxGet(type){
-	var json_object = {"type": type};
-	$.ajax({
-        url: "ajax_get.php",
-        data: json_object,
-        dataType: 'json',
-        type: 'POST',
-        success: function(json_object){
-			$("#backups").text(json_object);
-        },
-        error: function(json_object){
-            console.log("Error!"); 
-        }
-    });
 };
 </script>
 </body>
