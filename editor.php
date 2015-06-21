@@ -2,17 +2,15 @@
 require_once 'functions.php';
 require_once 'login.php';
 const database = 'dasna';
-const debug = false;
+// const debug = true; // uncomment for debug
 if($_SESSION['authenticated'] === true){
 	echo '<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />';
-	if(debug){echo 'Authenticated!' . '<br/>'; };
-	if (debug){echo 'Username: ' . $_SESSION['username'] . '<br/>';};
+	if (debug){echo '<b>Username:</b> ' . $_SESSION['username'] . '<br/>';};
 	$current_page = read_page($_SESSION['username']);
-	if(debug){echo 'Current page: ' . $current_page . '<br/>';};
+	if(debug){echo '<b>Current page:</b> ' . $current_page . '<br/>';};
 	if($columns = read_column_array('content')){
 		// if(debug){echo '<pre>';print_r($columns);echo '</pre>';};
-		echo '<center><div style="width: 150px;height: 40px;border-width:1px;">';
-		echo 'Select Page: <form><select id="dropdownDB" onchange="set_DB()">';
+		echo '<div id="dropdownDBdiv">Select Page:<form><select id="dropdownDB" onchange="set_DB()">';
 		foreach($columns as $column){
 			switch ($column){
 			case "A":
@@ -34,23 +32,37 @@ if($_SESSION['authenticated'] === true){
 		}
 		echo '</option>';
 		}
-		echo '</select></div></form>';
+		echo '</select></form></div><br/>';
 	}
 	if($html = read_content($current_page)){
-		echo '<table width="100%" border="0"><tr><td colspan="2">';
+		echo '<div id="editordiv"><table width="100%" border="0"><tr><td colspan="2">';
 		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . $html . '</textarea></td></tr>';
-		echo '<tr><td colspan="2"><div id="saved" style="font-weight: bold;">&nbsp</div>';
-		echo '<input type="button" id="publish" name="publish" value="Publish" style="display: none;"></input></td></tr></table></center>';
+		echo '<tr><td colspan="2"><div id="saved"></div><input type="button" id="publish" name="publish" value="Publish" style="display: none;"></input>';
+		echo '</td></tr></table></div>';
 	}else{
 		echo 'Failed to read content!<br/>';
 	}
 }
 ?>
-<script src="jquery.min.js"></script>
-<script src="ckeditor.js"></script>
+<script src="jquery.min.js"></script><script src="ckeditor.js"></script>
 <title>DASNA Page Editing System</title>
-</head>
-<body>
+<style>
+#saved{
+	font-weight: bold;
+}
+#dropdownDBdiv{
+	width: 150px;
+	height: 40px;
+	border-width:1px;
+	margin-left: auto;
+	margin-right; auto;
+}
+$editordiv{
+	margin-left: auto;
+	margin-right; auto;
+}
+</style>
+</head><body>
 <script>
 <?php if($_SESSION['authenticated'] === true){ // So editor only displays if authenticated
 	echo "var bodyEditor = CKEDITOR.replace('editor1',";
@@ -74,10 +86,6 @@ if(typeof bodyEditor != 'undefined'){
 		console.log("Change(change) Occured!");
 		var data = CKEDITOR.instances.editor1.getData();
 		saveFunction(data);
-	});
-	bodyEditor.on('save', function () {
-		console.log("Change(save) Occured!");
-		var data = CKEDITOR.instances.editor1.getData();
 	});
 }
 function set_DB(){
@@ -110,17 +118,20 @@ function saveFunction(dataIn){
         dataType: 'json',
         type: 'POST',
         success: function(json_object){
-			var newdate = make_my_Date();
+			var newdate = make_Date();
 			document.getElementById("saved").style.color = "green";
-			document.getElementById("saved").style.display = "inline";
-			$("#saved").text(json_object + ' on ' + newdate);
+			var btn = document.getElementById("publish");
+			document.getElementById("publish").style.display = "inline";
+			$("#saved").text(json_object + ' on ' + newdate + ' ');
+			$("#saved").append(btn);
+			
         },
         error: function(json_object){
             console.log("Error!"); 
         }
     });
 };
-function make_my_Date(){
+function make_Date(){
 	var date = new Date();
 	var options = {
 		weekday: "long", year: "numeric", month: "short",
