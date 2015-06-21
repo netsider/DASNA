@@ -1,14 +1,5 @@
 <?php
-function save_content($section, $data){
-	include 'db.php';
-	mysqli_select_db($db, 'dasna');
-	$query = "UPDATE content SET data = '$data' WHERE section = '$section'";
-	if(mysqli_query($db, $query)){
-		return true;
-	}else{
-		return false;
-	}
-};
+require_once 'functions.php';
 if(save_content($_POST['page'], htmlentities($_POST['data']))){
 	echo json_encode('Saved');
 }

@@ -1,15 +1,10 @@
 <?php
-function insert_into($table, $values){
+	$v = htmlentities($_POST['data']);
+	$t = 'backups';
 	include 'db.php';
 	mysqli_select_db($db, 'dasna');
-	$query = "INSERT INTO $table (data) VALUES ('$values')";
+	$query = "INSERT INTO $t (data) VALUES ('$v')";
 	if(mysqli_query($db, $query)){
-		return true;
-	}else{
-		return false;
+		echo json_encode('Published');
 	}
-};
-if(insert_into('middlecolumn', htmlentities($_POST['data']))){
-	echo json_encode('Published');
-}
 ?>

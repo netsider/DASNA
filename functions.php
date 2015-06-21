@@ -5,6 +5,26 @@ $fcg = '<font color="green">';
 $fcr = '<font color="red">';
 $efc = '</font>';
 $efcbr = '</font><br/>';
+function save_content($section, $data){
+	include 'db.php';
+	mysqli_select_db($db, 'dasna');
+	$query = "UPDATE content SET data = '$data' WHERE section = '$section'";
+	if(mysqli_query($db, $query)){
+		return true;
+	}else{
+		return false;
+	}
+};
+function insert_into($table, $values){
+	include 'db.php';
+	mysqli_select_db($db, 'dasna');
+	$query = "INSERT INTO $table (data) VALUES ('$values')";
+	if(mysqli_query($db, $query)){
+		return true;
+	}else{
+		return false;
+	}
+};
 function save_salt($user, $salt){
 	include('db.php');
 	mysqli_select_db($db, database);

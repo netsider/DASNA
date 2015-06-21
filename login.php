@@ -1,16 +1,15 @@
 <?php
 error_reporting(E_ALL ^ E_NOTICE);
 session_name("DASNAID");
-ini_set('session.hash_function','whirlpool');
-date_default_timezone_set("America/New_york");
+ini_set('session.hash_function','whirlpool');date_default_timezone_set("America/New_york");
 session_start();session_regenerate_id(true); // to prevent session fixation
 require_once 'functions.php';
 require_once 'vars.php';
-const debug = true;
+// const debug = true;
 $_SESSION['id'] = session_id();
 if(debug){ echo '$_SESSION[id]: ' . $_SESSION['id'] . '<br/>';};
 if($_SESSION['authenticated'] === true){
-	$expires = 3600 * 24 * 365 * 5; // 5 years
+	$expires = 3600 * 24 * 365 * 25; // 25 years
 	setrawcookie('DCOUNT', $_SESSION['count'], time() + ($expires), "/");
 	$authenticated = true;
 }else{
@@ -58,14 +57,8 @@ if($_POST['in-submit']){
 					}else{
 						if(debug){echo 'User IP NOT saved to database.' . $br;};
 					}
-					// if(save_to_DB($username, 'sid', $_SESSION['id'])){
-						// if(debug){echo 'User SID saved to database.' . $br;};
-					// }else{
-						// if(debug){echo 'User SID NOT saved to database.' . $br;};
-					// }
 				}else{
 					if(debug){$output .= $fcr . 'Validation Failed!' . $efcbr;};
-					// $_SESSION['authenticated'] = false;
 				}
 			}
 		}else{

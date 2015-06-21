@@ -10,7 +10,7 @@ if($_SESSION['authenticated'] === true){
 	if(debug){echo '<b>Current page:</b> ' . $current_page . '<br/>';};
 	if($columns = read_column_array('content')){
 		// if(debug){echo '<pre>';print_r($columns);echo '</pre>';};
-		echo '<div id="dropdownDBdiv">Select Page:<form><select id="dropdownDB" onchange="set_DB()">';
+		echo '<div id="dropdownDBdiv">Select Page:<form><select id="dropdownDB" onchange="set_DB()" multiple>';
 		foreach($columns as $column){
 			switch ($column){
 			case "A":
@@ -39,6 +39,7 @@ if($_SESSION['authenticated'] === true){
 		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . $html . '</textarea></td></tr>';
 		echo '<tr><td colspan="2"><div id="saved"></div><input type="button" id="publish" name="publish" value="Publish" style="display: none;" onclick="publishFunction()"></input>';
 		echo '</td></tr></table></div>';
+		echo '<br/><div id="backups"></div>';
 	}else{
 		echo 'Failed to read content!<br/>';
 	}
@@ -115,13 +116,12 @@ function saveFunction(dataIn){
         dataType: 'json',
         type: 'POST',
         success: function(json_object){
-			var newdate = make_Date();
+			// var newdate = make_Date();
 			document.getElementById("saved").style.color = "green";
 			var btn = document.getElementById("publish");
 			document.getElementById("publish").style.display = "inline";
-			$("#saved").text(json_object + ' on ' + newdate + ' ');
+			$("#saved").text(json_object + ' on ' + make_Date() + ' ');
 			$("#saved").append(btn);
-			
         },
         error: function(json_object){
             console.log("Error!"); 
@@ -138,12 +138,13 @@ function publishFunction(){
         dataType: 'json',
         type: 'POST',
         success: function(json_object){
-			var newdate = make_Date();
+			ajaxGet();
+			// var newdate = make_Date();
 			document.getElementById("saved").style.color = "green";
 			var btn = document.getElementById("publish");
 			document.getElementById("publish").style.display = "inline";
 			document.getElementById("publish").style.fontweight = "bolder";
-			$("#saved").text(json_object + ' on ' + newdate + ' ');
+			$("#saved").text(json_object + ' on ' + make_Date() + ' ');
 			$("#saved").append(btn);
         },
         error: function(json_object){
@@ -160,6 +161,18 @@ function make_Date(){
 	var newdate = date.toLocaleTimeString("en-us", options);
 	return newdate;
 };
+function ajaxGet(){
+	var r = new XMLHttpRequest();
+	var url = 'ajax_get.php';
+	r.open("POST", url, true);
+	r.send(null);
+	
+	r.onreadystatechange = function() {
+    if (r.readyState == 4) {
+      document.getElementById("backups").innerHTML = r.responseText;
+    }
+	};
+}
 </script>
 </body>
 </html>
