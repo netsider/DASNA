@@ -5,7 +5,7 @@ ini_set('session.hash_function','whirlpool');date_default_timezone_set("America/
 session_start();session_regenerate_id(true); // to prevent session fixation
 require_once 'functions.php';
 require_once 'vars.php';
-// const debug = true;
+const debug = false;
 $_SESSION['id'] = session_id();
 if(debug){ echo '$_SESSION[id]: ' . $_SESSION['id'] . '<br/>';};
 if($_SESSION['authenticated'] === true){

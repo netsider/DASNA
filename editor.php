@@ -2,7 +2,7 @@
 require_once 'functions.php';
 require_once 'login.php';
 const database = 'dasna';
-// const debug = true; // uncomment for debug
+const debug = false; // comment for debug
 if($_SESSION['authenticated'] === true){
 	echo '<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />';
 	// if (debug){echo '<b>Username:</b> ' . $_SESSION['username'] . '<br/>';};
@@ -10,7 +10,7 @@ if($_SESSION['authenticated'] === true){
 	if(debug){echo '<b>Current page:</b> ' . $current_page . '<br/>';};
 	if($columns = read_column_array('content')){
 		// if(debug){echo '<pre>';print_r($columns);echo '</pre>';};
-		echo '<div id="dropdownDBdiv">Select Page:<form><select id="dropdownDB" onchange="set_DB()" multiple>';
+		echo '<div id="dropdownDBdiv">Select Page:<form><select id="dropdownDB" onchange="set_DB()">';
 		foreach($columns as $column){
 			switch ($column){
 			case "A":
@@ -32,7 +32,7 @@ if($_SESSION['authenticated'] === true){
 		}
 		echo '</option>';
 		}
-		echo '</select></form></div><br/><br/><br/>';
+		echo '</select></form></div><br/>';
 	}
 	if($html = read_content($current_page)){
 		echo '<div id="editordiv"><table width="100%" border="0"><tr><td colspan="2">';
