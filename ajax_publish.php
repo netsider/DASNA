@@ -11,9 +11,5 @@ function insert_into($table, $values){
 };
 if(insert_into('middlecolumn', htmlentities($_POST['data']))){
 	echo json_encode('Published');
-}else{
-	echo '<pre>';
-	var_export(_$POST);
-	echo '</pre>';
 }
 ?>

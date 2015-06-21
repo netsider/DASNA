@@ -37,7 +37,7 @@ if($_SESSION['authenticated'] === true){
 	if($html = read_content($current_page)){
 		echo '<div id="editordiv"><table width="100%" border="0"><tr><td colspan="2">';
 		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . $html . '</textarea></td></tr>';
-		echo '<tr><td colspan="2"><div id="saved"></div><input type="button" id="publish" name="publish" value="Publish" style="display: none;"></input>';
+		echo '<tr><td colspan="2"><div id="saved"></div><input type="button" id="publish" name="publish" value="Publish" style="display: none;" onclick="publishFunction()"></input>';
 		echo '</td></tr></table></div>';
 	}else{
 		echo 'Failed to read content!<br/>';
@@ -47,9 +47,6 @@ if($_SESSION['authenticated'] === true){
 <script src="jquery.min.js"></script><script src="ckeditor.js"></script>
 <title>DASNA Page Editing System</title>
 <style>
-#saved{
-	font-weight: bold;
-}
 #dropdownDBdiv{
 	width: 150px;
 	height: 40px;
@@ -125,6 +122,29 @@ function saveFunction(dataIn){
 			$("#saved").text(json_object + ' on ' + newdate + ' ');
 			$("#saved").append(btn);
 			
+        },
+        error: function(json_object){
+            console.log("Error!"); 
+        }
+    });
+};
+function publishFunction(){
+	var dataIn = document.getElementById("editor1").value;
+	var current_page = page;
+    var json_object = {"data": dataIn, "page": current_page};
+    $.ajax({
+        url: "ajax_publish.php",
+        data: json_object,
+        dataType: 'json',
+        type: 'POST',
+        success: function(json_object){
+			var newdate = make_Date();
+			document.getElementById("saved").style.color = "green";
+			var btn = document.getElementById("publish");
+			document.getElementById("publish").style.display = "inline";
+			document.getElementById("publish").style.fontweight = "bolder";
+			$("#saved").text(json_object + ' on ' + newdate + ' ');
+			$("#saved").append(btn);
         },
         error: function(json_object){
             console.log("Error!"); 
