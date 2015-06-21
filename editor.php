@@ -129,6 +129,7 @@ function saveFunction(dataIn){
     });
 };
 function publishFunction(){
+	ajaxGet("B");
 	var dataIn = document.getElementById("editor1").value;
 	var current_page = page;
     var json_object = {"data": dataIn, "page": current_page};
@@ -138,7 +139,6 @@ function publishFunction(){
         dataType: 'json',
         type: 'POST',
         success: function(json_object){
-			ajaxGet();
 			// var newdate = make_Date();
 			document.getElementById("saved").style.color = "green";
 			var btn = document.getElementById("publish");
@@ -161,18 +161,21 @@ function make_Date(){
 	var newdate = date.toLocaleTimeString("en-us", options);
 	return newdate;
 };
-function ajaxGet(){
-	var r = new XMLHttpRequest();
-	var url = 'ajax_get.php';
-	r.open("POST", url, true);
-	r.send(null);
-	
-	r.onreadystatechange = function() {
-    if (r.readyState == 4) {
-      document.getElementById("backups").innerHTML = r.responseText;
-    }
-	};
-}
+function ajaxGet(type){
+	var json_object = {"type": type};
+	$.ajax({
+        url: "ajax_get.php",
+        data: json_object,
+        dataType: 'json',
+        type: 'POST',
+        success: function(json_object){
+			$("#backups").text(json_object);
+        },
+        error: function(json_object){
+            console.log("Error!"); 
+        }
+    });
+};
 </script>
 </body>
 </html>
