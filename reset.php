@@ -90,25 +90,25 @@ if($_POST['in-submit']){
 						$parray = array(); // an array for the allgood function
 						if(isset($password) && isset($pass_new)){
 							$bothset = true;
-							if(check_equal($pass_new, $password)){
+							if(check_equal($pass_new, $password)){ // check if both the same
 								$iterations = 100000;
 								$output .= $fcg . 'Password OK!' . $efcbr;
 								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));						
 								$hash = create_hash(create_hash($password, $salt, 'ripemd320', $iterations), $salt, 'whirlpool', $iterations);
 								if(debug){$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;};
 								$output .= 'Attempting to save to database...' . $efcbr;			
-								if(save_hash($username, $hash)){
+								if(save_hash($username, $hash)){ // save hash
 									$output .= $fcg . 'Password saved to database.' . $efcbr;
 								}else{
 									$output .= $fcr . 'Password NOT saved to database.' . $efcbr;
 								}
-								if(save_salt($username, $salt)){
+								if(save_salt($username, $salt)){ // save salt
 									$output .= $fcg . 'Salt saved to database!' . $efcbr;
 								}else{
 									$output .= $fcr . 'Salt NOT saved to database!' . $efcbr;
 								}
 								if(validate($username, $password)){ // Check it
-									$output .= 'Password Successfully set!  Please close this window completely, and proceed to the login area.';
+									$output .= 'Password Successfully set!  Please close this window (to login  later), or <a href="editor.php">proceed</a>.';
 								}else{
 									$output .= 'Fail!';
 								}
@@ -122,7 +122,7 @@ if($_POST['in-submit']){
 					$output .= $fcr . 'Phone number entered does not match value in DB!' . $efcbr;
 				}				
 			}
-		}else{ // If !null or $null
+		}else{
 			$output .= $fcr . 'Password does not meet requirements to be reset!' . $efcbr;
 		}
 	}
@@ -138,7 +138,7 @@ if($_POST['in-submit']){
 	<center>
 	<table width='25%' border='1'>
 	<tr><td colspan="2"><center>Set Password</center></td></tr>
-	<form action='reset.php' method='POST'>
+	<form action='reset.php' method='POST' name="Form" id="Form">
 	<tr><td>Username:</td><td>
 	<?php 
 	echo "<input type='text' name='in-user'";
@@ -146,18 +146,18 @@ if($_POST['in-submit']){
 	if($user_exist){ 
 		echo 'disabled';
 	}
-	echo "/></td></tr>";
+	echo 'onkeyup="validateForm()"/></td></tr>';
 	if($user_exist){
 		echo '<tr><td>Phone Number:</td><td><input type="text" name="in-phone"';
 		if($phone_set){
 			echo "value='$phone'";
 		}
 		if($phone_match){ echo ' disabled';};
-		echo '/></td></tr>';
+		echo 'onkeyup="validateForm()"/></td></tr>';
 	}
 	if($user_exist){
 		echo '<tr><td>Mobile Carrier:</td><td>';
-		echo '<select name="in-carrier"';
+		echo '<select name="in-carrier" onchange="validateForm()"';
 		if(isset($carrier)){ echo ' disabled';};
 		echo '>';
 			echo '<option value="verizon">Verizon</option>';
@@ -189,7 +189,7 @@ if($_POST['in-submit']){
 		}
 		echo "/></td></tr>";
 	}
-	echo "<tr><td colspan='2'><center><input type='submit' name='in-submit'"; // Submit button
+	echo "<tr><td colspan='2'><center><input type='submit' name='in-submit' id='in-submit'"; // Submit button
 	if($null){ 
 		echo "value='Finish'";
 	}else{ 
@@ -220,5 +220,62 @@ if($_POST['in-submit']){
 	}
 	?>
 	</center><br/></form></table>
+<script>
+document.getElementById("in-submit").disabled = true;
+function validateForm(){
+		var toCheck = new Array();
+		var trueArray = new Array();
+		// toCheck["user"] = document.forms["Form"]["in-user"].value;
+        var elem = document.getElementById('Form').elements;
+        for(var i = 0; i < elem.length;i++){
+			console.log("Name: " + elem[i].name + "| Value: " + elem[i].value);
+			if(elem[i].name === "in-user"){
+				toCheck["user"] = elem[i].value;
+				// console.log("User: " + toCheck["user"]);
+			}
+			if(elem[i].name === "in-phone"){
+				toCheck["phone"] = elem[i].value;
+				// console.log("User: " + toCheck["phone"]);
+			}
+			if(elem[i].name === "in-carrier"){
+				toCheck["carrier"] = elem[i].value;
+				// console.log("Carrier: " + toCheck["phone"]);
+			}
+		}
+		if(toCheck["user"] != undefined){
+			var user = toCheck["user"];
+			if(user.length > 0){
+				trueArray.push(1);
+			}
+		}
+		if(toCheck["phone"] != undefined){
+			var phone = toCheck["phone"];
+			if(phone.length < 10){
+				trueArray.push(1);
+			}
+		}
+		if(toCheck["carrier"] != undefined){
+			var carrier = toCheck["carrier"];
+			if(carrier.length > 0){
+				trueArray.push(1);
+			}
+		}
+		for(var i = 0; i < trueArray.length;i++){
+			// console.log(trueArray[i]);
+			if(trueArray[i] != 1){
+				console.log("False");
+			}else{
+				console.log("True");
+			}
+		}
+}
+function toggleSubmit(bool){
+	if(bool === true){
+		document.getElementById("in-submit").disabled = false;
+	}else{
+		document.getElementById("in-submit").disabled = true;
+	}
+};
+</script>
 </body>
 </html>
