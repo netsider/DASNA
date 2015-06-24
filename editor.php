@@ -2,15 +2,15 @@
 require_once 'functions.php';
 require_once 'login.php';
 const database = 'dasna';
-const debug = false; // comment for debug
+$show = true; // comment for $show
 if($_SESSION['authenticated'] === true){
 	echo '<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />';
-	// if (debug){echo '<b>Username:</b> ' . $_SESSION['username'] . '<br/>';};
 	$current_page = read_page($_SESSION['username']);
-	if(debug){echo '<b>Current page:</b> ' . $current_page . '<br/>';};
+	if($show){$output .= '<b>Current page:</b> ' . $current_page . '<br/>';};
+	if($show){$output .= '$_SESSION[id]: ' . $_SESSION['id'] . '<br/>';};
 	if($columns = read_column_array('content')){
-		// if(debug){echo '<pre>';print_r($columns);echo '</pre>';};
-		echo '<div id="dropdownDBdiv">Select Page:<form><select id="dropdownDB" onchange="set_DB()">';
+		// if($show){echo '<pre>';print_r($columns);echo '</pre>';};
+		echo '<div id="container" style="width: 75%;" class="center"><div id="dropdownDBdiv">Select Page:<form><select id="dropdownDB" onchange="set_DB()">';
 		foreach($columns as $column){
 			switch ($column){
 			case "A":
@@ -32,14 +32,14 @@ if($_SESSION['authenticated'] === true){
 		}
 		echo '</option>';
 		}
-		echo '</select></form></div><br/>';
+		echo '</select></form></div></div>';
 	}
 	if($html = read_content($current_page)){
 		echo '<div id="editordiv"><table width="100%" border="0"><tr><td colspan="2">';
 		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . html_entity_decode($html) . '</textarea></td></tr>';
-		echo '<tr><td colspan="2"><div id="saved"></div><input type="button" id="publish" name="publish" value="Publish" style="display: none;" onclick="publishFunction()"></input>';
+		echo '<tr><td colspan="2"><div id="saved">&nbsp</div><input type="button" id="publish" name="publish" value="Publish" style="display: none;" onclick="publishFunction()"></input>';
 		echo '</td></tr></table></div>';
-		echo '<br/><div id="backups"></div>';
+		echo '<br/><div id="output"><b>Page output:</b>' . $output . '</div>';
 	}else{
 		echo 'Failed to read content!<br/>';
 	}
@@ -48,17 +48,38 @@ if($_SESSION['authenticated'] === true){
 <script src="jquery.min.js"></script><script src="ckeditor.js"></script>
 <title>DASNA Page Editing System</title>
 <style>
+.center{
+	margin-left: auto;
+	margin-right: auto;
+}
 #dropdownDBdiv{
+	text-align: center;
 	width: 150px;
 	height: 40px;
 	border-width: 1px;
-	margin-left: auto;
-	margin-right: auto;
+	border: 1px solid black;
+	border-bottom: 0px;
+}
+#saved{
+	border-top: 1px solid black;
 }
 #editordiv{
 	width: 75%;
 	margin-left: auto;
 	margin-right: auto;
+	border-width: 1px;
+	border-style: solid;
+	borer-color: black;
+}
+#output{
+	width: 75%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+	border-width: 1px;
+	border-style: solid;
+	borer-color: black;
+	padding: 2px;
 }
 </style>
 </head><body>

@@ -23,4 +23,5 @@ if($user_exist && $user_set){
 	}
 	echo '/>';
 ?>
-</td></tr><tr><td colspan='2'><?php if(isset($output)){ echo $output;}; ?></td></tr></form></table>
+</td></tr><tr><td colspan='2'><?php if(isset($output)){ echo $output;}; ?></td></tr>
+</form></table>

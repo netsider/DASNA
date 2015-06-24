@@ -7,48 +7,62 @@ if($_POST['in-submit']){
 	if(allgood($_POST)){
 		$input_clean = true;
 		if(isset($_POST['in-user'])){
-			$username = determine_magic_quotes($_POST['in-user']);
+			$username = $_POST['in-user'];
 		}
 		if(isset($_POST['in-pass'])){
-			$password = determine_magic_quotes($_POST['in-pass']);
+			$password = $_POST['in-pass'];
 		}
 		if(isset($_POST['in-phone'])){
-			$phone = determine_magic_quotes($_POST['in-phone']);
+			$phone = $_POST['in-phone'];
 			$phone_set = true;
 		}
 		if(isset($_POST['in-pass-new'])){
-			$pass_new = determine_magic_quotes($_POST['in-pass-new']);
+			$pass_new = $_POST['in-pass-new'];
 		}
 		if(isset($_POST['in-conf'])){
-			$confirm_code = determine_magic_quotes($_POST['in-conf']);
+			$confirm_code = $_POST['in-conf'];
 			$confirm_set = true;
 		}
 		if(isset($_POST['in-carrier'])){
-			$carrier = determine_magic_quotes($_POST['in-carrier']);
+			$carrier = $_POST['in-carrier'];
 			$carrier_set = true;
 		}	
 		if(user_exist($username)){
 			$user_exist = true;
 			if(row_null('phash', $username) === true){
-				$output .= $fcg . 'Password for user has no value.  Proceed to set.' . $efcbr;
+				$output .= $fcg . 'Password for user has no value.  Password will be set.' . $efcbr;
 				$null = true;
 			}else{
-				$output .= $fcr . 'Password for user exists.  Password will be reset...' . $efcbr;
+				$output .= $fcr . 'User already has password value stored in database.  If you continue, the password will be reset.' . $efcbr;
 				$null = false;
 			}
-			if(row_null('phone', $username)){
-				$output .= $fcr . 'Phone # not currently set.  Continue to set...' . $br;
+			if(row_null('phone', $username) && !$carrier_set){
+				$output .= $fcr . 'User phone # not currently set.  Please enter number (above) to save to database and continue.' . $efcbr;
 				$phone_null = true;
-			}else{
-				$output .= $fcg . 'Phone exist for user.  Continue to reset password.' . $br;
+			}elseif(!row_null('phone', $username)){
+				$output .= $fcg . 'User phone # exists in database.  If phone number is confirmed, password will be reset.' . $br;
 				$phone_null = false;
 			}
 		}else{
 			$output .= $fcr . 'User does not exist!' . $efcbr;
 			$user_exist = false;
 		}
-		if($null OR !$null){
+		if($null OR !$null){ // Remove !$null to only set passwords that are blank, or keep both to reset current passwords
 			if($user_exist && $phone_set){
+				if(row_null('phone', $username) && isset($phone)){
+					if(debug){$output .= 'Phone does not exist in database, but is set by user...<br/>';};
+					include('db.php');
+					mysqli_select_db($db, database);
+					$query = "UPDATE users SET phone = '$phone' WHERE name = '$username'";
+					if($result = mysqli_query($db, $query)){
+						$output .= 'Phone number saved!<br/>';
+						$phone_saved = true;
+					}else{
+						$output .= 'Phone number NOT saved!<br/>';
+					}
+				}elseif(!row_null('phone', $username)){
+					$output .= '<b>Phone value already present in database, or not set by user.</b><br/>';
+				}
 				if(check_equal($phone_fromDB = row_value('phone', $username), $phone)){
 					$output .= $fcg . 'Phone number exists/matches!' . $efcbr;
 					$phone_match = true;
@@ -56,12 +70,10 @@ if($_POST['in-submit']){
 						$mobile_carrier = pick_carrier($carrier);
 						if(save_carrier($mobile_carrier, $username)){
 							$to_add = $phone_fromDB . $mobile_carrier;
-							// $c = mt_rand(1000000, 9999999);
 							$conf_length = 7;
 							for ($x = 0; $x < $conf_length; $x++) {
-							$int = mt_rand(0, 9);
-							// if(debug){echo $x . '-->' . $int . '<br/>';};
-							$c .= $int;
+								$int = mt_rand(0, 9);
+								$c .= $int;
 							}					
 							$output .= 'Attempting to send SMS...' . $br;
 							if(sendSMS($to_add, 'mailserver@dasna.net', $c, 'Confirmation')){ // change back to "" if not working later
@@ -105,24 +117,15 @@ if($_POST['in-submit']){
 							}
 						}
 					}else{
+						$out .= $fcr . 'Confirm code does not match that in database.' . $efcbr;
 						$confirm = false;
 					}
-				}else{ // if phone doesn't match
-					if(row_null('phone', $username)){
-						if(debug){echo '<b>Phone Null!</b><br/>';};
-						include('db.php');
-						mysqli_select_db($db, database);
-						$query = "UPDATE users SET phone = '$phone' WHERE name = '$username'";
-						if($result = mysqli_query($db, $query)){
-							echo 'Phone number saved!<br/>';
-						}else{
-							echo 'Phone number NOT saved!<br/>';
-					}
 				}else{
-					echo '<b>Not Null!</b><br/>';
-				}
-			}						
+					$output .= $fcr . 'Phone number entered does not match value in DB!' . $efcbr;
+				}				
 			}
+		}else{ // If !null or $null
+			$output .= $fcr . 'Password does not meet requirements to be reset!' . $efcbr;
 		}
 	}
 }
@@ -131,7 +134,7 @@ if($_POST['in-submit']){
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
-	<title>60</title>
+	<title>User Reset Form</title>
 </head>
 <body>
 	<center>
@@ -198,7 +201,7 @@ if($_POST['in-submit']){
 	echo '<tr><td colspan="2"><u><center>Notes:</center></u>';
 	if(isset($output)){ echo $output;};
 	echo '</td></tr>';
-	if(isset($username) && $user_exist){ // To retain data between submits
+	if(isset($username) && $user_exist){ // To retain data between submits (before I realized how to do it the rigth way)
 		echo "<input type='hidden' name='in-user' value='$username' />";
 	}
 	if($bothset){
