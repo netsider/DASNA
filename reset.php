@@ -146,20 +146,21 @@ if($_POST['in-submit']){
 	if($user_exist){ 
 		echo 'disabled';
 	}
-	echo 'onkeyup="validateForm()"/></td></tr>';
+	echo 'onkeyup="validateForm()" onblur="validateForm()"/></td></tr>';
 	if($user_exist){
 		echo '<tr><td>Phone Number:</td><td><input type="text" name="in-phone"';
 		if($phone_set){
 			echo "value='$phone'";
 		}
 		if($phone_match){ echo ' disabled';};
-		echo 'onkeyup="validateForm()"/></td></tr>';
+		echo 'onkeyup="validateForm()" onblur="validateForm()"/></td></tr>';
 	}
 	if($user_exist){
 		echo '<tr><td>Mobile Carrier:</td><td>';
 		echo '<select name="in-carrier" onchange="validateForm()"';
 		if(isset($carrier)){ echo ' disabled';};
 		echo '>';
+			echo '<option value="Choose">Choose</option>';
 			echo '<option value="verizon">Verizon</option>';
 			echo '<option value="att">ATT</option>';
 		echo '</select>';
@@ -171,7 +172,7 @@ if($_POST['in-submit']){
 			echo "value='$confirm_code'";
 			if($confirm){ echo ' disabled';};
 		}
-		echo "/></td></tr>";
+		echo 'onkeyup="validateForm()"/></td></tr>';
 	}
 	if($confirm){
 		echo "<tr><td><b>New Password</b>:</td><td><input type='password' name='in-pass'";
@@ -271,6 +272,13 @@ function validateForm(){
 		if(toCheck["carrier"] != undefined){
 			var carrier = toCheck["carrier"];
 			if(carrier.length > 0){
+				trueArray.push(1);
+			}else{
+				trueArray.push(0);
+			}
+			if(carrier === "Choose"){
+				trueArray.push(0);
+			}else{
 				trueArray.push(1);
 			}
 		}
