@@ -241,17 +241,31 @@ function validateForm(){
 				toCheck["carrier"] = elem[i].value;
 				// console.log("Carrier: " + toCheck["phone"]);
 			}
+			if(check_alphanum(elem[i].value)){
+				trueArray.push(1);
+			}else{
+				trueArray.push(0);
+			}
 		}
 		if(toCheck["user"] != undefined){
 			var user = toCheck["user"];
 			if(user.length > 0){
 				trueArray.push(1);
+			}else{
+				trueArray.push(0);
 			}
 		}
 		if(toCheck["phone"] != undefined){
 			var phone = toCheck["phone"];
-			if(phone.length < 10){
+			if(phone.length >= 10){
 				trueArray.push(1);
+			}else{
+				trueArray.push(0);
+			}
+			if(check_alphanum(phone.value)){
+				trueArray.push(1);
+			}else{
+				trueArray.push(0);
 			}
 		}
 		if(toCheck["carrier"] != undefined){
@@ -260,13 +274,20 @@ function validateForm(){
 				trueArray.push(1);
 			}
 		}
-		for(var i = 0; i < trueArray.length;i++){
-			// console.log(trueArray[i]);
+		var ret = true;  // true unless below changes it
+		for(var i = 0;i < trueArray.length;i++){
+			console.log(trueArray[i]);
 			if(trueArray[i] != 1){
 				console.log("False");
+				ret = false;
 			}else{
 				console.log("True");
 			}
+		}
+		if(ret === true){
+			toggleSubmit(true);
+		}else{
+			toggleSubmit(false);
 		}
 }
 function toggleSubmit(bool){
@@ -276,6 +297,12 @@ function toggleSubmit(bool){
 		document.getElementById("in-submit").disabled = true;
 	}
 };
+function check_alphanum(code){
+    if(/[^a-zA-Z0-9]/.test(code)){
+       return false;
+    }
+    return true;     
+}
 </script>
 </body>
 </html>
