@@ -30,17 +30,17 @@ if($_POST['in-submit']){
 		if(user_exist($username)){
 			$user_exist = true;
 			if(row_null('phash', $username) === true){
-				$output .= $fcg . 'Password for user has no value.  Password will be set.' . $efcbr;
+				$output .= $fcg . 'Password for user has no value.  Password will be set...' . $efcbr;
 				$null = true;
 			}else{
-				$output .= $fcr . 'User already has password value stored in database.  If you continue, the password will be reset.' . $efcbr;
+				$output .= $fcr . 'User already has password value stored in database.  Password will be reset...' . $efcbr;
 				$null = false;
 			}
 			if(row_null('phone', $username) && !$carrier_set){
-				$output .= $fcr . 'User phone # not currently set.  Please enter number (above) to save to database and continue.' . $efcbr;
+				$output .= $fcr . 'User phone # not currently set.  Please enter your phone number to continue.' . $efcbr;
 				$phone_null = true;
 			}elseif(!row_null('phone', $username)){
-				$output .= $fcg . 'User phone # exists in database.  If phone number is confirmed, password will be reset.' . $br;
+				$output .= $fcg . 'User phone # exists in database.' . $br;
 				$phone_null = false;
 			}
 		}else{
@@ -55,13 +55,11 @@ if($_POST['in-submit']){
 					mysqli_select_db($db, database);
 					$query = "UPDATE users SET phone = '$phone' WHERE name = '$username'";
 					if($result = mysqli_query($db, $query)){
-						$output .= 'Phone number saved!<br/>';
+						$output .= $fcg . '<b>Phone number saved!</b>' . $efcbr;
 						$phone_saved = true;
 					}else{
-						$output .= 'Phone number NOT saved!<br/>';
+						$output .= $fcr . '<b>Phone number NOT saved!</b>' . $efcbr;
 					}
-				}elseif(!row_null('phone', $username)){
-					$output .= '<b>Phone value already present in database, or not set by user.</b><br/>';
 				}
 				if(check_equal($phone_fromDB = row_value('phone', $username), $phone)){
 					$output .= $fcg . 'Phone number exists/matches!' . $efcbr;
@@ -89,7 +87,7 @@ if($_POST['in-submit']){
 					if(row_value('temp', $username) === $confirm_code){
 						$output .= $fcg . 'Confirmation code confirmed by database!  You can now set your new password.' . $efcbr;
 						$confirm = true;
-						$parray = array(); // create an array to pass into the allgood function
+						$parray = array(); // an array for the allgood function
 						if(isset($password) && isset($pass_new)){
 							$bothset = true;
 							if(check_equal($pass_new, $password)){
@@ -110,9 +108,9 @@ if($_POST['in-submit']){
 									$output .= $fcr . 'Salt NOT saved to database!' . $efcbr;
 								}
 								if(validate($username, $password)){ // Check it
-								$output .= 'Password Successfully set!  Please close this window completely, and proceed to the login area.';
+									$output .= 'Password Successfully set!  Please close this window completely, and proceed to the login area.';
 								}else{
-								$output .= 'Fail!';
+									$output .= 'Fail!';
 								}
 							}
 						}
