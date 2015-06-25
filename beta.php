@@ -83,31 +83,30 @@
 	</div>    
 	<div id="nav-bar">
      <?php include '/articles/nav.php'; ?>
-    </div><div id="leftcolumn"><?php include 'left.php'; ?></div>
+    </div><div id="leftcolumn">	
+	<?php
+	include_once '/ssl/functions.php';
+	if($a = read_content('A')){
+		echo html_entity_decode($a);
+	}
+	?>
+	</div>
     <div id="content">
-		<h2>Welcome to Development Association of Shire</h2><span style="font-size:13px">
-		<?php
-		const database = 'dasna';
-		const debug = false;
-		function read_content($section){
-			include 'db.php';
-			mysqli_select_db($db, database);
-			$query = "SELECT data FROM content WHERE section = '$section'";
-			$result = mysqli_query($db, $query);
-			$array = mysqli_fetch_array($result);
-			$length = strlen($array[0]);
-			$value = $array[0];
-			if(debug){echo 'Field Value: "' . $value . '"<br/>';};
-			if(debug){echo 'Length: ' . $length . '<br/>';};
-			return $value;
-		};
-		if($A = read_content('A')){
-			echo html_entity_decode($A);
-		}
-		?>
+	<h2>Welcome to Development Association of Shire</h2><span style="font-size:13px">
+	<?php
+	include_once '/ssl/functions.php';
+	if($a = read_content('C')){
+		echo html_entity_decode($a);
+	}
+	?>
 	</div>
 	<div id="rightcolumn">
-	<?php include 'right.html'; ?>
+	<?php
+	include_once '/ssl/functions.php';
+	if($a = read_content('B')){
+		echo html_entity_decode($a);
+	}
+	?>
 	</div>
 	<div id="footer">
 	<?php include 'end.php'; ?>
