@@ -40,8 +40,7 @@ if($_SESSION['authenticated'] === true){
 		echo '<tr><td colspan="2"><div id="saved">&nbsp</div><input type="button" id="publish" name="publish" value="Publish" style="display: none;" onclick="publishFunction()"></input>';
 		echo '</td></tr></table></div>';
 		echo '<center><div id="output" class="center blackbox"><b>Page output:</b>' . $output . '</div></center>';
-		echo '<div id="livechanges" class="center blackbox"><span style="color: red;">All changes being made are <strong>live</strong> and will reflect on the home page</span></div>';
-		echo '<div id="govisit" class="center blackbox">See your <a href="http://www.dasna.net/beta.php">changes here</a>!</div>';
+		echo '<div id="livechanges" class="center blackbox"><span style="color: red;">All changes being made are <strong>live</strong> and will reflect on the <a href="http://dasna.net/beta.php">home page</a></span></div>';
 	}else{
 		echo 'Failed to read content!<br/>';
 	}
