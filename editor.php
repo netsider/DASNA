@@ -109,6 +109,7 @@ if(typeof bodyEditor != 'undefined'){
 	});
 }
 function set_DB(){
+	document.getElementById("dropdownDB").disabled = true;
 	var output = {};
 	var element = document.getElementById("dropdownDB");
     var myData = element.value;
