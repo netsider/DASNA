@@ -88,7 +88,6 @@ if($_SESSION['authenticated'] === true){
 </style>
 </head><body>
 <script>
-document.getElementById("govisit").style.display = "none";
 document.getElementById("check_debug").checked = false;
 debugFunction();
 <?php if($_SESSION['authenticated'] === true){ // So editor only displays if authenticated
