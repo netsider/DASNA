@@ -1,3 +1,4 @@
+<div id="container">
 <table width='20%' border='1'>
 <tr><td colspan="2">Login</td></tr><tr><td>Username:</td><td>
 <?php 
@@ -19,9 +20,10 @@ if($user_exist){
 if($user_exist && $user_set){
 		echo 'value="Login"';
 	}else{
-		echo 'value="Submit"';
+		echo 'value="Next"';
 	}
 	echo '/>';
 ?>
 </td></tr><tr><td colspan='2'><?php if(isset($output)){ echo $output;}; ?></td></tr>
 </form></table>
+</div>

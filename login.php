@@ -2,8 +2,8 @@
 session_name("DASNAID");
 ini_set('session.hash_function','whirlpool');date_default_timezone_set("America/New_york");
 session_start();
-session_regenerate_id(true); // to prevent session fixation
-require_once 'functions.php';
+session_regenerate_id(true);
+// require_once 'functions.php';
 require_once 'vars.php';
 $DEBUG = true;
 if($_POST['in-submit']){

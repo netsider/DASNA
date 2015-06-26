@@ -1,10 +1,57 @@
+<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="jquery.min.js"></script><script src="ckeditor.js"></script>
+<title>DASNA Page Editing System</title>
+<style>
+#dropdownDBdiv{
+	text-align: center;
+	width: 145px;
+	height: 40px;
+	border-width: 1px;
+	border: 1px solid black;
+	border-bottom: 0px;
+	padding: 2px;
+	display: inline-block;
+	left: -3px;
+	position: relative;
+}
+#saved{
+	border-top: 1px solid black;
+}
+#output{
+	text-align: left;
+}
+.blackbox{
+	width: 75%;
+	border-style: solid;
+	borer-color: black;
+	border-width: 1px;
+	padding: 2px;
+	margin-top: 2px;
+}
+.center{
+	margin-left: auto;
+	margin-right: auto;
+}
+.left{
+	float: left;
+}
+.right{
+	float: right;
+}
+@media (min-width: 300px) and (max-width: 600px) {
+	#container{
+	
+	}
+}
+</style></head><body>
 <?php
 require_once 'functions.php';
 require_once 'login.php';
 const database = 'dasna';
 $show = true;
 if($_SESSION['authenticated'] === true){
-	echo '<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />';
+	echo '<div id="container">';
 	$current_page = read_page($_SESSION['username']);
 	$debug = read_debug($_SESSION['username']);
 	if($show){$output .= '<b>Current page:</b> ' . $current_page . '<br/>';};
@@ -49,49 +96,9 @@ if($_SESSION['authenticated'] === true){
 	}else{
 		echo 'Failed to read content!<br/>';
 	}
+	echo '</div>';
 }
 ?>
-<script src="jquery.min.js"></script><script src="ckeditor.js"></script>
-<title>DASNA Page Editing System</title>
-<style>
-#dropdownDBdiv{
-	text-align: center;
-	width: 145px;
-	height: 40px;
-	border-width: 1px;
-	border: 1px solid black;
-	border-bottom: 0px;
-	padding: 2px;
-	display: inline-block;
-	left: -3px;
-	position: relative;
-}
-#saved{
-	border-top: 1px solid black;
-}
-#output{
-	text-align: left;
-}
-.blackbox{
-	width: 75%;
-	border-style: solid;
-	borer-color: black;
-	border-width: 1px;
-	padding: 2px;
-	margin-top: 2px;
-}
-.center{
-	margin-left: auto;
-	margin-right: auto;
-}
-.left{
-	float: left;
-}
-.right{
-	float: right;
-}
-</style>
-</head><body>
 <script>
 debugFunction();
 <?php if($_SESSION['authenticated'] === true){ // So editor only displays if authenticated

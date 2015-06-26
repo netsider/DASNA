@@ -15,6 +15,7 @@ function save_content($section, $data){
 	}else{
 		return false;
 	}
+	mysqli_close($db);
 };
 function insert_into($table, $values){
 	include 'db.php';
@@ -25,9 +26,10 @@ function insert_into($table, $values){
 	}else{
 		return false;
 	}
+	mysqli_close($db);
 };
 function save_salt($user, $salt){
-	include('db.php');
+	include 'db.php';
 	mysqli_select_db($db, database);
 	$query = "UPDATE users SET salt = '$salt' WHERE name = '$user'";
 	if(mysqli_query($db, $query)){
@@ -44,7 +46,7 @@ function check_equal($str1, $str2){
 	}
 };
 function save_confirm_code($code, $user){
-	include('db.php');
+	include 'db.php';
 	mysqli_select_db($db, database);
 	$query = "UPDATE users SET temp = '$code' WHERE name = '$user'";
 	if($result = mysqli_query($db, $query)){
@@ -54,7 +56,7 @@ function save_confirm_code($code, $user){
 	}
 };
 function save_hash($user, $hash){
-	include('db.php');
+	include 'db.php';
 	mysqli_select_db($db, database);
 	$query = "UPDATE users SET phash = '$hash' WHERE name = '$user'";
 	if(mysqli_query($db, $query)){
@@ -191,7 +193,7 @@ function row_null($column_name, $user){
 		return false;
 	}
 };
-function allgood($array){ // Returns false if not alphanumeric or empty
+function allgood($array){
 	$alpha = true; // true unless something changes it
 	// $output .= '<pre>';
 	// print_r($array);
@@ -199,7 +201,7 @@ function allgood($array){ // Returns false if not alphanumeric or empty
 	foreach($array as $key => $value){
 		if (ctype_alnum($value)) {
 			if(debug){$output .= 'Field(' . $key . ') is completely alphanumeric.<br/>';};
-			if(strlen($value) < 3){
+			if(strlen($value) < 1){
 				$output .= '<b>Field too short!</b>';
 				return false;
 			}
@@ -330,6 +332,6 @@ function validate($username, $password){
 		if(debug === true){$output .= '<b>Final Hash Generated:</b> ' . $final_hash . '<br/> <b>Hash(from DB):</b> ' . $hash_fromDB . '<br/>';};
 		return false;
 	}
-
+	mysqli_close($db);
 };
 ?>
