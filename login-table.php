@@ -1,3 +1,4 @@
+
 <div id="container">
 <table border="0">
 <tr><td style="text-align: center;" colspan="2">Login:</td></tr>
@@ -19,9 +20,9 @@ if($user_exist){
 }
 	echo '<tr><td colspan="2" style="text-align: center;"><input type="submit" name="in-submit"';
 if($user_exist && $user_set){
-		echo 'value="Login"';
+		echo 'value="Login"class="button-success pure-button button-small"';
 	}else{
-		echo 'value="Next"';
+		echo 'value="Next" class="button-success pure-button button-small"';
 	}
 	echo '/>';
 ?>

@@ -1,6 +1,6 @@
 <html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="jquery.min.js"></script><script src="ckeditor.js"></script>
+<script src="jquery.min.js"></script><script src="ckeditor.js"></script><link rel="stylesheet" href="pure.min.css">
 <title>DASNA Page Editing System</title>
 <style>
 #dropdownDBdiv{
@@ -56,6 +56,18 @@
 table {
     margin: 0 auto;
 }
+.button-small {
+            font-size: 85%;
+}
+.button-secondary {
+           color: white;
+            border-radius: 4px;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+        .button-success {
+			color: white;
+            background: rgb(28, 184, 65); /* this is a green */
+        }
 </style></head><body>
 <?php
 require_once 'functions.php';
