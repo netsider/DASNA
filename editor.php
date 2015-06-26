@@ -124,8 +124,8 @@ if($_SESSION['authenticated'] === true){
 }
 ?>
 <script>
-debugFunction();
 <?php if($_SESSION['authenticated'] === true){ // So editor only displays if authenticated
+	echo 'debugFunction();';
 	echo "var bodyEditor = CKEDITOR.replace('editor1',";
 	echo '{';
 	echo 'readOnly: false';
