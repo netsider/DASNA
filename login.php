@@ -59,8 +59,8 @@ if($_SESSION['authenticated'] === true){
 if($authenticated === true){
 	if($DEBUG){$output .= $fcg . 'User authenticated' . $efcbr;};
 }else{
-	echo '<center><form action="editor.php" method="POST">';
+	echo '<form action="editor.php" method="POST">'; // Action is page this goes to
 	require_once 'login-table.php';
-	echo '</center>';
+	echo '';
 }
 ?>

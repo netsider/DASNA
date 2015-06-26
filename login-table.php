@@ -1,6 +1,7 @@
 <div id="container">
-<table width='20%' border='1'>
-<tr><td colspan="2">Login</td></tr><tr><td>Username:</td><td>
+<table border="0">
+<tr><td style="text-align: center;" colspan="2">Login:</td></tr>
+<tr><td style="text-align: center;">Username:</td><td>
 <?php 
 echo "<input type='text' name='in-user'"; 
 if(!empty($username) && isset($username)){
@@ -16,7 +17,7 @@ if($user_exist){
 	}
 	echo '/></td></tr>';
 }
-	echo "<tr><td colspan='2'><input type='submit' name='in-submit'";
+	echo '<tr><td colspan="2" style="text-align: center;"><input type="submit" name="in-submit"';
 if($user_exist && $user_set){
 		echo 'value="Login"';
 	}else{
@@ -24,6 +25,6 @@ if($user_exist && $user_set){
 	}
 	echo '/>';
 ?>
-</td></tr><tr><td colspan='2'><?php if(isset($output)){ echo $output;}; ?></td></tr>
+</td></tr><tr><td colspan='2'><div id="saved"><?php if(isset($output)){ echo $output;}; ?></div></td></tr>
 </form></table>
 </div>

@@ -1,3 +1,5 @@
+- add code to make passwords match
+- add pure/YUI
 <?php
 require_once 'functions.php';
 require_once 'vars.php';

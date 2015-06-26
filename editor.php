@@ -39,10 +39,22 @@
 .right{
 	float: right;
 }
-@media (min-width: 300px) and (max-width: 600px) {
+.border{
+	border-style: solid;
+	borer-color: black;
+	border-width: 1px;
+}
+#container{
+	width: 100%;
+}
+@media (min-width: 300px) and (max-width: 800px) {
 	#container{
-	
+		margin: auto;
+		max-width: 600px;
 	}
+}
+table {
+    margin: 0 auto;
 }
 </style></head><body>
 <?php
