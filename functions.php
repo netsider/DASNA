@@ -94,6 +94,15 @@ function read_page($user){
 		return $array[0];
 	}
 };
+function read_debug($user){
+	include 'db.php';
+	mysqli_select_db($db, database);
+	$query = "SELECT debug FROM users WHERE name = '$user'";
+	if($result = mysqli_query($db, $query)){
+		$array = mysqli_fetch_array($result);
+		return $array[0];
+	}
+};
 function read_column_array($table){
 	include 'db.php';
 	mysqli_select_db($db, database);

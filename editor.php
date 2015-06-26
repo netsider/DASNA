@@ -2,10 +2,11 @@
 require_once 'functions.php';
 require_once 'login.php';
 const database = 'dasna';
-$show = true; // comment for $show
+$show = true;
 if($_SESSION['authenticated'] === true){
 	echo '<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />';
 	$current_page = read_page($_SESSION['username']);
+	$debug = read_debug($_SESSION['username']);
 	if($show){$output .= '<b>Current page:</b> ' . $current_page . '<br/>';};
 	if($show){$output .= '$_SESSION[id]: ' . $_SESSION['id'] . '<br/>';};
 	if($columns = read_column_array('content')){
@@ -32,7 +33,11 @@ if($_SESSION['authenticated'] === true){
 		}
 		echo '</option>';
 		}
-		echo '</select></form></div><div id="dropdownDBdiv">Debugging<br/><form><input type="checkbox" name="check_debug" onchange="debugFunction()" id="check_debug"></input></form></div></div></div>';
+		echo '</select></form></div><div id="dropdownDBdiv">Debugging<br/><form><input type="checkbox" name="check_debug" onchange="debugFunction()" id="check_debug"';
+		if($debug === "1"){
+			echo ' checked="checked"';
+		}
+		echo '></input></form></div></div></div>';
 	}
 	if($html = read_content($current_page)){
 		echo '<div id="editordiv" class="center blackbox" style="position: relative;margin-top: -2px;"><table width="100%" border="0"><tr><td colspan="2">';
@@ -40,7 +45,7 @@ if($_SESSION['authenticated'] === true){
 		echo '<tr><td colspan="2"><div id="saved">&nbsp</div><input type="button" id="publish" name="publish" value="Publish" style="display: none;" onclick="publishFunction()"></input>';
 		echo '</td></tr></table></div>';
 		echo '<center><div id="output" class="center blackbox"><b>Page output:</b>' . $output . '</div></center>';
-		echo '<div id="livechanges" class="center blackbox"><span style="color: red;">All changes being made are <strong>live</strong> and will reflect on the <a href="http://dasna.net/beta.php">home page</a></span></div>';
+		echo '<div id="livechanges" class="center blackbox"><span style="color: red;">All changes being made are <strong>live</strong> and will reflect on the <a href="http://dasna.net/beta.php">beta home page</a></span></div>';
 	}else{
 		echo 'Failed to read content!<br/>';
 	}
@@ -88,7 +93,6 @@ if($_SESSION['authenticated'] === true){
 </style>
 </head><body>
 <script>
-document.getElementById("check_debug").checked = false;
 debugFunction();
 <?php if($_SESSION['authenticated'] === true){ // So editor only displays if authenticated
 	echo "var bodyEditor = CKEDITOR.replace('editor1',";
@@ -206,11 +210,29 @@ function make_Date(){
 function debugFunction(){
 	if($('#check_debug').is(":checked")){
 		console.log("Checkbox is checked.");
+		set_debug("1");
 		document.getElementById("output").style.display = "inline-block";
 	}else{
+		set_debug("0");
 		document.getElementById("output").style.display = "none";
 		console.log("Checkbox is not checked.");
 	}
+};
+function set_debug(data){
+	var user = username;
+    var json_object = {"user": user, "data": data};
+    $.ajax({
+        url: "ajax_save_debug.php",
+        data: json_object,
+        dataType: 'json',
+        type: 'POST',
+        success: function(json_object){
+			console.log("Returned AJax!");
+        },
+        error: function(json_object){
+            console.log("Error!"); 
+        }
+    });
 };
 </script>
 </body>
