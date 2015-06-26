@@ -1,6 +1,57 @@
-<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="jquery.min.js"></script><script src="ckeditor.js"></script><link rel="stylesheet" href="pure.min.css">
+<?php
+require_once 'functions.php';
+require_once 'login.php';
+const database = 'dasna';
+$show = true;
+if($_SESSION['authenticated'] === true){
+	echo '<html><head><meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />';
+	echo '<link rel="stylesheet" href="pure.min.css"><script src="jquery.min.js"></script><script src="ckeditor.js"></script>';
+	$current_page = read_page($_SESSION['username']);
+	$debug = read_debug($_SESSION['username']);
+	if($show){$output .= '<b>Current page:</b> ' . $current_page . '<br/>';};
+	if($show){$output .= '$_SESSION[id]: ' . $_SESSION['id'] . '<br/>';};
+	if($columns = read_column_array('content')){
+		// if($show){echo '<pre>';print_r($columns);echo '</pre>';};
+		echo '<div id="container" style="width: 75%;" class="center"><div id="dropdownDBdiv" style="float: left;">Select Page:<form><select id="dropdownDB" onchange="set_DB()">';
+		foreach($columns as $column){
+			switch ($column){
+			case "A":
+				$col_name = get_pageName($column);
+				break;
+			case "B":
+				$col_name = get_pageName($column);
+				break;
+			case "C":
+				$col_name = get_pageName($column);
+				break;
+			}
+		if($current_page === $column){
+			echo '<option value="' . $column . '" selected="selected">';
+			echo $col_name;
+		}else{
+			echo '<option value="' . $column . '">';
+			echo $col_name;
+		}
+		echo '</option>';
+		}
+		echo '</select></form></div><div id="dropdownDBdiv">Debugging<br/><form><input type="checkbox" name="check_debug" onchange="debugFunction()" id="check_debug"';
+		if($debug === "1"){
+			echo ' checked="checked"';
+		}
+		echo '></input></form></div></div></div>';
+	}
+	if($html = read_content($current_page)){
+		echo '<div id="editordiv" class="center blackbox" style="position: relative;margin-top: -2px;"><table width="100%" border="0"><tr><td colspan="2">';
+		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . html_entity_decode($html) . '</textarea></td></tr>';
+		echo '<tr><td colspan="2"><div id="saved">&nbsp</div><input type="button" id="publish" name="publish" value="Publish" style="display: none;" onclick="publishFunction()"></input>';
+		echo '</td></tr></table></div>';
+		echo '<center><div id="output" class="center blackbox"><b>Page output:</b>' . $output . '</div></center>';
+		echo '<div id="livechanges" class="center blackbox"><span style="color: red;">All changes being made are <strong>live</strong> and will reflect on the <a href="http://dasna.net/beta.php">beta home page</a></span></div>';
+	}else{
+		echo 'Failed to read content!<br/>';
+	}
+}
+?>
 <title>DASNA Page Editing System</title>
 <style>
 #dropdownDBdiv{
@@ -56,73 +107,14 @@
 table {
     margin: 0 auto;
 }
-.button-small {
-            font-size: 85%;
-}
 .button-secondary {
-           color: white;
-            border-radius: 4px;
-            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-        }
-        .button-success {
-			color: white;
-            background: rgb(28, 184, 65); /* this is a green */
-        }
-</style></head><body>
-<?php
-require_once 'functions.php';
-require_once 'login.php';
-const database = 'dasna';
-$show = true;
-if($_SESSION['authenticated'] === true){
-	echo '<div id="container">';
-	$current_page = read_page($_SESSION['username']);
-	$debug = read_debug($_SESSION['username']);
-	if($show){$output .= '<b>Current page:</b> ' . $current_page . '<br/>';};
-	if($show){$output .= '$_SESSION[id]: ' . $_SESSION['id'] . '<br/>';};
-	if($columns = read_column_array('content')){
-		// if($show){echo '<pre>';print_r($columns);echo '</pre>';};
-		echo '<div id="container" style="width: 75%;" class="center"><div id="dropdownDBdiv" style="float: left;">Select Page:<form><select id="dropdownDB" onchange="set_DB()">';
-		foreach($columns as $column){
-			switch ($column){
-			case "A":
-				$col_name = get_pageName($column);
-				break;
-			case "B":
-				$col_name = get_pageName($column);
-				break;
-			case "C":
-				$col_name = get_pageName($column);
-				break;
-			}
-		if($current_page === $column){
-			echo '<option value="' . $column . '" selected="selected">';
-			echo $col_name;
-		}else{
-			echo '<option value="' . $column . '">';
-			echo $col_name;
-		}
-		echo '</option>';
-		}
-		echo '</select></form></div><div id="dropdownDBdiv">Debugging<br/><form><input type="checkbox" name="check_debug" onchange="debugFunction()" id="check_debug"';
-		if($debug === "1"){
-			echo ' checked="checked"';
-		}
-		echo '></input></form></div></div></div>';
-	}
-	if($html = read_content($current_page)){
-		echo '<div id="editordiv" class="center blackbox" style="position: relative;margin-top: -2px;"><table width="100%" border="0"><tr><td colspan="2">';
-		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . html_entity_decode($html) . '</textarea></td></tr>';
-		echo '<tr><td colspan="2"><div id="saved">&nbsp</div><input type="button" id="publish" name="publish" value="Publish" style="display: none;" onclick="publishFunction()"></input>';
-		echo '</td></tr></table></div>';
-		echo '<center><div id="output" class="center blackbox"><b>Page output:</b>' . $output . '</div></center>';
-		echo '<div id="livechanges" class="center blackbox"><span style="color: red;">All changes being made are <strong>live</strong> and will reflect on the <a href="http://dasna.net/beta.php">beta home page</a></span></div>';
-	}else{
-		echo 'Failed to read content!<br/>';
-	}
-	echo '</div>';
+	color: white;
+	border-radius: 4px;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
-?>
+.button-success {color: white;background: rgb(28, 184, 65);}
+</style>
+</head><body>
 <script>
 <?php if($_SESSION['authenticated'] === true){ // So editor only displays if authenticated
 	echo 'debugFunction();';

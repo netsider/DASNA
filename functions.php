@@ -15,7 +15,6 @@ function save_content($section, $data){
 	}else{
 		return false;
 	}
-	mysqli_close($db);
 };
 function insert_into($table, $values){
 	include 'db.php';
@@ -26,7 +25,6 @@ function insert_into($table, $values){
 	}else{
 		return false;
 	}
-	mysqli_close($db);
 };
 function save_salt($user, $salt){
 	include 'db.php';
@@ -332,6 +330,5 @@ function validate($username, $password){
 		if(debug === true){$output .= '<b>Final Hash Generated:</b> ' . $final_hash . '<br/> <b>Hash(from DB):</b> ' . $hash_fromDB . '<br/>';};
 		return false;
 	}
-	mysqli_close($db);
 };
 ?>

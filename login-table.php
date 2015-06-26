@@ -20,12 +20,11 @@ if($user_exist){
 }
 	echo '<tr><td colspan="2" style="text-align: center;"><input type="submit" name="in-submit"';
 if($user_exist && $user_set){
-		echo 'value="Login"class="button-success pure-button button-small"';
+		echo 'value="Login"class="button-success pure-button"';
 	}else{
-		echo 'value="Next" class="button-success pure-button button-small"';
+		echo 'value="Next" class="button-success pure-button"';
 	}
 	echo '/>';
 ?>
-</td></tr><tr><td colspan='2'><div id="saved"><?php if(isset($output)){ echo $output;}; ?></div></td></tr>
-</form></table>
+</td></tr><tr><td colspan='2'><div id="saved"><?php if(isset($output)){ echo $output;}; ?></div></td></tr></table>
 </div>
