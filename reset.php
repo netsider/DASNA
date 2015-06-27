@@ -1,5 +1,3 @@
-- add code to make passwords match
-- add pure/YUI
 <?php
 require_once 'functions.php';
 require_once 'vars.php';
@@ -182,7 +180,7 @@ if($_POST['in-submit']){
 			echo "value='$password'";
 			echo ' disabled';
 		}
-		echo "/></td></tr>";
+		echo 'onkeyup="validateForm()" /></td></tr>';
 	}
 	if($confirm){
 		echo "<tr><td><b>Re-type Password</b>:</td><td><input type='password' name='in-pass-new'";
@@ -190,7 +188,7 @@ if($_POST['in-submit']){
 			echo "value='$pass_new'";
 			echo ' disabled';
 		}
-		echo "/></td></tr>";
+		echo 'onkeyup="validateForm()" /></td></tr>';
 	}
 	echo "<tr><td colspan='2'><center><input type='submit' name='in-submit' id='in-submit'"; // Submit button
 	if($null){ 
@@ -244,6 +242,14 @@ function validateForm(){
 				toCheck["carrier"] = elem[i].value;
 				// console.log("Carrier: " + toCheck["phone"]);
 			}
+			if(elem[i].name === "in-pass"){
+				toCheck["pass"] = elem[i].value;
+				// console.log("Carrier: " + toCheck["phone"]);
+			}
+			if(elem[i].name === "in-pass-new"){
+				toCheck["pass-new"] = elem[i].value;
+				// console.log("Carrier: " + toCheck["phone"]);
+			}
 			if(check_alphanum(elem[i].value)){
 				trueArray.push(1);
 			}else{
@@ -283,6 +289,27 @@ function validateForm(){
 			}else{
 				trueArray.push(1);
 			}
+		}
+		if(toCheck["pass"] != undefined){
+			var pass = toCheck["pass"];
+			if(pass.length > 0){
+				trueArray.push(1);
+			}else{
+				trueArray.push(0);
+			}
+		}
+		if(toCheck["pass-new"] != undefined){
+			var pass_new = toCheck["pass-new"];
+			if(pass_new.length > 0){
+				trueArray.push(1);
+			}else{
+				trueArray.push(0);
+			}
+		}
+		if(pass_new === pass){
+			trueArray.push(1);
+		}else{
+			trueArray.push(0);
 		}
 		var ret = true;  // true unless below changes it
 		for(var i = 0;i < trueArray.length;i++){

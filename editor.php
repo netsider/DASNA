@@ -44,7 +44,7 @@ if($_SESSION['authenticated'] === true){
 	if($html = read_content($current_page)){
 		echo '<div id="editordiv" class="center blackbox" style="position: relative;margin-top: -2px;"><table width="100%" border="0"><tr><td colspan="2">';
 		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . html_entity_decode($html) . '</textarea></td></tr>';
-		echo '<tr><td colspan="2"><div id="saved">&nbsp</div><input type="button" id="publish" name="publish" value="Publish" style="display: none;" onclick="publishFunction()"></input>';
+		echo '<tr><td colspan="2"><div id="saved">&nbsp</div><input type="button" id="publish" name="publish" value="Backup/Restore" style="display: none;" onclick="publishFunction()"></input>';
 		echo '</td></tr></table></div>';
 		echo '<center><div id="output" class="center blackbox"><b>Page output:</b>' . $output . '</div></center>';
 		echo '<div id="livechanges" class="center blackbox"><span style="color: red;">All changes being made are <strong>live</strong> and will reflect on the <a href="http://dasna.net/beta.php">beta home page</a></span></div>';
