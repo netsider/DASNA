@@ -217,7 +217,8 @@ function ajaxGet(type){
 		for (var property in json_object) {
 			// output += "<tr><td><b>" + json_object[property][0] + "</b></td></tr>";
 			for(var i in json_object[property]){
-				output += "<tr><td><b>" + i + "</b></td><td><i>" + json_object[property][i] + "</i></td></tr>";
+				// output += "<tr><td><b>" + i + "</b></td><td><i>" + json_object[property][i] + "</i></td></tr>";
+				output += "<tr><td><b>" + json_object[0][i] + "</b></td><td><i>" + json_object[1][i] + "</i></td></tr>";
 			}
 		}
 		output += '</table>';
