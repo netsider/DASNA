@@ -6,6 +6,15 @@ $fcg = '<font color="green">';
 $fcr = '<font color="red">';
 $efc = '</font>';
 $efcbr = '</font><br/>';
+function select_from($col, $table, $where){
+	include 'db.php';
+	mysqli_select_db($db, database);
+	$query = "SELECT $col FROM $table WHERE $where";
+	$result = mysqli_query($db, $query);
+	$array = mysqli_fetch_array($result);
+	$value = $array[0];
+	return $value;
+};
 function save_content($section, $data){
 	include 'db.php';
 	mysqli_select_db($db, 'dasna');

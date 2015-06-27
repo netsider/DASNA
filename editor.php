@@ -14,15 +14,16 @@ if($_SESSION['authenticated'] === true){
 		// if($show){echo '<pre>';print_r($columns);echo '</pre>';};
 		echo '<div id="container" style="width: 75%;" class="center"><div id="dropdownDBdiv" style="float: left;">Select Page:<form><select id="dropdownDB" onchange="set_DB()">';
 		foreach($columns as $column){
+			$where = "section = '$column'";
 			switch ($column){
 			case "A":
-				$col_name = get_pageName($column);
+				$col_name = select_from('pagename', 'content', $where);
 				break;
 			case "B":
-				$col_name = get_pageName($column);
+				$col_name = select_from('pagename', 'content', $where);
 				break;
 			case "C":
-				$col_name = get_pageName($column);
+				$col_name = select_from('pagename', 'content', $where);
 				break;
 			}
 		if($current_page === $column){
