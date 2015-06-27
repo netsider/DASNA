@@ -212,25 +212,17 @@ function ajaxGet(type){
         dataType: 'json',
         type: 'POST',
         success: function(json_object){
-		
 		var output = '';
-		// output += '<center><table border="1">';
+		output += '<table border="1" width="85%">';
 		for (var property in json_object) {
-		// output += 'Property: ' + property + ', Value: ' + json_object[property];
-			// output += '<tr>';
-			for(var i in property){
-				// output += '<td>Property: ' + i + '</td>';
+			// output += "<tr><td><b>" + json_object[property][0] + "</b></td></tr>";
+			for(var i in json_object[property]){
+				output += "<tr><td><b>" + i + "</b></td><td><i>" + json_object[property][i] + "</i></td></tr>";
 			}
-			for(var a in json_object[property]){
-				// output += '<td>Value: ' + a + '</td>';
-			}
-			// output += '</tr></table></center>';
 		}
-		// console.log(output);
-		// $("#backups").html(output);
-		// $("#backups").text(json_object[1]);
-		$('body').append( print(json_object) );
-		// $("#backups").text(json_object[2]);
+		output += '</table>';
+		$("#backups").html(output);
+		// $('body').append( print(json_object) );
         },
         error: function(json_object){
             console.log("Error!"); 
