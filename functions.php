@@ -12,8 +12,7 @@ function select_from($col, $table, $where){
 	$query = "SELECT $col FROM $table WHERE $where";
 	$result = mysqli_query($db, $query);
 	$array = mysqli_fetch_array($result);
-	$value = $array[0];
-	return $value;
+	return $array[0];
 };
 function save_content($section, $data){
 	include 'db.php';
