@@ -173,9 +173,8 @@ function saveFunction(dataIn){
         success: function(json_object){
 			document.getElementById("saved").style.color = "green";
 			var btn = document.getElementById("publish");
-			document.getElementById("publish").style.display = "inline";
+			document.getElementById("publish").style.display = "inline-block";
 			$("#saved").text(json_object + ' on ' + make_Date() + '.');
-			document.getElementById("govisit").style.display = "block";
 			$("#saved").append(btn);
         },
         error: function(json_object){
@@ -213,19 +212,25 @@ function ajaxGet(type){
         dataType: 'json',
         type: 'POST',
         success: function(json_object){
-		// $("#backups").text(json_object[1]);
+		
 		var output = '';
+		// output += '<center><table border="1">';
 		for (var property in json_object) {
 		// output += 'Property: ' + property + ', Value: ' + json_object[property];
+			// output += '<tr>';
 			for(var i in property){
-				output += 'Property: ' + i;
+				// output += '<td>Property: ' + i + '</td>';
 			}
 			for(var a in json_object[property]){
-				output += 'Value: ' + a;
+				// output += '<td>Value: ' + a + '</td>';
 			}
+			// output += '</tr></table></center>';
 		}
-		console.log(output);
-		$("#backups").text(output);
+		// console.log(output);
+		// $("#backups").html(output);
+		// $("#backups").text(json_object[1]);
+		$('body').append( print(json_object) );
+		// $("#backups").text(json_object[2]);
         },
         error: function(json_object){
             console.log("Error!"); 
@@ -268,6 +273,17 @@ function set_debug(data){
         }
     });
 };
+var print = function(o){
+    var str='';
+    for(var p in o){
+        if(typeof o[p] == 'string'){
+            str+= p + ': ' + o[p]+'; </br>';
+        }else{
+            str+= p + ': { </br>' + print(o[p]) + '}';
+        }
+    }
+    return str;
+}
 </script>
 </body>
 </html>
