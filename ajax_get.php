@@ -16,10 +16,10 @@ function read_all_into_array($table){
 };
 if(is_array($a = read_all_into_array('backups'))){
 	if($_POST['type'] === "B"){
-		echo json_encode($a[0]);
+		echo json_encode($a[0]); // Send single row
 	}
 	if($_POST['type'] === "A"){
-		echo json_encode($a[1]);
+		echo json_encode($a); // Send entire array
 	}
 }else{
 	echo json_encode('Fail');

@@ -12,7 +12,7 @@ if($_SESSION['authenticated'] === true){
 	if($show){$output .= '$_SESSION[id]: ' . $_SESSION['id'] . '<br/>';};
 	if($columns = read_column_array('content')){
 		// if($show){echo '<pre>';print_r($columns);echo '</pre>';};
-		echo '<div id="container" style="width: 75%;" class="center"><div id="dropdownDBdiv" style="float: left;">Select Page:<form><select id="dropdownDB" onchange="set_DB()">';
+		echo '<div id="container" style="width: 75%;" class="center"><div id="dropdownDBdiv" style="float: left;">Select Section:<form><select id="dropdownDB" onchange="set_DB()">';
 		foreach($columns as $column){
 			$where = "section = '$column'";
 			switch ($column){
@@ -48,6 +48,7 @@ if($_SESSION['authenticated'] === true){
 		echo '</td></tr></table></div>';
 		echo '<center><div id="output" class="center blackbox"><b>Page output:</b>' . $output . '</div></center>';
 		echo '<div id="livechanges" class="center blackbox"><span style="color: red;">All changes being made are <strong>live</strong> and will reflect on the <a href="http://dasna.net/beta.php">beta home page</a></span></div>';
+		echo '<div id="backups" class="center blackbox">&nbsp</div>';
 	}else{
 		echo 'Failed to read content!<br/>';
 	}
@@ -108,40 +109,37 @@ if($_SESSION['authenticated'] === true){
 table {
     margin: 0 auto;
 }
-.button-secondary {
-	color: white;
-	border-radius: 4px;
-	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-}
 .button-success {color: white;background: rgb(28, 184, 65);}
 </style>
-</head><body>
+</head><body onload="init()">
 <script>
+var username = "<?php echo $_SESSION['username']; ?>";
+var page = "<?php echo $current_page; ?>";
 <?php if($_SESSION['authenticated'] === true){ // So editor only displays if authenticated
-	echo 'debugFunction();';
 	echo "var bodyEditor = CKEDITOR.replace('editor1',";
 	echo '{';
 	echo 'readOnly: false';
 	echo '});';
-}
+	}
 ?>
-if(typeof bodyEditor != 'undefined'){
-	var username = "<?php echo $_SESSION['username']; ?>";
-	var page = "<?php echo $current_page; ?>";
-	bodyEditor.on('mode', function () {
-		if (this.mode == 'source') {
-			var editable = bodyEditor.editable();
-			editable.attachListener(editable, 'input', function () {
-				console.log("Change(mode) Occured!");
-			});
-		}
-	});
-	bodyEditor.on('change', function () {
-		console.log("Change(change) Occured!");
-		var data = CKEDITOR.instances.editor1.getData();
-		saveFunction(data);
-	});
-}
+function init(){
+	if(typeof bodyEditor != 'undefined'){
+		debugFunction();
+		bodyEditor.on('mode', function () {
+			if (this.mode == 'source') {
+				var editable = bodyEditor.editable();
+				editable.attachListener(editable, 'input', function () {
+					console.log("Change(mode) Occured!");
+				});
+			}
+		});
+		bodyEditor.on('change', function () {
+			console.log("Change(change) Occured!");
+			var data = CKEDITOR.instances.editor1.getData();
+			saveFunction(data);
+		});
+	}
+};
 function set_DB(){
 	document.getElementById("dropdownDB").disabled = true;
 	var output = {};
@@ -174,11 +172,11 @@ function saveFunction(dataIn){
         type: 'POST',
         success: function(json_object){
 			document.getElementById("saved").style.color = "green";
-			// var btn = document.getElementById("publish");
-			// document.getElementById("publish").style.display = "inline";
+			var btn = document.getElementById("publish");
+			document.getElementById("publish").style.display = "inline";
 			$("#saved").text(json_object + ' on ' + make_Date() + '.');
 			document.getElementById("govisit").style.display = "block";
-			// $("#saved").append(btn);
+			$("#saved").append(btn);
         },
         error: function(json_object){
             console.log("Error!"); 
@@ -215,7 +213,19 @@ function ajaxGet(type){
         dataType: 'json',
         type: 'POST',
         success: function(json_object){
-			$("#backups").text(json_object[1]);
+		// $("#backups").text(json_object[1]);
+		var output = '';
+		for (var property in json_object) {
+		// output += 'Property: ' + property + ', Value: ' + json_object[property];
+			for(var i in property){
+				output += 'Property: ' + i;
+			}
+			for(var a in json_object[property]){
+				output += 'Value: ' + a;
+			}
+		}
+		console.log(output);
+		$("#backups").text(output);
         },
         error: function(json_object){
             console.log("Error!"); 
@@ -239,7 +249,7 @@ function debugFunction(){
 	}else{
 		set_debug("0");
 		document.getElementById("output").style.display = "none";
-		console.log("Checkbox is not checked.");
+		// console.log("Checkbox is not checked.");
 	}
 };
 function set_debug(data){
