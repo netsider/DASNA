@@ -44,10 +44,10 @@ if($_SESSION['authenticated'] === true){
 	if($html = read_content($current_page)){
 		echo '<div id="editordiv" class="center blackbox" style="position: relative;margin-top: -2px;"><table width="100%" border="0"><tr><td colspan="2">';
 		echo '<textarea class="ckeditor" name="editor1" id="editor1">' . html_entity_decode($html) . '</textarea></td></tr>';
-		echo '<tr><td colspan="2"><div id="saved">&nbsp</div><input type="button" id="publish" name="publish" value="Backup/Restore" style="display: none;" onclick="publishFunction()"></input>';
+		echo '<tr><td colspan="2"><div id="saved" style="display: table-cell;vertical-align: middle;">&nbsp</div><input type="button" id="publish" name="publish" value="Backup Current Copy of this Page" style="display: none;margin-left: 3px;margin-top: 2px;" onclick="publishFunction()" class="pure-button pure-button-primary button-xsmall"></input>';
 		echo '</td></tr></table></div>';
 		echo '<center><div id="output" class="center blackbox"><b>Page output:</b>' . $output . '</div></center>';
-		echo '<div id="livechanges" class="center blackbox"><span style="color: red;">All changes being made are <strong>live</strong> and will reflect on the <a href="http://dasna.net/beta.php">beta home page</a></span></div>';
+		echo '<div id="livechanges" class="center blackbox"><span>All changes being made are <strong>live</strong> and will reflect on the <a href="http://dasna.net/beta.php">beta home page</a>.  There is also a <a href="http://dasna.net/ssl/editor.php">beta editor</a>.</span></div>';
 		echo '<div id="backups" class="center blackbox">&nbsp</div>';
 	}else{
 		echo 'Failed to read content!<br/>';
@@ -67,6 +67,9 @@ if($_SESSION['authenticated'] === true){
 	display: inline-block;
 	left: -3px;
 	position: relative;
+}
+#dropdownDBdiv:nth-child(2){
+	border-left: 0px;
 }
 #saved{
 	border-top: 1px solid black;
@@ -106,10 +109,10 @@ if($_SESSION['authenticated'] === true){
 		max-width: 600px;
 	}
 }
-table {
-    margin: 0 auto;
-}
+table{margin: 0 auto;}
 .button-success {color: white;background: rgb(28, 184, 65);}
+.button-small{font-size: 85%;}
+.button-xsmall{font-size: 70%;}
 </style>
 </head><body onload="init()">
 <script>
@@ -213,11 +216,10 @@ function ajaxGet(type){
         type: 'POST',
         success: function(json_object){
 		var output = '';
-		output += '<table border="1" width="85%">';
+		output += '<table border="1" width="100%">';
 		for (var property in json_object) {
 			// output += "<tr><td><b>" + json_object[property][0] + "</b></td></tr>";
 			for(var i in json_object[property]){
-				// output += "<tr><td><b>" + i + "</b></td><td><i>" + json_object[property][i] + "</i></td></tr>";
 				output += "<tr><td><b>" + json_object[0][i] + "</b></td><td><i>" + json_object[1][i] + "</i></td></tr>";
 			}
 		}

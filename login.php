@@ -4,6 +4,7 @@ ini_set('session.hash_function','whirlpool');date_default_timezone_set("America/
 session_start();session_regenerate_id(true);
 require_once 'functions.php';
 require_once 'vars.php';
+const debug = true;
 $DEBUG = true;
 if($_POST['in-submit']){
 	if(allgood($_POST)){
