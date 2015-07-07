@@ -33,7 +33,7 @@ if($_POST['in-submit']){
 				$output .= $fcg . 'Password for user has no value.  Password will be set...' . $efcbr;
 				$null = true;
 			}else{
-				$output .= $fcr . 'User already has password value stored in database (password will be reset).' . $efcbr;
+				$output .= 'User already has password value stored in database (password will be reset).' . $br;
 				$null = false;
 			}
 			if(row_null('phone', $username) && !$carrier_set){
@@ -79,7 +79,7 @@ if($_POST['in-submit']){
 								$c .= $int;
 							}					
 							$output .= 'Attempting to send confirmation code...' . $br;
-							if(sendSMS($to_add, 'mailserver@dasna.net', $c, 'Confirmation')){ // change back to "" if not working later
+							if(sendSMS($to_add, 'mailserver@dasna.net', $c, 'Confirmation Code')){ // change back to "" if not working later
 								$output .= $fcg . "Confirmation code sent to $to_add. Check your mobile device text messages for the code." . $efcbr;
 								if(save_confirm_code($c, $username)){
 									$output .= $fcg . "Confirmation code recorded. Please enter it to continue" . $efcbr;
@@ -144,7 +144,7 @@ if($_POST['in-submit']){
 	<table width='25%' border='1'>
 	<tr><td colspan="2"><center>Set Password</center></td></tr>
 	<form action='reset.php' method='POST' name="Form" id="Form">
-	<tr><td>Username:</td><td>
+	<tr><td>User:</td><td>
 	<?php 
 	echo "<input type='text' name='in-user'";
 	if(isset($username)){ echo "value='$username'";}; 
@@ -153,7 +153,7 @@ if($_POST['in-submit']){
 	}
 	echo 'onkeyup="validateForm()" onblur="validateForm()"/></td></tr>';
 	if($user_exist){
-		echo '<tr><td>Phone Number (or email):</td><td><input type="text" name="in-phone"';
+		echo '<tr><td><div id="whattoselect">Phone/Email:</div></td><td><input type="text" name="in-phone"';
 		if($phone_set){
 			echo "value='$phone'";
 		}
@@ -161,12 +161,12 @@ if($_POST['in-submit']){
 		echo 'onkeyup="validateForm()" onblur="validateForm()"/></td></tr>';
 	}
 	if($user_exist){
-		echo '<tr><td>Mobile Carrier:</td><td>';
+		echo '<tr><td>Delivery Method:</td><td>';
 		echo '<select name="in-carrier" onchange="validateForm()"';
 		if(isset($carrier)){ echo ' disabled';};
 		echo '>';
 			echo '<option value="Choose">Choose</option>';
-			echo '<option value="email">Use e-mail instead</option>';
+			echo '<option value="email">Use e-mail</option>';
 			echo '<option value="verizon">Verizon</option>';
 			echo '<option value="att">AT&T</option>';
 		echo '</select>';
@@ -228,6 +228,7 @@ if($_POST['in-submit']){
 	?>
 	</center><br/></form></table>
 <script>
+validateForm();
 document.getElementById("in-submit").disabled = true;
 function validateForm(){
 		var toCheck = new Array();
@@ -289,6 +290,29 @@ function validateForm(){
 				trueArray.push(0);
 			}else{
 				trueArray.push(1);
+			}
+			if(carrier === "email"){
+				document.getElementById("whattoselect").innerHTML = "Email:";
+				if(phone.match('@')){
+					trueArray.push(1);
+				}else{
+					trueArray.push(0);
+				}
+				if(phone.match('.com')){
+					trueArray.push(1);
+				}else{
+					trueArray.push(0);
+				}
+			}
+			if(carrier === "verizon" || carrier === "att"){
+				document.getElementById("whattoselect").innerHTML = "Phone:";
+				var reg = new RegExp('^\\d+$');
+				console.log("Phone is: " + reg.test(phone));
+				if(!reg.test(phone)){
+					trueArray.push(0);
+				}else{
+					trueArray.push(1);
+				}
 			}
 		}
 		if(toCheck["pass"] != undefined){
