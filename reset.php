@@ -313,6 +313,11 @@ function validateForm(){
 				}else{
 					trueArray.push(1);
 				}
+				if(phone.length === 10){
+					trueArray.push(1);
+				}else{
+					trueArray.push(0);
+				}
 			}
 		}
 		if(toCheck["pass"] != undefined){
