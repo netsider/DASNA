@@ -33,7 +33,7 @@ if($_POST['in-submit']){
 				$output .= $fcg . 'Password for user has no value.  Password will be set...' . $efcbr;
 				$null = true;
 			}else{
-				$output .= $fcr . 'User already has password value stored in database.  Password will be reset...' . $efcbr;
+				$output .= $fcr . 'User already has password value stored in database (password will be reset).' . $efcbr;
 				$null = false;
 			}
 			if(row_null('phone', $username) && !$carrier_set){
@@ -61,13 +61,17 @@ if($_POST['in-submit']){
 						$output .= $fcr . '<b>Phone number NOT saved!</b>' . $efcbr;
 					}
 				}
-				if(check_equal($phone_fromDB = row_value('phone', $username), $phone)){
+				if($phone_fromDB = row_value('phone', $username)){
 					$output .= $fcg . 'Phone number exists/matches!' . $efcbr;
 					$phone_match = true;
 					if(!$confirm_set && $carrier_set){
 						$mobile_carrier = pick_carrier($carrier);
-						if(save_carrier($mobile_carrier, $username)){
+						if($mobile_carrier === 'email'){
+							$to_add = $phone_fromDB;
+						}else{
 							$to_add = $phone_fromDB . $mobile_carrier;
+						}
+						if(save_carrier($mobile_carrier, $username)){
 							$conf_length = 7;
 							for ($x = 0; $x < $conf_length; $x++) {
 								$int = mt_rand(0, 9);
@@ -148,7 +152,7 @@ if($_POST['in-submit']){
 	}
 	echo 'onkeyup="validateForm()" onblur="validateForm()"/></td></tr>';
 	if($user_exist){
-		echo '<tr><td>Phone Number:</td><td><input type="text" name="in-phone"';
+		echo '<tr><td>Phone Number (or email):</td><td><input type="text" name="in-phone"';
 		if($phone_set){
 			echo "value='$phone'";
 		}
@@ -161,8 +165,9 @@ if($_POST['in-submit']){
 		if(isset($carrier)){ echo ' disabled';};
 		echo '>';
 			echo '<option value="Choose">Choose</option>';
+			echo '<option value="email">Use e-mail instead</option>';
 			echo '<option value="verizon">Verizon</option>';
-			echo '<option value="att">ATT</option>';
+			echo '<option value="att">AT&T</option>';
 		echo '</select>';
 		echo '</td></tr>';
 	}
@@ -250,7 +255,7 @@ function validateForm(){
 				toCheck["pass-new"] = elem[i].value;
 				// console.log("Carrier: " + toCheck["phone"]);
 			}
-			if(check_alphanum(elem[i].value)){
+			if(check_alphanum(elem[i].value.replace('@', 'AT').replace('.', 'DOT'))){
 				trueArray.push(1);
 			}else{
 				trueArray.push(0);
@@ -266,12 +271,7 @@ function validateForm(){
 		}
 		if(toCheck["phone"] != undefined){
 			var phone = toCheck["phone"];
-			if(phone.length >= 10){
-				trueArray.push(1);
-			}else{
-				trueArray.push(0);
-			}
-			if(check_alphanum(phone.value)){
+			if(phone.length > 0){
 				trueArray.push(1);
 			}else{
 				trueArray.push(0);

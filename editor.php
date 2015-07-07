@@ -49,6 +49,7 @@ if($_SESSION['authenticated'] === true){
 		echo '<center><div id="output" class="center blackbox"><b>Page output:</b>' . $output . '</div></center>';
 		echo '<div id="livechanges" class="center blackbox"><span>All changes being made are <strong>live</strong> and will reflect on the <a href="http://dasna.net/beta.php">beta home page</a>.  There is also a <a href="http://dasna.net/ssl/editor.php">beta editor</a>.</span></div>';
 		echo '<div id="backups" class="center blackbox">&nbsp</div>';
+		echo '<div class="center blackbox">You can view the sourceocode for this on github: http://github.com/netsider/DASNA</div>';
 	}else{
 		echo 'Failed to read content!<br/>';
 	}

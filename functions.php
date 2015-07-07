@@ -79,6 +79,9 @@ function pick_carrier($string){
 	case "att":
 		$carrier = '@mms.att.net';
 		break;
+	case "email":
+		$carrier = 'email';
+		break;
 	default:
 		$carrier = '@vtext.com';
 	}
@@ -212,7 +215,11 @@ function allgood($array){
 				return false;
 			}
 		}else{
-			$alpha = false;
+			if(ctype_alnum(str_replace('.', 'DOT', str_replace('@', 'AT', $value)))){
+				$alpha = true;
+			}else{
+				$alpha = false;
+			}
 			if(empty($value)){
 				$output .= '<b>Field Empty!</b><br/>';
 			}else{
