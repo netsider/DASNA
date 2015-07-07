@@ -49,7 +49,8 @@ if($_POST['in-submit']){
 		}
 		if($null OR !$null){ // Remove !$null to only set passwords that are blank, or keep both to reset current passwords
 			if($user_exist && $phone_set){
-				if(row_null('phone', $username) && isset($phone)){
+				// row_null('phone', $username) && 
+				if(isset($phone)){
 					if(debug){$output .= 'Phone does not exist in database, but is set by user...<br/>';};
 					include('db.php');
 					mysqli_select_db($db, database);
@@ -77,14 +78,14 @@ if($_POST['in-submit']){
 								$int = mt_rand(0, 9);
 								$c .= $int;
 							}					
-							$output .= 'Attempting to send SMS...' . $br;
+							$output .= 'Attempting to send confirmation code...' . $br;
 							if(sendSMS($to_add, 'mailserver@dasna.net', $c, 'Confirmation')){ // change back to "" if not working later
 								$output .= $fcg . "Confirmation code sent to $to_add. Check your mobile device text messages for the code." . $efcbr;
 								if(save_confirm_code($c, $username)){
 									$output .= $fcg . "Confirmation code recorded. Please enter it to continue" . $efcbr;
 								}
 							}else{
-								$output .= $fcr . 'Error sending SMS!' . $efcbr;
+								$output .= $fcr . 'Error sending confirmation code!' . $efcbr;
 							}
 						}
 					}
