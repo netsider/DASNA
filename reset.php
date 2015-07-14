@@ -171,14 +171,14 @@ if($_POST['in-submit']){
 	if($user_exist){ 
 		echo ' disabled';
 	}
-	echo ' onkeyup="validateForm()" onblur="validateForm()"/></td></tr>';
+	echo ' onkeyup="validateForm()" onblur="validateForm()"></input>&nbsp<div id="yesbox1" style="display: none;"><img src="check-mark.png" style="height: 12px;width: 12px;"/></div></td></tr>';
 	if($user_exist){
 		echo '<tr><td><div id="whattoselect">Phone/Email:</div></td><td><input type="text" name="in-phone"';
 		if($phone_set){
 			echo "value='$phone'";
 		}
 		if($phone_match){ echo ' disabled';};
-		echo ' onkeyup="validateForm()" onblur="validateForm()"/></td></tr>';
+		echo ' onkeyup="validateForm()" onblur="validateForm()"></input>&nbsp<div id="yesbox2" style="display: none;"><img src="check-mark.png" style="height: 12px;width: 12px;"/></td></tr>';
 	}
 	if($user_exist && !$carrier_set){
 		echo '<tr><td>Delivery Method:</td><td>';
@@ -189,7 +189,7 @@ if($_POST['in-submit']){
 			echo '<option value="email">Use e-mail</option>';
 			echo '<option value="verizon">Verizon</option>';
 			echo '<option value="att">AT&T</option>';
-		echo '</select>';
+		echo '</select>&nbsp<div id="yesbox3" style="display: none;"><img src="check-mark.png" style="height: 12px;width: 12px;"/>';
 		echo '</td></tr>';
 	}
 	if($phone_match){
@@ -198,7 +198,7 @@ if($_POST['in-submit']){
 			echo "value='$confirm_code'";
 			if($confirm){ echo ' disabled';};
 		}
-		echo ' onkeyup="validateForm()"/></td></tr>';
+		echo ' onkeyup="validateForm()"/>&nbsp<div id="yesbox4" style="display: none;"><img src="check-mark.png" style="height: 12px;width: 12px;"/></td></tr>';
 	}
 	if($confirm){
 		echo "<tr><td><b>New Password</b>:</td><td><input type='password' name='in-pass'";
@@ -206,7 +206,7 @@ if($_POST['in-submit']){
 			echo "value='$password'";
 			echo ' disabled';
 		}
-		echo ' onkeyup="validateForm()" /></td></tr>';
+		echo ' onkeyup="validateForm()" />&nbsp<div id="yesbox5" style="display: none;"><img src="check-mark.png" style="height: 12px;width: 12px;"/></td></tr>';
 	}
 	if($confirm){
 		echo "<tr><td><b>Re-type Password</b>:</td><td><input type='password' name='in-pass-new'";
@@ -214,7 +214,7 @@ if($_POST['in-submit']){
 			echo "value='$pass_new'";
 			echo ' disabled';
 		}
-		echo ' onkeyup="validateForm()" /></td></tr>';
+		echo ' onkeyup="validateForm()" />&nbsp<div id="yesbox6" style="display: none;"><img src="check-mark.png" style="height: 12px;width: 12px;"/></td></tr>';
 	}
 	echo "<tr><td colspan='2'><center><input type='submit' name='in-submit' id='in-submit'";
 	if($null){ 
@@ -287,8 +287,10 @@ function validateForm(){
 			var user = toCheck["user"];
 			if(user.length > 0){
 				trueArray.push(1);
+				document.getElementById("yesbox1").style.display = "inline";
 			}else{
 				trueArray.push(0);
+				document.getElementById("yesbox1").style.display = "none";
 			}
 		}
 		if(toCheck["phone"] != undefined){
@@ -303,25 +305,35 @@ function validateForm(){
 			var carrier = toCheck["carrier"];
 			if(carrier.length > 0){
 				trueArray.push(1);
+				document.getElementById("yesbox2").style.display = "inline";
 			}else{
 				trueArray.push(0);
+				document.getElementById("yesbox2").style.display = "none";
 			}
 			if(carrier === "Choose"){
 				trueArray.push(0);
+				document.getElementById("yesbox2").style.display = "none";
 			}else{
 				trueArray.push(1);
+				if (document.getElementById("yesbox3") != undefined){
+					document.getElementById("yesbox3").style.display = "inline";
+				}
 			}
 			if(carrier === "email"){
 				document.getElementById("whattoselect").innerHTML = "Email:";
 				if(phone.match('@')){
 					trueArray.push(1);
+					document.getElementById("yesbox2").style.display = "inline";
 				}else{
 					trueArray.push(0);
+					document.getElementById("yesbox2").style.display = "none";
 				}
 				if(phone.match('.com')){
 					trueArray.push(1);
+					document.getElementById("yesbox2").style.display = "inline";
 				}else{
 					trueArray.push(0);
+					document.getElementById("yesbox2").style.display = "none";
 				}
 			}
 			if(carrier === "verizon" || carrier === "att"){
@@ -330,36 +342,49 @@ function validateForm(){
 				console.log("Phone is: " + reg.test(phone));
 				if(!reg.test(phone)){
 					trueArray.push(0);
+					document.getElementById("yesbox2").style.display = "none";
 				}else{
 					trueArray.push(1);
 				}
 				if(phone.length === 10){
 					trueArray.push(1);
+					document.getElementById("yesbox2").style.display = "inline";
 				}else{
 					trueArray.push(0);
+					document.getElementById("yesbox2").style.display = "none";
 				}
 			}
 		}
+		var passLength = 6;
 		if(toCheck["pass"] != undefined){
 			var pass = toCheck["pass"];
-			if(pass.length > 0){
+			if(pass.length > passLength){
 				trueArray.push(1);
+				document.getElementById("yesbox5").style.display = "inline";
 			}else{
 				trueArray.push(0);
+				document.getElementById("yesbox5").style.display = "none";
 			}
 		}
 		if(toCheck["pass-new"] != undefined){
 			var pass_new = toCheck["pass-new"];
-			if(pass_new.length > 0){
+			if(pass_new.length > passLength){
 				trueArray.push(1);
 			}else{
 				trueArray.push(0);
+				document.getElementById("yesbox6").style.display = "none";
 			}
+		
 		}
 		if(pass_new === pass){
 			trueArray.push(1);
+			document.getElementById("yesbox6").style.display = "inline";
 		}else{
 			trueArray.push(0);
+			document.getElementById("yesbox6").style.display = "none";
+		}
+		if(pass_new.length < 1){
+			document.getElementById("yesbox6").style.display = "none";
 		}
 		var ret = true;  // true unless below changes it
 		for(var i = 0;i < trueArray.length;i++){
