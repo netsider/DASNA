@@ -14,6 +14,16 @@ function select_from($col, $table, $where){
 	$array = mysqli_fetch_array($result);
 	return $array[0];
 };
+function save_phone($phone, $user){
+	include('db.php');
+	mysqli_select_db($db, database);
+	$query = "UPDATE users SET phone = '$phone' WHERE name = '$username'";
+	if($result = mysqli_query($db, $query)){
+		return true;
+	}else{
+		return false;
+	}
+}
 function save_content($section, $data){
 	include 'db.php';
 	mysqli_select_db($db, 'dasna');

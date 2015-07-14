@@ -30,34 +30,33 @@ if($_POST['in-submit']){
 		if(user_exist($username)){
 			$user_exist = true;
 			if(row_null('phash', $username) === true){
-				$output .= $fcg . 'Password for user has no current value.' . $efcbr;
+				$output .= '<span class="success">User password value in database NULL.</span><br/>';
 				$null = true;
 			}else{
-				$output .= 'User already has password stored in database (password will be reset).' . $br;
+				$output .= 'User already has password stored in database (password will be reset).<br/>';
 				$null = false;
 			}
 			if(row_null('phone', $username) && !$carrier_set){
-				$output .= $fcr . 'User contact information not found in DB (Please enter contact address).' . $efcbr;
+				$output .= '<span class="fail">User contact information not found in DB (Please enter contact address).</span></br>';
 				$phone_null = true;
 			}elseif(!row_null('phone', $username)){
-				if(Fdebug){$output .= $fcg . 'User contact information exists in database.' . $br;};
+				if(Fdebug){$output .= '<span class="success">User contact information exists in database.</span><br/>';};
 				$phone_null = false;
 			}
 		}else{
 			$output .= $fcr . 'User does not exist!' . $efcbr;
 			$user_exist = false;
 		}
-		if($null OR !$null){ // Remove !$null to only set passwords that are blank, or keep both to reset current passwords
-			if($user_exist && $phone_set){
-				if(read_changeable($username) === "1"){
-					$output .= 'User dynamic!' . $br;
-					$changeable = true;
-				}else{
-					$output .= 'User static!' . $br;
-					$changeable = false;
-				}
-				if(isset($phone)){
-					if($changeable === true OR row_null('phone', $username)){
+		if($user_exist && $phone_set){
+			if(read_changeable($username) === "1"){
+				$output .= 'User dynamic!<br/>';
+				$changeable = true;
+			}else{
+				$output .= 'User static!<br/>';
+				$changeable = false;
+		}
+		if(isset($phone)){
+				if($changeable === true || $phone_null === true){
 						if(row_null('phone', $username)){
 							if(Fdebug){$output .= "User contact information NULL.<br/>";};
 						}else{
@@ -68,21 +67,18 @@ if($_POST['in-submit']){
 						}else{
 							if(Fdebug){$output .= "User contact information NOT changeable!<br/>";};
 						}
-						include('db.php');
-						mysqli_select_db($db, database);
-						$query = "UPDATE users SET phone = '$phone' WHERE name = '$username'";
-						if($result = mysqli_query($db, $query)){
-							$output .= $fcg . '<b>Phone number saved!</b>' . $efcbr;
+						if(save_phone($phone, $username)){
+							$output .= '<span class="success">Phone number saved!</span><br/>';
 							$phone_saved = true;
 						}else{
-							$output .= $fcr . '<b>Phone number NOT saved!</b>' . $efcbr;
+							$output .= '<span class="fail">Phone number NOT saved!</span><br/>';
 						}
 					}else{
 						if(Fdebug){$output .= $fcr . 'Phone exists in database, or "changeable" set to FALSE... (number cannot be changed, but can/will be verified)' . $efcbr;};
-					}
 				}
+			}
 				if(check_equal($phone_fromDB = row_value('phone', $username), $phone)){
-					$output .= $fcg . 'Phone number exists/matches!' . $efcbr;
+					$output .= '<span class="success">Phone number exists/matches!</span><br/>';
 					$phone_match = true;
 					if(!$confirm_set && $carrier_set){
 						$mobile_carrier = pick_carrier($carrier);
@@ -96,42 +92,42 @@ if($_POST['in-submit']){
 							for ($x = 0; $x < $conf_length; $x++) {
 								$int = mt_rand(0, 9);
 								$c .= $int;
-							}					
-							$output .= 'Attempting to send confirmation code...' . $br;
+							}
+							$output .= 'Attempting to send confirmation code...<br/>';
 							if(sendSMS($to_add, 'mailserver@dasna.net', $c, 'Confirmation Code')){ // change back to "" if not working later
-								$output .= $fcg . "Confirmation code sent to $to_add. Check your mobile device text messages for the code." . $efcbr;
+								$output .= "<span class='success'>Confirmation code sent to $to_add. Check your mobile device text messages for the code.</span><br/>";
 								if(save_confirm_code($c, $username)){
-									$output .= $fcg . "Confirmation code recorded. Please enter it to continue" . $efcbr;
+									$output .= "<span class='success'>Confirmation code recorded. Please enter it to continue</span><br/>";
 								}
 							}else{
-								$output .= $fcr . 'Error sending confirmation code!' . $efcbr;
+								$output .= '<span class="fail">Error sending confirmation code!</span><br/>';
 							}
 						}
 					}
 					if(row_value('temp', $username) === $confirm_code){
 						$output .= $fcg . 'Confirmation code confirmed by database!  You can now set your new password.' . $efcbr;
 						$confirm = true;
-						$parray = array(); // an array for the allgood function
+						$parray = array(); // an array, since the allgood function only takes arrays
 						if(isset($password) && isset($pass_new)){
 							$bothset = true;
-							if(check_equal($pass_new, $password)){ // check if both the same
+							if(check_equal($pass_new, $password)){
 								$iterations = 100000;
 								$output .= $fcg . 'Password OK!' . $efcbr;
 								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));						
 								$hash = create_hash(create_hash($password, $salt, 'ripemd320', $iterations), $salt, 'whirlpool', $iterations);
-								if(Fdebug){$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;};
+								if(Fdebug){$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $br;};
 								$output .= 'Attempting to save to database...' . $efcbr;			
-								if(save_hash($username, $hash)){ // save hash
-									$output .= $fcg . 'Password saved to database.' . $efcbr;
+								if(save_hash($username, $hash)){
+									$output .= '<span class="success">Password saved to database.</span><br/>';
 								}else{
-									$output .= $fcr . 'Password NOT saved to database.' . $efcbr;
+									$output .= '<span class="fail">Password NOT saved to database.</span><br/>';
 								}
-								if(save_salt($username, $salt)){ // save salt
-									$output .= $fcg . 'Salt saved to database!' . $efcbr;
+								if(save_salt($username, $salt)){
+									$output .= '<span class="success">Salt saved to database!</span><br/>';
 								}else{
-									$output .= $fcr . 'Salt NOT saved to database!' . $efcbr;
+									$output .= '<span class="fail">Salt NOT saved to database!</span><br/>';
 								}
-								if(validate($username, $password)){ // Check it
+								if(validate($username, $password)){
 									$output .= 'Password Successfully set!  Please close this window (to login  later), or <a href="editor.php">proceed</a>.';
 								}else{
 									$output .= 'Fail!';
@@ -139,16 +135,13 @@ if($_POST['in-submit']){
 							}
 						}
 					}else{
-						$out .= $fcr . 'Confirm code does not match that in database.' . $efcbr;
+						$out .= $fcr . '<span class="fail">Confirm code does not match that in database.</span><br/>';
 						$confirm = false;
 					}
 				}else{
-					$output .= $fcr . 'Phone number entered does not match value in DB, or user account locked from changes!' . $efcbr;
+					$output .= '<span class="fail">Phone number entered does not match value in DB</span><br/>';
 				}				
 			}
-		}else{
-			$output .= $fcr . 'Password does not meet requirements to be reset!' . $efcbr;
-		}
 	}
 }
 ?>
@@ -158,6 +151,14 @@ if($_POST['in-submit']){
 	<meta http-equiv="Content-Type" content="text/html"; charset="iso-8859-1" />
 	<title>User Reset Form</title>
 </head>
+<style>
+.success{
+	color: green;
+}
+.fail{
+	color: red;
+}
+</style>
 <body>
 	<center>
 	<table width='25%' border='1'>
