@@ -50,10 +50,10 @@ if($_POST['in-submit']){
 		if($null OR !$null){ // Remove !$null to only set passwords that are blank, or keep both to reset current passwords
 			if($user_exist && $phone_set){
 				if(read_changeable($username) === "1"){
-					$output .= 'User can be changed: ' . read_changeable($username) . $br;
+					$output .= 'User can be changed!' . $br;
 					$changeable = true;
 				}else{
-					$output .= 'User cannot be changed: ' . read_changeable($username) . $br;
+					$output .= 'User cannot be changed!' . $br;
 					$changeable = false;
 				}
 				if(isset($phone)){
