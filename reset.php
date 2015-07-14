@@ -49,7 +49,6 @@ if($_POST['in-submit']){
 		}
 		if($null OR !$null){ // Remove !$null to only set passwords that are blank, or keep both to reset current passwords
 			if($user_exist && $phone_set){
-				// row_null('phone', $username) && 
 				if(read_changeable($username) === "1"){
 					$output .= 'User can be changed: ' . read_changeable($username) . $br;
 					$changeable = true;
@@ -59,7 +58,7 @@ if($_POST['in-submit']){
 				}
 				if(isset($phone)){
 					if($changeable === true OR row_null('phone', $username)){
-						if(debug){$output .= 'Phone does not exist in database, or "changeable" set to TRUE...<br/>';};
+						if(debug){$output .= $fcg . 'Phone does not exist in database, or "changeable" set to TRUE...' . $efcbr;};
 						include('db.php');
 						mysqli_select_db($db, database);
 						$query = "UPDATE users SET phone = '$phone' WHERE name = '$username'";
@@ -69,6 +68,8 @@ if($_POST['in-submit']){
 						}else{
 							$output .= $fcr . '<b>Phone number NOT saved!</b>' . $efcbr;
 						}
+					}else{
+						if(debug){$output .= $fcr . 'Phone exists in database, or "changeable" set to FALSE...' . $efcbr;};
 					}
 				}
 				if(check_equal($phone_fromDB = row_value('phone', $username), $phone)){
@@ -158,18 +159,18 @@ if($_POST['in-submit']){
 	echo "<input type='text' name='in-user'";
 	if(isset($username)){ echo "value='$username'";}; 
 	if($user_exist){ 
-		echo 'disabled';
+		echo ' disabled';
 	}
-	echo 'onkeyup="validateForm()" onblur="validateForm()"/></td></tr>';
+	echo ' onkeyup="validateForm()" onblur="validateForm()"/></td></tr>';
 	if($user_exist){
 		echo '<tr><td><div id="whattoselect">Phone/Email:</div></td><td><input type="text" name="in-phone"';
 		if($phone_set){
 			echo "value='$phone'";
 		}
 		if($phone_match){ echo ' disabled';};
-		echo 'onkeyup="validateForm()" onblur="validateForm()"/></td></tr>';
+		echo ' onkeyup="validateForm()" onblur="validateForm()"/></td></tr>';
 	}
-	if($user_exist){
+	if($user_exist && !$carrier_set){
 		echo '<tr><td>Delivery Method:</td><td>';
 		echo '<select name="in-carrier" onchange="validateForm()"';
 		if(isset($carrier)){ echo ' disabled';};
@@ -187,7 +188,7 @@ if($_POST['in-submit']){
 			echo "value='$confirm_code'";
 			if($confirm){ echo ' disabled';};
 		}
-		echo 'onkeyup="validateForm()"/></td></tr>';
+		echo ' onkeyup="validateForm()"/></td></tr>';
 	}
 	if($confirm){
 		echo "<tr><td><b>New Password</b>:</td><td><input type='password' name='in-pass'";
@@ -195,7 +196,7 @@ if($_POST['in-submit']){
 			echo "value='$password'";
 			echo ' disabled';
 		}
-		echo 'onkeyup="validateForm()" /></td></tr>';
+		echo ' onkeyup="validateForm()" /></td></tr>';
 	}
 	if($confirm){
 		echo "<tr><td><b>Re-type Password</b>:</td><td><input type='password' name='in-pass-new'";
@@ -203,9 +204,9 @@ if($_POST['in-submit']){
 			echo "value='$pass_new'";
 			echo ' disabled';
 		}
-		echo 'onkeyup="validateForm()" /></td></tr>';
+		echo ' onkeyup="validateForm()" /></td></tr>';
 	}
-	echo "<tr><td colspan='2'><center><input type='submit' name='in-submit' id='in-submit'"; // Submit button
+	echo "<tr><td colspan='2'><center><input type='submit' name='in-submit' id='in-submit'";
 	if($null){ 
 		echo "value='Finish'";
 	}else{ 
@@ -215,7 +216,7 @@ if($_POST['in-submit']){
 	echo '<tr><td colspan="2"><u><center>Notes:</center></u>';
 	if(isset($output)){ echo $output;};
 	echo '</td></tr>';
-	if(isset($username) && $user_exist){ // To retain data between submits (before I realized how to do it the rigth way)
+	if(isset($username) && $user_exist){
 		echo "<input type='hidden' name='in-user' value='$username' />";
 	}
 	if($bothset){
