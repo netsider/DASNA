@@ -50,19 +50,28 @@ if($_POST['in-submit']){
 		if($null OR !$null){ // Remove !$null to only set passwords that are blank, or keep both to reset current passwords
 			if($user_exist && $phone_set){
 				// row_null('phone', $username) && 
+				if(read_changeable($username) === "1"){
+					$output .= 'User can be changed: ' . read_changeable($username) . $br;
+					$changeable = true;
+				}else{
+					$output .= 'User cannot be changed: ' . read_changeable($username) . $br;
+					$changeable = false;
+				}
 				if(isset($phone)){
-					if(debug){$output .= 'Phone does not exist in database, but is set by user...<br/>';};
-					include('db.php');
-					mysqli_select_db($db, database);
-					$query = "UPDATE users SET phone = '$phone' WHERE name = '$username'";
-					if($result = mysqli_query($db, $query)){
-						$output .= $fcg . '<b>Phone number saved!</b>' . $efcbr;
-						$phone_saved = true;
-					}else{
-						$output .= $fcr . '<b>Phone number NOT saved!</b>' . $efcbr;
+					if($changeable === true OR row_null('phone', $username)){
+						if(debug){$output .= 'Phone does not exist in database, or "changeable" set to TRUE...<br/>';};
+						include('db.php');
+						mysqli_select_db($db, database);
+						$query = "UPDATE users SET phone = '$phone' WHERE name = '$username'";
+						if($result = mysqli_query($db, $query)){
+							$output .= $fcg . '<b>Phone number saved!</b>' . $efcbr;
+							$phone_saved = true;
+						}else{
+							$output .= $fcr . '<b>Phone number NOT saved!</b>' . $efcbr;
+						}
 					}
 				}
-				if($phone_fromDB = row_value('phone', $username)){
+				if(check_equal($phone_fromDB = row_value('phone', $username), $phone)){
 					$output .= $fcg . 'Phone number exists/matches!' . $efcbr;
 					$phone_match = true;
 					if(!$confirm_set && $carrier_set){
@@ -124,7 +133,7 @@ if($_POST['in-submit']){
 						$confirm = false;
 					}
 				}else{
-					$output .= $fcr . 'Phone number entered does not match value in DB!' . $efcbr;
+					$output .= $fcr . 'Phone number entered does not match value in DB, or user account locked from changes!' . $efcbr;
 				}				
 			}
 		}else{

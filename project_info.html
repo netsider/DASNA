@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xml:lang="en" lang="en">
+<head>
+	<title>DASNA Page Editing System - Instructions</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+.heading1{
+	font-color: #000;
+	font-weight: bold;
+	font-size: 20px;
+}
+.heading2{
+	font-color: #000;
+	font-weight: bold;
+	font-size: 15px;
+}
+.center{
+	margin-left: auto;
+	margin-right: auto;
+}
+#wrapper{
+	width: 100%;
+}
+#content{
+	width: 65%;
+	text-align: left;
+	padding: 2px;
+	font-size: 14px;
+}
+.border{
+	border-color: black;
+	border-style: solid;
+	border-width: 1px;
+}
+#versioninfo{
+	position: fixed;
+	width: 10%;
+	font-size: 10px;
+	padding: 2px;
+}
+#pages{
+	position: fixed;
+	width: 10%;
+	font-size: 10px;
+	padding: 2px;
+	top: 80px;
+}
+</style>
+</head>
+<body>
+<div id="versioninfo" class="border">Version: <strong>1.0</strong><br/>
+Author: Russell Rounds<br/>
+Source: <a href="https://github.com/netsider/DASNA/">Github</a><br/>
+Activity: <a href="https://github.com/netsider/DASNA/commits?author=netsider">History</a>
+</div>
+<div id="wrapper">
+<center><div class="heading1">DASNA Page Management System (PMS)</div></center>
+<br/>
+<center><div class="heading2">What is it?</div>
+<div id="content">The DASNA page management system is a simple set of webpages designed to aid a single person in managing and maintaining the main DASNA homepage, located at http://www.dasna.net.</div></center><br/>
+<center><span class="heading2">How can I use it?</span>
+<div id="content">
+<ol><li>First, create a new account to use with the page editing system, by visiting <a href="http://www.dasna.net/ssl/beta/reset.php">http://www.dasna.net/ssl/beta/reset.php</a>.  
+<br/>Here, you must:
+<ul><li>Enter your provided username, and press enter.  <i>Note: New users cannot be created!</i></li>
+<li>Enter email or phone number to send confirmation code to.</li>
+<li>Select your preffered method to receive confirmation code (email, or mobile carrier) from the dropdown list-box.  <span style="color: red;">Confirmation-codes  via e-mail are slow. SMS (text message) is preffered, but device must have mobile data connection enabled.</span></li>
+<li>Enter the confirmation code received, and press enter.</li>
+<li>Enter new desired password (twice), and press enter.</li>
+<li>Done.</li>
+</ul></li>
+<li>After successfully creating a user in the above step, navigate to <a href="http://login.dasna.net/">http://login.dasna.net</a>.  <i>Note: You MUST use Chrome!!</i><br/>
+Here, you can:</li>
+<ul>
+<li>Note: This page will automatically redirect to <a href="http://www.dasna.net/ssl/beta/reset.php">http://www.dasna.net/ssl/beta/reset.php</a> (or wherever the current version is).</li>
+<li>Enter username, then press submit.</li>
+<li>Enter password, then press submit.</li>
+<li>If successfully verified, a page should appear with a word-processor-like interface (if login fails, please try again).</li>
+</ul>
+<li>You are now successfully logged into the DASNA Page Editing System.<br/>Please, keep in mind:</li>
+<ul>
+<li>Any keystrokes typed into the editing window will reflect <b>live</b> on the page (I designed it to save every time a key is released).  <i>Note: Currently, there is no save/restore feature, but implementation has already started</i></li>
+<li>The dropdown listbox in the top left-hand corner selects the column on the page to edit.  Selecting an item from the dropdown listbox automatically changes the page being edited in the editor.</li>
+<li>To see your changes, view them at: <a href="http://www.dasna.net/beta.php">http://www.dasna.net/beta.php</a></li>
+</ul>
+</ol></div><br/>
+<span class="heading2">Is there anything else I should know?</span>
+<div id="content">
+<ul>
+<li>Later, this system will be used on <a href="http://www.dasna.net/index.php">http://www.dasna.net/index.php</a> (replaced by the current beta.php), which will be done after security has been more thoroughly tested.</li>
+<li>Issues will be reported here (if this changes, it will be posted here).</li>
+<li>If you find any errors, please report them to me (<a href="mailto:rdoubleoc@gmail.com">rdoubleoc@gmail.com</a>).</li>
+<li>Source code can be found at: <a href="https://github.com/netsider/DASNA/">https://github.com/netsider/DASNA/</a>.</li>
+<li>My current activity on this project can be found <a href="https://github.com/netsider/DASNA/commits?author=netsider">here</a>.</li>
+<li>Below is content discussing how the project more "under the good".</li>
+</ul>
+</div><br/>
+<span class="heading2">"Under the Hood"</span>
+<div id="content">This section is under construction, but will be available soon.</div>
+</div>
+</body>
+</html>
