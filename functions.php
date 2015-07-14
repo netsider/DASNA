@@ -1,6 +1,6 @@
 <?php
 const database = 'dasna';
-const debug = true;
+const debug = false;
 $br = '<br/>';
 $fcg = '<font color="green">';
 $fcr = '<font color="red">';

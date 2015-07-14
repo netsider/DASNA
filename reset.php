@@ -1,7 +1,7 @@
 <?php
 require_once 'functions.php';
 require_once 'vars.php';
-const debug = true;
+const Fdebug = true;
 const database = 'dasna';
 if($_POST['in-submit']){
 	if(allgood($_POST)){
@@ -30,17 +30,17 @@ if($_POST['in-submit']){
 		if(user_exist($username)){
 			$user_exist = true;
 			if(row_null('phash', $username) === true){
-				$output .= $fcg . 'Password for user has no value.  Password will be set...' . $efcbr;
+				$output .= $fcg . 'Password for user has no current value.' . $efcbr;
 				$null = true;
 			}else{
-				$output .= 'User already has password value stored in database (password will be reset).' . $br;
+				$output .= 'User already has password stored in database (password will be reset).' . $br;
 				$null = false;
 			}
 			if(row_null('phone', $username) && !$carrier_set){
-				$output .= $fcr . 'User phone # not currently set.  Please enter your phone number to continue.' . $efcbr;
+				$output .= $fcr . 'User contact information not found in DB (Please enter contact address).' . $efcbr;
 				$phone_null = true;
 			}elseif(!row_null('phone', $username)){
-				$output .= $fcg . 'User phone # exists in database.' . $br;
+				if(Fdebug){$output .= $fcg . 'User contact information exists in database.' . $br;};
 				$phone_null = false;
 			}
 		}else{
@@ -50,15 +50,24 @@ if($_POST['in-submit']){
 		if($null OR !$null){ // Remove !$null to only set passwords that are blank, or keep both to reset current passwords
 			if($user_exist && $phone_set){
 				if(read_changeable($username) === "1"){
-					$output .= 'User can be changed!' . $br;
+					$output .= 'User dynamic!' . $br;
 					$changeable = true;
 				}else{
-					$output .= 'User cannot be changed!' . $br;
+					$output .= 'User static!' . $br;
 					$changeable = false;
 				}
 				if(isset($phone)){
 					if($changeable === true OR row_null('phone', $username)){
-						if(debug){$output .= $fcg . 'Phone does not exist in database, or "changeable" set to TRUE...' . $efcbr;};
+						if(row_null('phone', $username)){
+							if(Fdebug){$output .= "User contact information NULL.<br/>";};
+						}else{
+							if(Fdebug){$output .= "User contact information exists.<br/>";};
+						}
+						if($changeable === true){
+							if(Fdebug){$output .= "User contact information changeable!<br/>";};
+						}else{
+							if(Fdebug){$output .= "User contact information NOT changeable!<br/>";};
+						}
 						include('db.php');
 						mysqli_select_db($db, database);
 						$query = "UPDATE users SET phone = '$phone' WHERE name = '$username'";
@@ -69,7 +78,7 @@ if($_POST['in-submit']){
 							$output .= $fcr . '<b>Phone number NOT saved!</b>' . $efcbr;
 						}
 					}else{
-						if(debug){$output .= $fcr . 'Phone exists in database, or "changeable" set to FALSE...' . $efcbr;};
+						if(Fdebug){$output .= $fcr . 'Phone exists in database, or "changeable" set to FALSE... (number cannot be changed, but can/will be verified)' . $efcbr;};
 					}
 				}
 				if(check_equal($phone_fromDB = row_value('phone', $username), $phone)){
@@ -110,7 +119,7 @@ if($_POST['in-submit']){
 								$output .= $fcg . 'Password OK!' . $efcbr;
 								$salt = hash('ripemd320', mcrypt_create_iv(20, MCRYPT_RAND));						
 								$hash = create_hash(create_hash($password, $salt, 'ripemd320', $iterations), $salt, 'whirlpool', $iterations);
-								if(debug){$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;};
+								if(Fdebug){$output .= '<b>Final Hash Generated: ' . $hash . '</b><br/> Salt: ' . $salt . $efcbr;};
 								$output .= 'Attempting to save to database...' . $efcbr;			
 								if(save_hash($username, $hash)){ // save hash
 									$output .= $fcg . 'Password saved to database.' . $efcbr;
